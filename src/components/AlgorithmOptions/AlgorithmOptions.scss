@@ -1,0 +1,117 @@
+@import '../../variables';
+
+.algorithm-options {
+  .option {
+    display: flex;
+    flex-direction: column;
+    font-size: $font3;
+
+    .option-header {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      margin-bottom: $spacing2;
+      align-items: center;
+
+      .option-name {
+        font-weight: 600;
+        font-size: $font3;
+      }
+    }
+
+    .algorithm-option-string {
+      display: flex;
+      flex-direction: column;
+      font-size: $font3;
+
+      .algorithm-option-string-input {
+        color: $textColor;
+        background: $secondaryDark;
+        padding: 5px;
+      }
+
+      .algorithm-option-string-restriction {
+        padding-top: $spacing2;
+      }
+    }
+
+    .algorithm-option-aoi {
+      .algorithm-option-aoi-tools {
+        display: flex;
+        flex-direction: row;
+
+        .button {
+          text-align: center;
+          border: none;
+          cursor: pointer;
+          font-size: $font3;
+          font-weight: 600;
+          padding: 10px 12px;
+          text-decoration: none;
+        }
+
+        .algorithm-option-aoi-display {
+          width: 80%;
+        }
+
+        .algorithm-option-aoi-clear {
+          width: 20%;
+        }
+      }
+
+      .algorithm-option-aoi-restriction {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        font-size: $font3;
+        padding: 5px 0;
+
+        i {
+          padding: 0 6px;
+        }
+      }
+    }
+
+    .algorithm-option-list {
+      display: flex;
+      flex-flow: row wrap;
+      font-size: $font3;
+
+      .list-input {
+        width: 40%;
+        margin-right: 5px;
+        margin-bottom: 5px;
+      }
+
+      .add-and-remove {
+        display: flex;
+        flex-direction: column;
+        width: 10%;
+        margin-left: 5px;
+
+        .add-element {
+          cursor: pointer;
+          font-size: 18px;
+        }
+
+        .remove-element {
+          cursor: pointer;
+          font-size: 18px;
+        }
+      }
+    }
+  }
+
+  .purchase-button {
+    width: 100%;
+
+    &.disabled {
+      pointer-events: none;
+      opacity: 0.5;
+    }
+  }
+}
+
+.algorithm-option-list-restricted {
+  font-size: $font3;
+}

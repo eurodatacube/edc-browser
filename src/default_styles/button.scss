@@ -1,0 +1,87 @@
+@import '../variables.scss';
+
+// BUTTON
+
+.button-base {
+  cursor: pointer;
+  font-size: $font3;
+  padding: 14px 20px;
+  transition: 0.05s linear background;
+  font-weight: $medium;
+  border: none;
+  letter-spacing: 0.3px;
+
+  &.fluid {
+    width: 100%;
+  }
+}
+
+.button:hover {
+  transition: 0.05s linear background;
+}
+
+// PRIMARY
+
+.button-primary {
+  @extend .button-base;
+
+  background-color: $primary;
+  color: $textColorFaded;
+  border: none;
+
+  i {
+    margin-right: 5px;
+  }
+}
+
+.button-primary:hover {
+  background: $primaryDark;
+}
+
+.button-primary:disabled {
+  background: $disabled;
+  opacity: 0.5;
+  cursor: auto;
+}
+
+// SECONDARY
+
+.button-secondary {
+  @extend .button-base;
+
+  border: 1px solid $textColorDisabled;
+  color: $textColorFaded;
+}
+
+.button-secondary:hover {
+  border: 1px solid $textColor;
+}
+// TERTIARY
+
+.button-tertiary {
+  border: none;
+  padding: 14px 0;
+  background: none;
+  color: $textColorFaded;
+  font-weight: $normal;
+  letter-spacing: 0.3px;
+}
+
+.button-tertiary:hover {
+  color: white;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+// Button Icon
+
+.button-icon {
+  background: none;
+  border: none;
+  color: #b2b2b2;
+  cursor: pointer;
+}
+
+.button-icon:hover {
+  color: $textColor;
+}

@@ -1,0 +1,24 @@
+@import '../variables.scss';
+
+.input-base {
+  font-size: $font4;
+  height: 45px;
+}
+
+.input-primary {
+  @extend .input-base;
+
+  box-sizing: border-box;
+  padding: 0 $spacing2;
+  background: $secondary;
+  border: none;
+  color: $textColor;
+}
+
+.input-primary:hover {
+  background: $secondaryDark;
+}
+
+.input-primary:focus {
+  background: $secondaryDark;
+}

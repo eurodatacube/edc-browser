@@ -1,0 +1,59 @@
+@import '../../variables';
+
+.visualization-panel {
+  padding: $spacing3 $spacing4;
+
+  .header {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+
+    .back-button {
+      padding: 7px 10px;
+      height: unset;
+    }
+
+    .collection-name {
+      color: $textColor;
+      font-size: $font4;
+      font-weight: $bold;
+    }
+  }
+
+  .date-selection {
+    .timespan-toggle {
+      font-weight: bold;
+    }
+
+    .timespan-picker {
+      .date-time-input {
+        margin-left: 5px;
+        margin-right: 0;
+
+        .numeric-input input {
+          max-width: 30px;
+        }
+      }
+    }
+  }
+
+  .tools {
+    margin-top: 5px;
+    padding: 5px 10px;
+    background: $secondaryDark;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+
+    .zoom-to-location {
+      color: $textColor;
+      cursor: pointer;
+    }
+  }
+
+  .visualization-layers-wrapper {
+    margin-top: 20px;
+  }
+}

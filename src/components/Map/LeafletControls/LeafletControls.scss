@@ -1,0 +1,112 @@
+@import '../../../variables.scss';
+
+#map {
+  .leaflet-control-container {
+    .leaflet-bottom.leaflet-left {
+      .leaflet-control-attribution {
+        background: $secondaryDark;
+        color: hsla(0, 0%, 100%, 0.6);
+
+        a {
+          color: $textColorDisabled;
+        }
+      }
+
+      @media screen and (max-width: 1200px) {
+        .leaflet-control-attribution {
+          max-width: 230px;
+        }
+      }
+
+      @media screen and (max-width: 780px) {
+        .leaflet-control-attribution {
+          bottom: 25px;
+        }
+      }
+    }
+
+    .leaflet-bottom.leaflet-right {
+      .leaflet-control-zoom {
+        border: none;
+
+        a {
+          padding-right: 2px;
+          line-height: 27px;
+        }
+
+        .leaflet-control-zoom-in {
+          border-bottom: 2px solid $secondary;
+        }
+
+        .leaflet-control-zoom-in,
+        .leaflet-control-zoom-out {
+          background-color: $secondary;
+          color: $textColor;
+          box-shadow: $boxShadow;
+          border-radius: 0;
+        }
+
+        .leaflet-control-zoom-in:hover,
+        .leaflet-control-zoom-out:hover {
+          color: $textColor;
+        }
+      }
+
+      @media screen and (max-width: 700px) {
+        .leaflet-control-zoom {
+          display: none;
+        }
+      }
+
+      .leaflet-control-scale {
+        margin-bottom: 0;
+
+        .leaflet-control-scale-line {
+          background: $secondary;
+          color: #fff;
+          border-color: #fff;
+        }
+      }
+
+      @media screen and (max-width: 500px) {
+        .leaflet-control-scale {
+          bottom: 2px;
+        }
+      }
+
+      @media screen and (max-width: 400px) {
+        .leaflet-control-scale {
+          bottom: 62px;
+        }
+      }
+
+      .leaflet-control-map-coordinates {
+        display: block;
+        margin-bottom: 0;
+        clear: unset;
+        font-size: $font1;
+        background: $secondaryDark;
+        color: $textColor;
+        padding: 1px;
+        min-width: 160px;
+        text-align: center;
+      }
+
+      .leaflet-control-map-coordinates.no-coordinates {
+        display: none;
+      }
+
+      @media screen and (max-width: 500px) {
+        .leaflet-control-map-coordinates {
+          clear: both;
+        }
+      }
+
+      @media screen and (max-width: 400px) {
+        .leaflet-control-map-coordinates {
+          bottom: 60px;
+        }
+      }
+    }
+  }
+}

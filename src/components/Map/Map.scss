@@ -1,0 +1,89 @@
+@import '../../variables.scss';
+
+#map {
+  background-color: #fff;
+  min-width: 280px;
+  min-height: 406px;
+  z-index: 0;
+
+  .maptiler-logo {
+    position: fixed;
+    bottom: 25px;
+    left: 10px;
+    z-index: 999;
+    width: 75px;
+    opacity: 0.75;
+    filter: drop-shadow($boxShadow);
+  }
+
+  @media (max-width: 1200px) {
+    .maptiler-logo {
+      bottom: 35px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .maptiler-logo {
+      bottom: 60px;
+    }
+  }
+
+  .leaflet-control-container {
+    .leaflet-top.leaflet-right {
+      .leaflet-control-layers {
+        background: $secondaryDark;
+        color: #fff;
+        border-radius: 0;
+        border: none;
+        margin-right: 10px;
+        box-shadow: $boxShadow;
+
+        .leaflet-control-layers-toggle {
+          background-image: url('../../assets/icons/layers.png');
+          border: none;
+          width: 40px;
+          height: 40px;
+        }
+
+        .leaflet-retina .leaflet-control-layers-toggle {
+          background-image: url('../../assets/icons/layers2x.png');
+        }
+      }
+    }
+  }
+
+  .mapboxgl-ctrl {
+    display: none !important;
+  }
+
+  .leaflet-layer {
+    pointer-events: auto !important;
+  }
+}
+
+#tooltip-holder {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+
+  .vector-data-tooltip {
+    z-index: 400;
+    position: absolute;
+    background: $secondaryDark;
+    color: $textColor;
+    padding: 20px;
+    max-height: 300px;
+    min-width: 300px;
+    overflow: auto;
+    pointer-events: all;
+
+    .single-geometry-data {
+      background: $secondary;
+      padding: 5px;
+      margin-bottom: 10px;
+    }
+  }
+}

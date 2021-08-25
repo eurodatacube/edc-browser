@@ -1,0 +1,29 @@
+@import '../../../variables.scss';
+
+div.commercial-data-description {
+  padding: 5px;
+
+  strong {
+    color: $textColor;
+  }
+
+  p {
+    font-size: 1em;
+
+    img {
+      width: 100%;
+    }
+  }
+
+  a {
+    color: $primary;
+  }
+
+  ul {
+    padding-inline-start: 1.5em;
+
+    li {
+      padding: 5px;
+    }
+  }
+}

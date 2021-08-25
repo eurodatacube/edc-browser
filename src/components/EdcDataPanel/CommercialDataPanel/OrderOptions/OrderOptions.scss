@@ -1,0 +1,71 @@
+@import '../../../../variables.scss';
+
+.commercial-data-order-options {
+  .row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 6px;
+    padding: 7px 15px 2px 0;
+
+    div {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .collection-selection {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      margin-left: -5px;
+
+      > input {
+        margin: 5px 0;
+      }
+    }
+
+    .dropdown {
+      padding: 0;
+    }
+
+    > * {
+      flex: 1;
+    }
+  }
+
+  .order-actions {
+    display: flex;
+    align-items: center;
+
+    a {
+      width: 100%;
+    }
+
+    /* stylelint-disable */
+    .padOnLeft {
+      i {
+        margin: 25px 0 10px 0;
+      }
+      /* stylelint-enable */
+    }
+  }
+
+  .selected-products {
+    padding: 2px;
+    display: flex;
+    flex-direction: column;
+
+    .selected-product {
+      font-size: 12px;
+      display: flex;
+      flex-direction: row;
+      padding: 2px;
+      justify-content: space-between;
+      align-items: center;
+
+      i {
+        color: $primary;
+        cursor: pointer;
+      }
+    }
+  }
+}

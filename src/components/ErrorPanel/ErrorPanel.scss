@@ -1,0 +1,29 @@
+@import '../../variables';
+
+.visualization-error-panel {
+  margin: 10px 0 10px 0;
+  padding: 0 10px;
+  text-align: center;
+  font-size: 14px;
+
+  .visualization-error-header {
+    margin-bottom: 5px;
+    color: $error;
+
+    .fa {
+      margin-right: 6px;
+    }
+  }
+
+  .textarea-wrapper {
+    .error-container {
+      color: $textColor;
+      background-color: $secondaryLight;
+      padding: 5px;
+      text-align: left;
+      white-space: pre-wrap;
+      max-height: 150px;
+      overflow-y: auto;
+    }
+  }
+}

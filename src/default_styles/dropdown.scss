@@ -1,0 +1,24 @@
+@import '../variables.scss';
+
+.dropdown-base {
+  height: 45px;
+  font-size: $font3;
+  border: none;
+}
+
+.dropdown-primary {
+  @extend .dropdown-base;
+
+  background: $secondary;
+  color: #eee;
+  width: 100%;
+  padding: 0 $spacing2;
+}
+
+.dropdown-primary:hover {
+  background: $secondaryDark;
+}
+
+.dropdown-primary:focus {
+  background: $secondaryDark;
+}

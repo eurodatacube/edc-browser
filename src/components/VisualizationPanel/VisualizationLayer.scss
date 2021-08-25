@@ -1,0 +1,48 @@
+@import '../../variables';
+
+.visualization-layer {
+  margin: 5px 0;
+  padding: 10px 20px;
+  background-color: $secondaryLight;
+
+  .main-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    .title {
+      color: $textColor;
+      font-size: $font4;
+      font-weight: $medium;
+      cursor: pointer;
+      width: 80%;
+    }
+
+    .expand-collapse-evalscript {
+      width: 20%;
+    }
+  }
+
+  &.selected {
+    border: 1px solid $primary;
+
+    .main-row {
+      .title {
+        color: $primaryLight;
+      }
+    }
+  }
+
+  .evalscript-holder {
+    pre {
+      color: $textColor;
+      background-color: $secondary;
+      padding: 5px;
+      text-align: left;
+      white-space: pre-wrap;
+      max-height: 150px;
+      overflow-y: auto;
+    }
+  }
+}

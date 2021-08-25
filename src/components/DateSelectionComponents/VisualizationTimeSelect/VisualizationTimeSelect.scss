@@ -1,0 +1,53 @@
+/* stylelint-disable */
+@import '../../../variables';
+
+.visualization-time-select {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  text-transform: none;
+  color: white;
+  text-align: center;
+  margin-top: 25px;
+
+  .time-select-type {
+    text-transform: none;
+    font-weight: normal;
+    color: $textColor;
+    margin-left: 0;
+    width: auto;
+    margin-right: 6px;
+  }
+
+  div:last-child {
+    margin-left: auto;
+  }
+
+  .timespan-label {
+    border-bottom: 1px solid white;
+    display: flex;
+    font-size: 13px;
+    height: 15px;
+    align-items: flex-end;
+    margin: 0 5px;
+    padding: 1px 2px;
+    line-height: 10px;
+    min-width: 220px;
+    justify-content: center;
+
+    &:hover {
+      cursor: pointer;
+      border-color: $primary;
+    }
+  }
+
+  .timespan-toggle {
+    color: $primary;
+    font-size: 13px;
+    cursor: pointer;
+  }
+
+  .timespan-title-wrap {
+    display: flex;
+  }
+}

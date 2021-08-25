@@ -1,0 +1,9 @@
+@import '../../variables.scss';
+
+.loader {
+  text-align: center;
+
+  & span {
+    position: relative;
+  }
+}

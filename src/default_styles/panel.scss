@@ -1,0 +1,10 @@
+@import '../variables.scss';
+
+.panel-content-wrap {
+  padding: $spacing3 $spacing4;
+  background: $secondaryLight;
+}
+
+.panel-section {
+  margin: 0 0 $spacing6 0;
+}

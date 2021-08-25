@@ -1,0 +1,31 @@
+@import '../../../../variables.scss';
+
+.commercial-data-search {
+  .row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 6px;
+    padding: 7px 15px 2px 0;
+
+    .aoi-selection {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+
+      i {
+        color: $primary;
+        padding: 0 5px;
+        cursor: pointer;
+
+        &.disabled {
+          color: $textColor;
+          cursor: not-allowed;
+        }
+      }
+    }
+
+    > * {
+      flex: 1;
+    }
+  }
+}

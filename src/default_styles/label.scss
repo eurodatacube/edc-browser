@@ -1,0 +1,8 @@
+@import '../variables.scss';
+
+.label-primary {
+  font-weight: $medium;
+  font-size: $font3;
+  color: $textColorFaded;
+  letter-spacing: 0.3px;
+}

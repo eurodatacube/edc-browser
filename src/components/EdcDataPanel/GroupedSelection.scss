@@ -1,0 +1,43 @@
+.group-selection {
+  margin: 10px 2px;
+
+  .group-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+
+    .group-title {
+      padding-right: 10px;
+      font-size: 1.1em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .icon {
+      &.closed {
+        transform: rotate(0deg);
+        transition: transform 0.1s linear;
+      }
+
+      &.open {
+        transform: rotate(180deg);
+        transition: transform 0.1s linear;
+      }
+    }
+  }
+
+  .selections {
+    padding-left: 10px;
+
+    .selection-item {
+      display: flex;
+
+      label {
+        vertical-align: text-bottom;
+        margin-left: 0.2rem;
+      }
+    }
+  }
+}

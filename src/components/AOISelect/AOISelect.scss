@@ -1,0 +1,56 @@
+@import '../../variables';
+
+.aoi-select-panel {
+  color: $textColor;
+  display: flex;
+  flex-direction: column;
+
+  .select-aoi-button {
+    background-color: $secondary;
+    margin-bottom: 10px;
+  }
+
+  .upload-aoi-button {
+    background: none;
+    margin-top: $spacing2;
+
+    .upload-label {
+      cursor: pointer;
+    }
+
+    #upload-aoi {
+      display: none;
+    }
+  }
+
+  .disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  .error-panel {
+    color: $error;
+    padding: 2px 10px;
+    font-size: $font2;
+  }
+
+  .continue-button {
+    position: absolute;
+    bottom: 20px;
+  }
+}
+
+.aoi-confirm-panel {
+  color: $textColor;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+
+  .clear-aoi-button {
+    width: 20%;
+  }
+
+  .continue-button {
+    width: 80%;
+  }
+}

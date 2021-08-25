@@ -1,0 +1,23 @@
+@import '../../variables';
+
+.info-tooltip {
+  position: relative;
+  display: inline-block;
+
+  .info-tooltip-text {
+    position: absolute;
+    background: $secondary;
+    padding: $spacing3;
+    border-radius: 5px;
+    box-shadow: $boxShadow;
+    right: 100%;
+    max-width: 300px;
+    width: max-content;
+    z-index: 1;
+    word-wrap: break-word;
+  }
+
+  .tooltip-icon {
+    cursor: pointer;
+  }
+}

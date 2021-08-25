@@ -1,0 +1,13 @@
+@import '../../variables';
+
+.algorithms-panel {
+  color: $textColor;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 40px 20px 40px;
+
+  .title-label {
+    margin-bottom: $spacing2;
+    font-size: $font3;
+  }
+}
