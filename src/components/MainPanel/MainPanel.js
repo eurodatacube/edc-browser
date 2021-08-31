@@ -7,7 +7,7 @@ import EdcDataPanel from '../EdcDataPanel/EdcDataPanel';
 import VisualizationPanel from '../VisualizationPanel/VisualizationPanel';
 import { getServiceHandlerForCollectionType } from '../../services';
 import store, { tabsSlice } from '../../store';
-import { PANEL_TAB, COLLECTION_TYPE } from '../../const';
+import { PANEL_TAB } from '../../const';
 import { getCollectionInfo } from '../../utils/collections';
 import ErrorPanel from '../ErrorPanel/ErrorPanel';
 
@@ -21,12 +21,18 @@ function MainPanel(props) {
     collectionsList,
     selectedCollectionId,
     selectedLayerId,
+    customVisualizationSelected,
+    evalscript,
+    evalscriptUrl,
     selectedType,
   } = props;
 
   const [panelOpen, setPanelOpen] = useState(true);
   const [showVisualizationPanel, setShowVisualizationPanel] = useState(
-    !!(selectedCollectionId && selectedLayerId),
+    !!(
+      selectedCollectionId &&
+      (selectedLayerId || (customVisualizationSelected && (evalscript || evalscriptUrl)))
+    ),
   );
   const [configurations, setConfigurations] = useState(null);
   const [bestLocation, setBestLocation] = useState(null);
@@ -102,9 +108,7 @@ function MainPanel(props) {
             {showVisualizationPanel && configurations ? (
               <VisualizationPanel
                 configurations={configurations}
-                collectionName={
-                  selectedType === COLLECTION_TYPE.GEO_DB ? selectedLayerId : selectedCollectionId
-                }
+                collectionName={collection.title}
                 collection={collection}
                 bestLocation={bestLocation}
                 onBack={() => setShowVisualizationPanel(false)}
@@ -126,6 +130,9 @@ const mapStoreToProps = (store) => ({
   selectedMainTabIndex: store.tabs.selectedMainTabIndex,
   selectedCollectionId: store.visualization.collectionId,
   selectedLayerId: store.visualization.layerId,
+  customVisualizationSelected: store.visualization.customVisualizationSelected,
+  evalscript: store.visualization.evalscript,
+  evalscriptUrl: store.visualization.evalscriptUrl,
   selectedType: store.visualization.type,
 });
 

@@ -4,7 +4,7 @@ export const SelectInput = ({ input, params, onChangeHandler }) => (
   <div key={`${input.id}`} className="row">
     <label title={input.label}>{input.label}</label>
     <select
-      className="dropdown"
+      className="dropdown-primary compact"
       value={params[input.id]}
       onChange={(e) => onChangeHandler(input.id, e.target.value)}
     >

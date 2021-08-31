@@ -9,6 +9,7 @@ import L from 'leaflet';
 
 import AOISelect from '../AOISelect/AOISelect';
 import store, { aoiSlice, mainMapSlice, previewAOISlice } from '../../store';
+import { getBoundsAndLatLng } from '../EdcDataPanel/CommercialDataPanel/commercialData.utils';
 
 function AOIAlgorithmOption(props) {
   const [displayAvailableArea, setDisplayAvailableArea] = useState(false);
@@ -25,16 +26,10 @@ function AOIAlgorithmOption(props) {
   }
 
   function displayAOIOnMap() {
-    const { lat, lng, bounds } = getBoundsAndLatLng(geojson);
-    store.dispatch(mainMapSlice.actions.setPosition({ lat: lat, lng: lng }));
+    const { lat, lng, zoom } = getBoundsAndLatLng(geojson);
+    const bounds = L.geoJSON(geojson).getBounds();
+    store.dispatch(mainMapSlice.actions.setPosition({ lat: lat, lng: lng, zoom: zoom }));
     store.dispatch(aoiSlice.actions.set({ geometry: geojson, bounds: bounds }));
-  }
-
-  function getBoundsAndLatLng(geometry) {
-    const layer = L.geoJSON(geometry);
-    const bounds = layer.getBounds();
-    const { lat, lng } = bounds.getCenter();
-    return { bounds: bounds, lat: lat, lng: lng };
   }
 
   function clearAOI() {

@@ -1,6 +1,5 @@
 import axios from 'axios';
 import wkx from 'wkx';
-import L from 'leaflet';
 
 import { parseJwt } from '../utils/jwt';
 import AbstractServiceHandler from './AbstractServiceHandler';
@@ -8,6 +7,7 @@ import { collectionFactory } from './collection';
 import { COLLECTION_TYPE, DEFAULT_TIMEOUT } from '../const';
 import { convertGeoJSONCrs } from '../utils/coords';
 import { requestWithTimeout } from '../utils';
+import { getBoundsAndLatLng } from '../components/EdcDataPanel/CommercialDataPanel/commercialData.utils';
 import GeoDBLayer from './GeoDBLayer';
 
 export default class GeoDBHandler extends AbstractServiceHandler {
@@ -81,6 +81,7 @@ export default class GeoDBHandler extends AbstractServiceHandler {
           uniqueId: `${collection.database}-${collection.table_name}`,
           id: collection.table_name,
           type: COLLECTION_TYPE.GEO_DB,
+          title: collection.table_name,
           group: collection.database,
           ownedByUser: collection.owner === userId,
         }),
@@ -130,10 +131,10 @@ export default class GeoDBHandler extends AbstractServiceHandler {
 
   async getBestInitialLocation(database, collectionId) {
     const srid = await this.getCollectionSRID(database, collectionId);
-    const data = await this.getCollectionData(database, collectionId, 10);
-    const geometries = data.map((d) => convertGeoJSONCrs(d.geometry, srid, 4326));
-    const centre = L.geoJSON(geometries).getBounds().getCenter();
-    return centre;
+    const data = await this.getCollectionData(database, collectionId, 1);
+    const geometry = data.map((d) => convertGeoJSONCrs(d.geometry, srid, 4326));
+    const { lat, lng, zoom } = getBoundsAndLatLng(geometry);
+    return { lat: lat, lng: lng, zoom: zoom };
   }
 
   getLayer(database, collectionId) {

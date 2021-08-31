@@ -16,18 +16,6 @@
     filter: drop-shadow($boxShadow);
   }
 
-  @media (max-width: 1200px) {
-    .maptiler-logo {
-      bottom: 35px;
-    }
-  }
-
-  @media (max-width: 768px) {
-    .maptiler-logo {
-      bottom: 60px;
-    }
-  }
-
   .leaflet-control-container {
     .leaflet-top.leaflet-right {
       .leaflet-control-layers {

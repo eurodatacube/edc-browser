@@ -14,9 +14,9 @@ class VisualizationLayer extends L.TileLayer {
       preview: 2,
       transparent: true,
     };
-    const { collection, layerId } = options;
+    const { collection, layerId, customVisualizationSelected, evalscript, evalscriptUrl } = options;
 
-    this.layer = LayersFactory(collection, layerId);
+    this.layer = LayersFactory(collection, layerId, customVisualizationSelected, evalscript, evalscriptUrl);
 
     const mergedOptions = Object.assign(defaultOptions, options);
     L.setOptions(this, mergedOptions);
@@ -88,12 +88,12 @@ class VisualizationLayer extends L.TileLayer {
     this.layer.getMap(individualTileParams, apiType, reqConfig).then((blob) => {
       tile.onload = function () {
         URL.revokeObjectURL(tile.src);
-        done(null, tile);
       };
       if (blob) {
         const objectURL = URL.createObjectURL(blob);
         tile.src = objectURL;
       }
+      done(null, tile);
     });
     return tile;
   };
@@ -101,8 +101,8 @@ class VisualizationLayer extends L.TileLayer {
   setParams = (params) => {
     this.options = Object.assign(this.options, params);
 
-    const { collection, layerId } = this.options;
-    this.layer = LayersFactory(collection, layerId);
+    const { collection, layerId, customVisualizationSelected, evalscript, evalscriptUrl } = this.options;
+    this.layer = LayersFactory(collection, layerId, customVisualizationSelected, evalscript, evalscriptUrl);
 
     this.redraw();
   };
@@ -118,6 +118,19 @@ class VisualizationLayerComponent extends GridLayer {
     const { progress, ...params } = props;
     const { leaflet: _l, ...options } = this.getOptions(params);
     const layer = new VisualizationLayer(options);
+
+    layer.on('loading', function () {
+      progress.start();
+      progress.inc();
+    });
+
+    layer.on('load', function () {
+      progress.done();
+    });
+
+    layer.on('remove', function () {
+      progress.done();
+    });
 
     layer.on('tileunload', function (e) {
       e.tile.cancelToken.cancel();
@@ -146,6 +159,23 @@ class VisualizationLayerComponent extends GridLayer {
     }
     if (params.layerId) {
       options.layerId = params.layerId;
+    } else {
+      options.layerId = null;
+    }
+    if (params.customVisualizationSelected) {
+      options.customVisualizationSelected = params.customVisualizationSelected;
+    } else {
+      options.customVisualizationSelected = false;
+    }
+    if (params.evalscript) {
+      options.evalscript = params.evalscript;
+    } else {
+      options.evalscript = null;
+    }
+    if (params.evalscriptUrl) {
+      options.evalscriptUrl = params.evalscriptUrl;
+    } else {
+      options.evalscriptUrl = null;
     }
     if (params.fromTime) {
       options.fromTime = params.fromTime;

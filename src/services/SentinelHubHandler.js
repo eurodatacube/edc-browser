@@ -1,6 +1,5 @@
 import axios from 'axios';
 import moment from 'moment';
-import center from '@turf/center';
 import {
   requestAuthToken,
   setAuthToken,
@@ -10,6 +9,7 @@ import {
   CRS_EPSG4326,
   BYOCSubTypes,
 } from '@sentinel-hub/sentinelhub-js';
+import jwtDecode from 'jwt-decode';
 
 import AbstractServiceHandler from './AbstractServiceHandler';
 
@@ -17,6 +17,8 @@ import { collectionFactory } from './collection';
 import { generateConfigurationsFromBands } from '../utils/evalscript';
 import { COLLECTION_TYPE, DEFAULT_FROM_TIME, DEFAULT_TIMEOUT } from '../const';
 import { requestWithTimeout } from '../utils';
+import { getSubTypeAndCollectionId } from '../utils/collections';
+import { getBoundsAndLatLng } from '../components/EdcDataPanel/CommercialDataPanel/commercialData.utils';
 
 export default class SentinelHubHandler extends AbstractServiceHandler {
   HANDLER_ID = 'SENTINEL_HUB';
@@ -32,7 +34,19 @@ export default class SentinelHubHandler extends AbstractServiceHandler {
     if (this.CLIENT_ID && this.CLIENT_SECRET) {
       this.token = await requestAuthToken(this.CLIENT_ID, this.CLIENT_SECRET);
       setAuthToken(this.token);
+      this.refreshToken(this.token);
     }
+  }
+
+  refreshToken(token) {
+    const exp = jwtDecode(token).exp;
+    const now = Math.floor(Date.now() / 1000);
+    const tokenExpiresInSeconds = exp - now;
+    // refresh token a minute before it expires
+    const refreshTokenInMilliseconds = (tokenExpiresInSeconds - 60) * 1000;
+    this.revokeTokenTimeout = setTimeout(() => {
+      this.authenticate();
+    }, refreshTokenInMilliseconds);
   }
 
   async getCollections() {
@@ -65,20 +79,41 @@ export default class SentinelHubHandler extends AbstractServiceHandler {
       params.viewToken = links.nextToken;
     }
 
-    return {
-      user: allCollections.map((collection) =>
-        collectionFactory({
-          uniqueId: collection.id,
-          id: collection.id,
-          type: COLLECTION_TYPE.SENTINEL_HUB,
+    const collectionsData = await Promise.all(
+      allCollections.map(async (collection) => {
+        const { data } = await axios.get(
+          `https://services.sentinel-hub.com/api/v1/metadata/collection/byoc-${collection.id}`,
+          {
+            headers: { Authorization: `Bearer ${this.token}` },
+          },
+        );
+        return {
+          ...data,
           group: collection.name,
+          additionalData: collection.additionalData,
+        };
+      }),
+    );
+
+    return {
+      user: collectionsData.map((collection) => {
+        const { subType, collectionId } = getSubTypeAndCollectionId(collection.id);
+        return collectionFactory({
+          uniqueId: collection.id,
+          id: collectionId,
+          title: collectionId,
+          type: COLLECTION_TYPE.SENTINEL_HUB,
+          group: collection.group,
           configurations: this.getConfigurations(collection),
           ownedByUser: true,
           serviceSpecificInfo: {
             type: DATASET_BYOC.id,
+            locationId: collection.location.id,
+            subType: subType,
+            collectionId: collectionId,
           },
-        }),
-      ),
+        });
+      }),
     };
   }
 
@@ -104,7 +139,11 @@ export default class SentinelHubHandler extends AbstractServiceHandler {
     if (!tiles.length) {
       return null;
     }
-    const [lng, lat] = center(tiles[0].geometry).geometry.coordinates;
-    return { lat: lat, lng: lng };
+    const { lat, lng, zoom } = getBoundsAndLatLng(tiles[0].geometry);
+    return { lat: lat, lng: lng, zoom: zoom };
+  }
+
+  supportsCustomScript() {
+    return true;
   }
 }

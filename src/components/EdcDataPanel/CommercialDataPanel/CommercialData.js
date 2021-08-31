@@ -15,19 +15,20 @@ Browse, visualise and analyze Very High Resolution (VHR) data directly in EDC Br
 
 Observe the planet at resolutions starting at 3 meters and all the way up to 0.5 meters for a cost down to 0.9 EUR per km².
 
-![High resolution imagery example.](${process.env.REACT_APP_ROOT_URL}commercial-data-previews/high-res-image-example.png)
+![High resolution imagery example.](commercial-data-previews/high-res-image-example.png)
 
 What you need: 
-- An active Sentinel Hub subscription to search the metadata. If you don't have an account yet: [Sign up](https://services.sentinel-hub.com/oauth/subscription?param_domain_id=1&param_redirect_uri=https://apps.sentinel-hub.com/dashboard/oauthCallback.html&param_state=%2F&param_scope=&param_client_id=30cf1d69-af7e-4f3a-997d-0643d660a478&domainId=1).
-- Pre-purchased quota for any of the constellations. Go to [Dashboard](https://apps.sentinel-hub.com/dashboard/#/account/billing) to establish a subscription and purchase commercial data plans. 
+- An active Sentinel Hub subscription to search the metadata. Activate the service [here](https://eurodatacube.com/marketplace/services/edc_sentinel_hub).
+- Pre-purchased quota for any of the constellations. Go to [Marketplace](https://eurodatacube.com/marketplace/data-products/commercial-data-sh) to establish a subscription and purchase commercial data plans. 
 `;
 
 const CommercialData = ({ collectionsList }) => {
   const [userAccountInfo, setUserAccountInfo] = useState({});
-  const shAuthToken = getServiceHandlerForCollectionType(COLLECTION_TYPE.SENTINEL_HUB).token;
+  const sentinelHubHandler = getServiceHandlerForCollectionType(COLLECTION_TYPE.SENTINEL_HUB);
+  const shAuthToken = sentinelHubHandler && sentinelHubHandler.token;
 
   useEffect(() => {
-    if (!shAuthToken) {
+    if (!shAuthToken || process.env.REACT_APP_PUBLIC_DEPLOY === 'true') {
       return;
     }
     const user = {

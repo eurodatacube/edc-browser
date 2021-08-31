@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 
 import { serviceHandlers } from '../../services';
 import store, { errorsSlice } from '../../store';
+import Loader from '../Loader/Loader';
 
 function CollectionsProvider({ children }) {
   const [collectionsList, setCollectionsList] = useState({
@@ -37,12 +38,12 @@ function CollectionsProvider({ children }) {
 
     loadCollections();
   }, []);
-  if (fetchingInProgress) {
-    return null;
-  }
-  return children({
-    collectionsList: collectionsList,
-  });
+
+  return fetchingInProgress ? (
+    <Loader type="initial-loader" />
+  ) : (
+    children({ collectionsList: collectionsList })
+  );
 }
 
 export default CollectionsProvider;

@@ -55,7 +55,7 @@ const ENV_VAR_NAMES = {
 };
 
 export function getEnvVarValue(envVar) {
-  return process.env[ENV_VAR_NAMES[envVar].buildTimeName]
+  return process.env[ENV_VAR_NAMES[envVar].buildTimeName] || !window._env_
     ? process.env[ENV_VAR_NAMES[envVar].buildTimeName]
     : window._env_[ENV_VAR_NAMES[envVar].runTimeName];
 }

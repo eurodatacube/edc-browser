@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { BBox, CRS_EPSG4326 } from '@sentinel-hub/sentinelhub-js';
+import { BBox, CRS_EPSG4326, SHV3_LOCATIONS_ROOT_URL, DATASET_BYOC } from '@sentinel-hub/sentinelhub-js';
 
 import AbstractServiceHandler from './AbstractServiceHandler';
 
@@ -7,6 +7,7 @@ import { requestWithTimeout } from '../utils';
 import { b64EncodeUnicode } from '../utils/base64MDN';
 import { collectionFactory } from './collection';
 import { LayersFactory } from './layersFactory';
+import { isCustom, getSubTypeAndCollectionId } from '../utils/collections';
 import { COLLECTION_TYPE, DEFAULT_TIMEOUT } from '../const';
 
 const GROUPS = ['Sentinel', 'Landsat', 'ICEYE', 'DEM', 'ALOS'];
@@ -59,20 +60,26 @@ export default class EDCHandler extends AbstractServiceHandler {
     );
 
     return {
-      public: publicCollections.map((collection) =>
-        collectionFactory({
+      public: publicCollections.map((collection) => {
+        const { subType, collectionId } = getSubTypeAndCollectionId(collection.datasource_type);
+        return collectionFactory({
           uniqueId: collection.id,
           id: collection.id,
+          title: collection.title,
           type: COLLECTION_TYPE.SENTINEL_HUB_EDC,
           group: this._getGroupName(collection.title),
           ownedByUser: true,
           configurations: collection.links.filter((l) => l.rel === 'processing-expression'),
+          bands: collection['cube:dimensions'].band.values,
           serviceSpecificInfo: {
-            type: collection.datasource_type,
+            type: isCustom(collection.datasource_type) ? DATASET_BYOC.id : collection.datasource_type,
             providers: collection.providers,
+            locationId: this.getLocationId(collection.providers),
+            subType: subType,
+            collectionId: collectionId,
           },
-        }),
-      ),
+        });
+      }),
       commercial: commercialCollections.map((collection) =>
         collectionFactory({
           uniqueId: collection.id,
@@ -87,6 +94,14 @@ export default class EDCHandler extends AbstractServiceHandler {
 
   _getGroupName(name) {
     return GROUPS.find((group) => name.match(group)) ?? 'Miscellaneous';
+  }
+
+  getLocationId(providers) {
+    let { url: host } = providers.find((p) => p.roles.includes('processor'));
+    return Object.keys(SHV3_LOCATIONS_ROOT_URL).find((key) => {
+      const url = new URL(SHV3_LOCATIONS_ROOT_URL[key]);
+      return url.host === host;
+    });
   }
 
   static getCheckoutUrl(algorithm, inputValues) {
@@ -190,9 +205,9 @@ export default class EDCHandler extends AbstractServiceHandler {
     ];
   }
 
-  async getAvailableDates(collection, layerId, bounds, fromTime, toTime) {
+  async getAvailableDates(collection, bounds, fromTime, toTime) {
     if (collection.type === COLLECTION_TYPE.SENTINEL_HUB_EDC) {
-      const searchLayer = LayersFactory(collection, layerId);
+      const searchLayer = LayersFactory(collection, null, true, '');
       const bbox = new BBox(
         CRS_EPSG4326,
         bounds.getWest(),
@@ -206,6 +221,13 @@ export default class EDCHandler extends AbstractServiceHandler {
   }
 
   supportsDateSelection(collectionType) {
+    if (collectionType === COLLECTION_TYPE.SENTINEL_HUB_EDC) {
+      return true;
+    }
+    return false;
+  }
+
+  supportsCustomScript(collectionType) {
     if (collectionType === COLLECTION_TYPE.SENTINEL_HUB_EDC) {
       return true;
     }

@@ -3,9 +3,11 @@ import { Map as LeafletMap, Pane, LayersControl, GeoJSON, FeatureGroup } from 'r
 import { connect } from 'react-redux';
 import L from 'leaflet';
 import 'leaflet.pm';
+import NProgress from 'nprogress';
 
 import 'leaflet/dist/leaflet.css';
 import 'leaflet.pm/dist/leaflet.pm.css';
+import 'nprogress/nprogress.css';
 
 import LeafletControls from './LeafletControls/LeafletControls';
 import store, { mainMapSlice, aoiSlice, visualizationSlice, commercialDataSlice } from '../../store';
@@ -57,6 +59,9 @@ function Map(props) {
     collectionId,
     collectionsList,
     layerId,
+    customVisualizationSelected,
+    evalscript,
+    evalscriptUrl,
     type,
     fromTime,
     toTime,
@@ -158,8 +163,18 @@ function Map(props) {
     store.dispatch(visualizationSlice.actions.removeTileDataGeometries(tileId));
   }
 
+  const progress = NProgress.configure({
+    parent: `#map`,
+    showSpinner: false,
+  });
+
   const collection = getCollectionInfo(collectionsList, collectionId, type, layerId);
-  const canDisplayVisualizationLayer = !!(collection && layerId && fromTime && toTime);
+  const canDisplayVisualizationLayer = !!(
+    collection &&
+    (layerId || (customVisualizationSelected && (evalscript || evalscriptUrl))) &&
+    fromTime &&
+    toTime
+  );
 
   return (
     <>
@@ -242,11 +257,15 @@ function Map(props) {
             <Overlay name={collection.id} checked={true}>
               <VisualizationLayerComponent
                 layerId={layerId}
+                customVisualizationSelected={customVisualizationSelected}
+                evalscript={evalscript}
+                evalscriptUrl={evalscriptUrl}
                 collection={collection}
                 fromTime={fromTime}
                 toTime={toTime}
                 pane={VISUALIZATION_LAYER_PANE_ID}
                 onUnload={onUnload}
+                progress={progress}
               />
             </Overlay>
           )}
@@ -333,6 +352,9 @@ const mapStoreToProps = (store) => {
     previewAOI: store.previewAOI.geometry,
     collectionId: store.visualization.collectionId,
     layerId: store.visualization.layerId,
+    customVisualizationSelected: store.visualization.customVisualizationSelected,
+    evalscript: store.visualization.evalscript,
+    evalscriptUrl: store.visualization.evalscriptUrl,
     type: store.visualization.type,
     fromTime: store.visualization.fromTime,
     toTime: store.visualization.toTime,

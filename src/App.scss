@@ -100,3 +100,8 @@ body,
     width: 300px !important;
   }
 }
+
+#nprogress .bar {
+  background: $primary;
+  height: 3px;
+}

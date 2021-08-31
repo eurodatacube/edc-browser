@@ -3,7 +3,7 @@
 .visualization-layer {
   margin: 5px 0;
   padding: 10px 20px;
-  background-color: $secondaryLight;
+  background-color: $secondary;
 
   .main-row {
     display: flex;
@@ -37,7 +37,7 @@
   .evalscript-holder {
     pre {
       color: $textColor;
-      background-color: $secondary;
+      background-color: $secondaryDark;
       padding: 5px;
       text-align: left;
       white-space: pre-wrap;

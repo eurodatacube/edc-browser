@@ -16,10 +16,11 @@ export function initializeServiceHandlers() {
     );
   }
 
+  serviceHandlers.push(new EDCHandler());
+
   const SH_CLIENT_ID = getEnvVarValue(ENV_VARS.SH_CLIENT_ID);
   const SH_CLIENT_SECRET = getEnvVarValue(ENV_VARS.SH_CLIENT_SECRET);
   if (SH_CLIENT_ID && SH_CLIENT_SECRET) {
-    serviceHandlers.push(new EDCHandler());
     serviceHandlers.push(
       new SentinelHubHandler({ CLIENT_ID: SH_CLIENT_ID, CLIENT_SECRET: SH_CLIENT_SECRET }),
     );

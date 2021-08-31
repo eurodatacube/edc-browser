@@ -20,10 +20,9 @@ export class Button extends PureComponent {
     } = this.props;
     return (
       <button
-        className={`button-${content} ${className || ''} ${fluid ? 'fluid' : ''} ${
-          disabled ? 'disabled' : ''
-        }`}
+        className={`button-${content} ${className || ''} ${fluid ? 'fluid' : ''} `}
         onClick={!disabled ? onClick : onDisabledClick}
+        disabled={disabled}
         {...rest}
       >
         {loading ? (

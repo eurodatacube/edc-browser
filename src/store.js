@@ -72,6 +72,9 @@ export const visualizationSlice = createSlice({
   initialState: {
     collectionId: undefined,
     layerId: undefined,
+    customVisualizationSelected: false,
+    evalscript: undefined,
+    evalscriptUrl: undefined,
     type: undefined,
     fromTime: DEFAULT_FROM_TIME,
     toTime: DEFAULT_TO_TIME,
@@ -85,6 +88,15 @@ export const visualizationSlice = createSlice({
       }
       if (action.payload.layerId !== undefined) {
         state.layerId = action.payload.layerId;
+      }
+      if (action.payload.customVisualizationSelected !== undefined) {
+        state.customVisualizationSelected = action.payload.customVisualizationSelected;
+      }
+      if (action.payload.evalscript !== undefined) {
+        state.evalscript = action.payload.evalscript;
+      }
+      if (action.payload.evalscriptUrl !== undefined) {
+        state.evalscriptUrl = action.payload.evalscriptUrl;
       }
       if (action.payload.type !== undefined) {
         state.type = action.payload.type;
@@ -115,6 +127,9 @@ export const visualizationSlice = createSlice({
     reset: (state) => {
       state.collectionId = undefined;
       state.layerId = undefined;
+      state.customVisualizationSelected = undefined;
+      state.evalscript = undefined;
+      state.evalscriptUrl = undefined;
       state.type = undefined;
       state.dataGeometries = [];
       state.highlightedDataGeometry = undefined;
@@ -205,6 +220,22 @@ export const errorsSlice = createSlice({
   },
 });
 
+export const indexSlice = createSlice({
+  name: 'index',
+  initialState: {
+    handlePositions: null,
+    gradient: null,
+  },
+  reducers: {
+    setHandlePositions: (state, action) => {
+      state.handlePositions = action.payload;
+    },
+    setGradient: (state, action) => {
+      state.gradient = action.payload;
+    },
+  },
+});
+
 const reducers = combineReducers({
   mainMap: mainMapSlice.reducer,
   tabs: tabsSlice.reducer,
@@ -213,6 +244,7 @@ const reducers = combineReducers({
   previewAOI: previewAOISlice.reducer,
   commercialData: commercialDataSlice.reducer,
   errors: errorsSlice.reducer,
+  index: indexSlice.reducer,
 });
 
 const store = configureStore({

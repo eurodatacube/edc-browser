@@ -4,7 +4,7 @@
 .timespan-picker {
   display: flex;
   flex-direction: column;
-  background: $secondaryDark;
+  background: $secondary;
   font-size: 14px;
   text-transform: none;
   margin-top: 10px;
@@ -84,7 +84,7 @@
 
   input {
     text-align: center;
-    background: $secondaryDark;
+    background: $secondary;
     color: white;
     border: none;
     max-width: 41px;

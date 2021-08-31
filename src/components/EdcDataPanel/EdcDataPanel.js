@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import { connect } from 'react-redux';
 
 import { Tabs, Tab } from '../Tabs/Tabs';
-import GroupedSelection from './GroupedSelection';
+import { PublicAndUserDataPanel } from './PublicAndUserDataPanel/PublicAndUserDataPanel';
 import CommercialData from './CommercialDataPanel/CommercialData';
 import store, { visualizationSlice, tabsSlice } from '../../store';
 import { groupBy } from './EdcDataPanel.utils';
@@ -28,7 +28,7 @@ function EdcDataPanel({ collectionsList, selectedEdcDataTabIndex, showVisualisat
     );
   }, [collectionsList.user, displayAll]);
 
-  const selectionChange = (selectedCollection) => {
+  const handleCollectionClick = (selectedCollection) => {
     if (selectedCollection) {
       let visualizationParams;
       if (selectedCollection.type === COLLECTION_TYPE.GEO_DB) {
@@ -47,6 +47,9 @@ function EdcDataPanel({ collectionsList, selectedEdcDataTabIndex, showVisualisat
     }
   };
 
+  const omitUserCollections =
+    collectionsList.user.length === 0 || process.env.REACT_APP_PUBLIC_DEPLOY === 'true';
+
   return (
     <div className="edc-data-panel panel-content-wrap">
       <Tabs
@@ -54,12 +57,12 @@ function EdcDataPanel({ collectionsList, selectedEdcDataTabIndex, showVisualisat
         onSelect={(index) => store.dispatch(tabsSlice.actions.setEdcDataTabIndex(index))}
       >
         <Tab title={`Public`} renderKey={0}>
-          <GroupedSelection group={publicCollections} onSelectionChange={selectionChange} />
+          <PublicAndUserDataPanel groups={publicCollections} handleCollectionClick={handleCollectionClick} />
         </Tab>
         <Tab title={`Commercial`} renderKey={1}>
           <CommercialData collectionsList={collectionsList} />
         </Tab>
-        <Tab title={`User`} renderKey={2}>
+        <Tab title={`User`} renderKey={2} omit={omitUserCollections}>
           <>
             <div className="toggle">
               <div className={`button ${displayAll ? 'selected' : ''}`} onClick={() => setDisplayAll(true)}>
@@ -69,7 +72,10 @@ function EdcDataPanel({ collectionsList, selectedEdcDataTabIndex, showVisualisat
                 Private
               </div>
             </div>
-            <GroupedSelection group={filteredUserCollections()} onSelectionChange={selectionChange} />
+            <PublicAndUserDataPanel
+              groups={filteredUserCollections()}
+              handleCollectionClick={handleCollectionClick}
+            />
           </>
         </Tab>
       </Tabs>

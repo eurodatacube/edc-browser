@@ -4,7 +4,19 @@ import store, { mainMapSlice, visualizationSlice, tabsSlice } from '../store';
 import { DEFAULT_LAT_LNG, PANEL_TAB } from '../const';
 
 export function updatePath(props) {
-  let { lat, lng, zoom, fromTime, toTime, collectionId, layerId, type } = props;
+  let {
+    lat,
+    lng,
+    zoom,
+    fromTime,
+    toTime,
+    collectionId,
+    layerId,
+    customVisualizationSelected,
+    evalscript,
+    evalscriptUrl,
+    type,
+  } = props;
   lat = Math.round(100000 * lat) / 100000;
   lng = Math.round(100000 * lng) / 100000;
 
@@ -19,6 +31,15 @@ export function updatePath(props) {
   }
   if (layerId) {
     params.layerId = layerId;
+  }
+  if (customVisualizationSelected) {
+    params.customVisualizationSelected = customVisualizationSelected;
+  }
+  if (evalscript) {
+    params.evalscript = evalscript;
+  }
+  if (evalscriptUrl) {
+    params.evalscriptUrl = evalscriptUrl;
   }
   if (type) {
     params.type = type;
@@ -54,7 +75,19 @@ export function getUrlParams() {
 }
 
 export function setStore(params) {
-  const { zoom, lat, lng, fromTime, toTime, collectionId, layerId, type } = params;
+  const {
+    zoom,
+    lat,
+    lng,
+    fromTime,
+    toTime,
+    collectionId,
+    layerId,
+    customVisualizationSelected,
+    evalscript,
+    evalscriptUrl,
+    type,
+  } = params;
 
   let { lat: parsedLat, lng: parsedLng, zoom: parsedZoom } = parsePosition(lat, lng, zoom);
 
@@ -66,6 +99,9 @@ export function setStore(params) {
   const newVisualizationParams = {
     collectionId: collectionId,
     layerId: layerId,
+    customVisualizationSelected: customVisualizationSelected,
+    evalscript: evalscript,
+    evalscriptUrl: evalscriptUrl,
     type: type,
   };
   if (fromTime) {

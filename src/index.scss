@@ -23,3 +23,44 @@ span {
     color: $primary;
   }
 }
+
+/* stylelint-disable */
+
+.react-toggle {
+  vertical-align: middle;
+  margin-left: 10px;
+}
+
+.react-toggle--checked .react-toggle-track,
+.react-toggle.react-toggle--checked:hover .react-toggle-track {
+  background: $primary;
+}
+
+.react-toggle--focus .react-toggle-thumb {
+  box-shadow: 0 0 2px 3px $primary;
+}
+
+.react-toggle:active .react-toggle-thumb {
+  box-shadow: 0 0 5px 5px $primary;
+}
+
+.react-toggle.react-toggle--focus .react-toggle-thumb {
+  box-shadow: 0 0 3px $primary;
+}
+
+.react-toggle--checked .react-toggle-thumb {
+  border-color: $primary;
+}
+
+.react-toggle:active:not(.react-toggle--disabled) .react-toggle-thumb {
+  box-shadow: 0 0 2px 2px #fff;
+}
+
+.react-toggle:hover:not(.react-toggle--disabled) .react-toggle-track {
+  background-color: #4d4d4d;
+}
+
+.react-toggle.react-toggle--checked:hover .react-toggle-track {
+  background-color: $primary;
+}
+/* stylelint-enable */

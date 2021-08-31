@@ -33,20 +33,32 @@ import {
   DEMLayer,
   DATASET_AWSUS_DEM,
   DEMAWSUSLayer,
-  LocationIdSHv3,
-  SHV3_LOCATIONS_ROOT_URL,
-  BYOCSubTypes,
+  AcquisitionMode,
+  Polarization,
+  Resolution,
 } from '@sentinel-hub/sentinelhub-js';
 
 import { getServiceHandlerForCollectionType } from './index';
 import { COLLECTION_TYPE } from '../const';
 
-export function LayersFactory(collection, layerId) {
+export function LayersFactory(
+  collection,
+  layerId,
+  customVisualizationSelected,
+  customEvalscript,
+  customEvalscriptUrl,
+) {
   if (
     collection.type === COLLECTION_TYPE.SENTINEL_HUB_EDC ||
     collection.type === COLLECTION_TYPE.SENTINEL_HUB
   ) {
-    return constructSentinelHubLayer(collection, layerId);
+    return constructSentinelHubLayer(
+      collection,
+      layerId,
+      customVisualizationSelected,
+      customEvalscript,
+      customEvalscriptUrl,
+    );
   }
   if (collection.type === COLLECTION_TYPE.GEO_DB) {
     const geoDBServiceHandler = getServiceHandlerForCollectionType(COLLECTION_TYPE.GEO_DB);
@@ -56,9 +68,6 @@ export function LayersFactory(collection, layerId) {
 }
 
 function getSHLayerClass(type) {
-  if (isCustom(type)) {
-    return BYOCLayer;
-  }
   switch (type) {
     case DATASET_AWSEU_S1GRD.catalogCollectionId:
       return S1GRDAWSEULayer;
@@ -89,6 +98,7 @@ function getSHLayerClass(type) {
     case DATASET_MODIS.catalogCollectionId:
       return MODISLayer;
     case DATASET_AWS_DEM.shProcessingApiDatasourceAbbreviation:
+    case 'dem':
       return DEMLayer;
     case DATASET_AWSUS_DEM.shProcessingApiDatasourceAbbreviation:
       return DEMAWSUSLayer;
@@ -99,21 +109,24 @@ function getSHLayerClass(type) {
   }
 }
 
-function constructSentinelHubLayer(collection, layerId) {
-  const { type, providers } = collection.serviceSpecificInfo;
+function constructSentinelHubLayer(
+  collection,
+  layerId,
+  customVisualizationSelected,
+  customEvalscript,
+  customEvalscriptUrl,
+) {
+  const { type, subType, locationId, collectionId } = collection.serviceSpecificInfo;
   const {
     evalscript,
-    evalscript_url: evalscriptUrl,
-    acquisition_mode: acquisitionMode,
+    evalscriptUrl,
+    acquisitionMode,
     polarization,
     resolution,
     upsampling,
-    mosaicking_order,
-    dem_instance,
-  } = collection.configurations.find((configuration) => configuration.layer_name === layerId);
-
-  const { collectionId, subType } = handleCustomCollections(type);
-  const locationId = getLocationId(providers) || LocationIdSHv3.awsEuCentral1;
+    mosaickingOrder,
+    demInstance,
+  } = getLayerParams(collection, layerId, customVisualizationSelected, customEvalscript, customEvalscriptUrl);
 
   const layerClass = getSHLayerClass(type);
   if (!layerClass) {
@@ -129,36 +142,48 @@ function constructSentinelHubLayer(collection, layerId) {
     polarization: polarization,
     resolution: resolution,
     upsampling: upsampling,
-    mosaickingOrder: mosaicking_order,
-    demInstance: dem_instance,
+    mosaickingOrder: mosaickingOrder,
+    demInstance: demInstance,
   });
 }
 
-function isCustom(type) {
-  return type.startsWith('byoc-') || type.startsWith('batch-');
-}
-
-function handleCustomCollections(type) {
-  if (!isCustom(type)) {
-    return {};
+function getLayerParams(
+  collection,
+  layerId,
+  customVisualizationSelected,
+  customEvalscript,
+  customEvalscriptUrl,
+) {
+  if (customVisualizationSelected) {
+    const defaultRequiredParams = {
+      acquisitionMode: AcquisitionMode.IW,
+      polarization: Polarization.DV,
+      resolution: Resolution.HIGH,
+    };
+    return {
+      ...defaultRequiredParams,
+      evalscript: customEvalscript,
+      evalscriptUrl: customEvalscriptUrl,
+    };
   }
-  const ind = type.indexOf('-');
-  const subTypeStr = type.slice(0, ind);
-  const collectionId = type.slice(ind + 1);
-
-  let subType;
-  if (subTypeStr === 'byoc') {
-    subType = BYOCSubTypes.BYOC;
-  } else if (subTypeStr === 'batch') {
-    subType = BYOCSubTypes.BATCH;
-  }
-  return { subType: subType, collectionId: collectionId };
-}
-
-function getLocationId(providers) {
-  let { url: host } = providers.find((p) => p.roles.includes('processor'));
-  return Object.keys(SHV3_LOCATIONS_ROOT_URL).find((key) => {
-    const url = new URL(SHV3_LOCATIONS_ROOT_URL[key]);
-    return url.host === host;
-  });
+  const {
+    evalscript,
+    evalscript_url: evalscriptUrl,
+    acquisition_mode: acquisitionMode,
+    polarization,
+    resolution,
+    upsampling,
+    mosaicking_order: mosaickingOrder,
+    dem_instance: demInstance,
+  } = collection.configurations.find((configuration) => configuration.layer_name === layerId);
+  return {
+    evalscript,
+    evalscriptUrl,
+    acquisitionMode,
+    polarization,
+    resolution,
+    upsampling,
+    mosaickingOrder,
+    demInstance,
+  };
 }

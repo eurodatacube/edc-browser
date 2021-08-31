@@ -32,4 +32,8 @@ export default class AbstractServiceHandler {
   supportsDateSelection() {
     return false;
   }
+
+  supportsCustomScript() {
+    return false;
+  }
 }

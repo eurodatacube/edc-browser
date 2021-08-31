@@ -7,13 +7,20 @@ export class Tabs extends Component {
     this.props.onSelect(renderKey);
   };
 
+  getChildren() {
+    return this.props.children.filter((c) => !c.props.omit);
+  }
+
   renderTabButtons = () => {
     return (
       <ul className="tab-list">
-        {this.props.children.map(
+        {this.getChildren().map(
           /* Note that we are accessing childrens' props here. This breaks encapsulation principles,
            but allows us to declare tabs in a nicer way (we can define props directly on each tab)*/
           (tab) => {
+            if (tab.props.omit) {
+              return null;
+            }
             return (
               <li
                 id={`${tab.props.id}-button`}
@@ -33,7 +40,7 @@ export class Tabs extends Component {
   };
 
   renderContent() {
-    return this.props.children.map((pane, index) => (
+    return this.getChildren().map((pane, index) => (
       <div id={pane.props.id} key={pane.props.renderKey} className="tab-panel-container">
         <div className={pane.props.renderKey === this.props.activeIndex ? 'active' : 'none'}>{pane}</div>
       </div>
