@@ -1,6 +1,6 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react';
 import moment from 'moment';
-import { OrderStatus, TPDI } from '@sentinel-hub/sentinelhub-js';
+import { OrderStatus, TPDI, TPDProvider } from '@sentinel-hub/sentinelhub-js';
 import {
   extractErrorMessage,
   fetchOrders,
@@ -12,6 +12,7 @@ import {
 import store, { commercialDataSlice, mainMapSlice, visualizationSlice } from '../../../../store';
 import { NotificationPanel } from '../../../junk/NotificationPanel/NotificationPanel';
 import { Button } from '../../../junk/Button/Button';
+import ExternalLink from '../../../ExternalLink/ExternalLink';
 
 import { COLLECTION_TYPE } from '../../../../const';
 
@@ -167,6 +168,16 @@ const OrderDetails = ({ order, setAction, orderCollection }) => {
         {}
       </div>
       {JSONProperty(order, 'input')}
+
+      {order.provider === TPDProvider.PLANET && (
+        <NotificationPanel>
+          {`Note that it is technically possible to order more Planet PlanetScope data than your purchased quota. Make sure your order is in line with the Hectares under Management (HUM) model to avoid overage fees. `}
+          <ExternalLink href="https://www.sentinel-hub.com/faq/#how-the-planetscope-hectares-under-management-works">
+            {`More information`}
+          </ExternalLink>
+        </NotificationPanel>
+      )}
+
       <div className="buttons">
         {orderButtons
           .filter((button) => button.status.includes(order.status) && !button.hidden)

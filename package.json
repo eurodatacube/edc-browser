@@ -5,6 +5,7 @@
   "private": true,
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.3",
+    "@geoman-io/leaflet-geoman-free": "^2.11.2",
     "@mapbox/geojson-area": "^0.2.2",
     "@mapbox/togeojson": "^0.16.0",
     "@reduxjs/toolkit": "^1.6.0",
@@ -16,6 +17,7 @@
     "@turf/boolean-disjoint": "^6.3.0",
     "@turf/boolean-equal": "^6.4.0",
     "@turf/boolean-point-in-polygon": "^6.5.0",
+    "@turf/intersect": "^6.5.0",
     "@turf/meta": "^6.3.0",
     "@turf/union": "^6.3.0",
     "axios": "^0.21.1",
@@ -27,7 +29,6 @@
     "jszip": "^3.6.0",
     "jwt-decode": "^3.1.2",
     "leaflet": "^1.7.1",
-    "leaflet.pm": "^2.2.0",
     "lodash.round": "^4.0.4",
     "maplibre-gl": "^1.14.0",
     "nprogress": "^0.2.0",

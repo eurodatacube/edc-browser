@@ -64,8 +64,10 @@
     }
   }
 
-  header {
-    padding: 5px 0;
+  .header {
+    .back-button {
+      margin-left: 12px;
+    }
   }
 
   .scriptBtnPanel {

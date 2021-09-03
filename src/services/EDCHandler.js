@@ -9,6 +9,8 @@ import { collectionFactory } from './collection';
 import { LayersFactory } from './layersFactory';
 import { isCustom, getSubTypeAndCollectionId } from '../utils/collections';
 import { COLLECTION_TYPE, DEFAULT_TIMEOUT } from '../const';
+import { getBoundsAndLatLng } from '../components/EdcDataPanel/CommercialDataPanel/commercialData.utils';
+import { createPolygonFromBBox } from '../utils/coords';
 
 const GROUPS = ['Sentinel', 'Landsat', 'ICEYE', 'DEM', 'ALOS'];
 
@@ -20,6 +22,7 @@ export default class EDCHandler extends AbstractServiceHandler {
     this.EDC_COLLECTIONS_BASE_URL = 'https://collections.eurodatacube.com';
     this.COMMERCIAL_DATA_TAG = 'commercial data';
     this.PUBLIC_DATA_TAG = 'open data';
+    this.extents = {};
   }
 
   async authenticate() {}
@@ -62,6 +65,7 @@ export default class EDCHandler extends AbstractServiceHandler {
     return {
       public: publicCollections.map((collection) => {
         const { subType, collectionId } = getSubTypeAndCollectionId(collection.datasource_type);
+        this.extents[collection.id] = collection.extent;
         return collectionFactory({
           uniqueId: collection.id,
           id: collection.id,
@@ -117,7 +121,12 @@ export default class EDCHandler extends AbstractServiceHandler {
     return axios.get(`https://api.eurodatacube.com/algorithms/`).then((r) => r.data);
   }
 
-  async getBestInitialLocation(database, collectionId) {
+  async getBestInitialLocation(collectionId) {
+    if (this.extents[collectionId]) {
+      const bboxes = this.extents[collectionId].spatial.bbox;
+      const polygon = createPolygonFromBBox(bboxes[bboxes.length - 1]);
+      return getBoundsAndLatLng(polygon);
+    }
     return null;
   }
 

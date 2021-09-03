@@ -143,7 +143,7 @@ export const CollectionSelection = ({ disabled, orderOptions, setOrderOptions, s
       <div>
         <div className="collection-selection">
           <select
-            className="dropdown"
+            className="dropdown-primary compact"
             disabled={disabled || loading}
             value={defaultCollectionId(searchParams.dataProvider, collectionId, manualCollection)}
             onChange={onChangeHandler}

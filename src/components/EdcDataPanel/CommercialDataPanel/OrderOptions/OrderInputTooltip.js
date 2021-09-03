@@ -20,7 +20,7 @@ const orderInputHelp = {
   harmonizeData: () =>
     `Harmonization is not yet supported for surface reflectance products, thus this field must be explicitly set to NONE if productBundle is analytic_sr or analytic_sr_udm2.`,
   planetApiKey: () =>
-    `Enter a Planet API key, that you received via email after purchasing a PlanetScope Sentinel Hub Package`,
+    `Enter a Planet API key, that you received via email after purchasing a Planet PlanetScope Sentinel Hub Package`,
   createOrder: () =>
     `When you click "Create Order", your order will be created. At this stage, the order will not go through and no quota will be substracted. This will happen when you confirm the order. Before you do, you will be able to review the requested quota and decide if you would like to proceed.`,
 };

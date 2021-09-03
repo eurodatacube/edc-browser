@@ -2,7 +2,7 @@ import React from 'react';
 
 import './NotificationPanel.scss';
 
-export const NotificationPanel = ({ type, msg }) => {
+export const NotificationPanel = ({ type, msg, children }) => {
   let icon = '';
   switch (type) {
     case 'error':
@@ -31,6 +31,7 @@ export const NotificationPanel = ({ type, msg }) => {
     <div className="notification">
       {icon !== '' && <i className={`fa fa-${icon}`} style={{ marginRight: '6px' }} />}
       {msg}
+      {children}
     </div>
   );
 };

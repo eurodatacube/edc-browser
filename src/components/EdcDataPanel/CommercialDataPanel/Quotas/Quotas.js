@@ -11,7 +11,7 @@ import { COLLECTION_TYPE } from '../../../../const';
 const Providers = {
   [TPDICollections.AIRBUS_PLEIADES]: 'Airbus Pleiades',
   [TPDICollections.AIRBUS_SPOT]: 'Airbus SPOT',
-  [TPDICollections.PLANET_SCOPE]: 'Planet Scope',
+  [TPDICollections.PLANET_SCOPE]: 'Planet PlanetScope',
   [TPDICollections.MAXAR_WORLDVIEW]: 'Maxar WorldView',
 };
 

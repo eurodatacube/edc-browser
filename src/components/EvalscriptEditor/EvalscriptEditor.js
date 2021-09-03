@@ -67,15 +67,14 @@ class EvalscriptEditor extends React.Component {
 
     return allBands.length > 0 ? (
       <div className="advancedPanel">
-        <header>
+        <div className="header">
           {
-            // eslint-disable-next-line
-            <a onClick={onBack} className="btn primary">
+            <div onClick={onBack} className="back-button button-primary">
               <i className="fa fa-arrow-left" />
               Back
-            </a>
+            </div>
           }
-        </header>
+        </div>
         <Accordion
           open={this.state.openAccordion === 0}
           title="Composite"
@@ -89,12 +88,7 @@ class EvalscriptEditor extends React.Component {
           title="Index"
           toggleOpen={() => this.toggleAccordion(1)}
         >
-          <IndexBands
-            bands={allBands}
-            // layers={indexLayers}
-            onChange={onIndexScriptChange}
-            evalscript={evalscript}
-          />
+          <IndexBands bands={allBands} onChange={onIndexScriptChange} evalscript={evalscript} />
         </Accordion>
 
         <Accordion

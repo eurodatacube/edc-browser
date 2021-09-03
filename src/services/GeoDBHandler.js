@@ -78,10 +78,10 @@ export default class GeoDBHandler extends AbstractServiceHandler {
     return {
       user: data[0].src.map((collection) =>
         collectionFactory({
-          uniqueId: `${collection.database}-${collection.table_name}`,
-          id: collection.table_name,
+          uniqueId: `${collection.database}-${collection.collection}`,
+          id: collection.collection,
           type: COLLECTION_TYPE.GEO_DB,
-          title: collection.table_name,
+          title: collection.collection,
           group: collection.database,
           ownedByUser: collection.owner === userId,
         }),

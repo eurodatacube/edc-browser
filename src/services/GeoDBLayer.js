@@ -3,7 +3,8 @@ import wkx from 'wkx';
 import { isCancelled } from '@sentinel-hub/sentinelhub-js';
 
 import { convertGeoJSONCrs, convertBBox } from '../utils/coords';
-import store, { visualizationSlice } from '../store';
+import store, { visualizationSlice, errorsSlice } from '../store';
+import { MAXIMUM_GEOMETRY_SIZE_BYTES } from '../const';
 
 export default class GeoDBLayer {
   constructor({ database, collectionId, geodb_token }) {
@@ -90,7 +91,8 @@ export default class GeoDBLayer {
 
     const [minx, miny, maxx, maxy] = convertBBox(bbox, srid);
 
-    const limit = 10000;
+    const limit = 100;
+    let offset = 0;
     let data = [];
 
     const requestConfig = this._getConfigWithAuth();
@@ -111,7 +113,7 @@ export default class GeoDBLayer {
             bbox_mode: 'intersects',
             where: 'id>-1',
             op: 'AND',
-            offset: 0,
+            offset: offset,
           },
           requestConfig,
         );
@@ -122,6 +124,7 @@ export default class GeoDBLayer {
         if (dataChunk.length < limit) {
           break;
         }
+        offset += dataChunk.length;
       } catch (err) {
         if (!isCancelled(err)) {
           console.log(tileId, 'failed with err ', err);
@@ -129,6 +132,21 @@ export default class GeoDBLayer {
         return;
       }
     }
+
+    data = data.filter((e) => {
+      if (e.geometry.length > MAXIMUM_GEOMETRY_SIZE_BYTES) {
+        console.warn(
+          `Geometry for entry ${e.id} was omitted, as it exceeds maximum supported size of ${MAXIMUM_GEOMETRY_SIZE_BYTES} bytes.`,
+        );
+        store.dispatch(
+          errorsSlice.actions.addError({
+            text: `Geometry for entry ${e.id} was omitted, as it exceeds maximum supported size of ${MAXIMUM_GEOMETRY_SIZE_BYTES} bytes.`,
+          }),
+        );
+        return false;
+      }
+      return true;
+    });
 
     data = this.convertGeoDBData(data);
 

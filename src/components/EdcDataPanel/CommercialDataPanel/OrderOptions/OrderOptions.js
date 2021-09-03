@@ -122,9 +122,10 @@ const OrderOptions = ({
         <label title="Name">{`Order name`}</label>
         <div>
           <input
+            className="input-primary compact"
             defaultValue={orderOptions.name}
             disabled={!!actionInProgress}
-            placeholder="e.g: My planet data"
+            placeholder="e.g.: My planet data"
             onChange={(e) => setOrderOptions({ ...orderOptions, name: e.target.value })}
           ></input>
           <OrderInputTooltip inputId="name" />
@@ -134,7 +135,7 @@ const OrderOptions = ({
         <label title="Order type">{`Order type`}</label>
         <div>
           <select
-            className="dropdown"
+            className="dropdown-primary compact"
             disabled={!!actionInProgress}
             value={orderOptions.type}
             onChange={(e) => setOrderOptions({ ...orderOptions, type: OrderType[e.target.value] })}
@@ -158,7 +159,7 @@ const OrderOptions = ({
         searchParams={searchParams}
       />
       <div className="row">
-        <label title="Order size(approx)">{`Order size (approx)`}</label>
+        <label title="Order size (approx.)">{`Order size (approx.)`}</label>
         <div>
           <label>
             {!!aoiGeometry ? (
@@ -176,6 +177,7 @@ const OrderOptions = ({
         <label title="Order limit">{`Order limit (km2)`}</label>
         <div>
           <input
+            className="input-primary compact"
             type="number"
             disabled={!!actionInProgress}
             defaultValue={orderOptions.limit}
@@ -210,6 +212,7 @@ const OrderOptions = ({
             <label title="Planet API Key">{`Planet API Key`}</label>
             <div>
               <input
+                className="input-primary compact"
                 type="text"
                 disabled={!!actionInProgress}
                 defaultValue={orderOptions.planetApiKey}

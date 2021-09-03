@@ -63,15 +63,30 @@
     background: $secondaryDark;
     color: $textColor;
     padding: 20px;
-    max-height: 300px;
     min-width: 300px;
-    overflow: auto;
     pointer-events: all;
 
     .single-geometry-data {
       background: $secondary;
-      padding: 5px;
-      margin-bottom: 10px;
+      max-height: 300px;
+      overflow: auto;
+
+      table,
+      th,
+      td {
+        border: 1px solid $secondaryDark;
+        border-collapse: collapse;
+      }
+
+      .data-property {
+        .property-name {
+          padding-right: 5px;
+        }
+
+        .property-value {
+          padding-left: 5px;
+        }
+      }
     }
   }
 }

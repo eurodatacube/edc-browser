@@ -27,3 +27,5 @@ export const DEFAULT_FROM_TIME = moment.utc('1970-01-01');
 export const DEFAULT_TO_TIME = moment.utc();
 
 export const DEFAULT_TIMEOUT = 20000;
+
+export const MAXIMUM_GEOMETRY_SIZE_BYTES = 10000000;

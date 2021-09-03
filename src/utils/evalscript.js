@@ -118,10 +118,10 @@ export function parseIndexEvalscript(evalscript) {
 
       if (bands[0].indexOf('-') !== -1) {
         equation = '(A-B)/(A+B)';
-        bands = bands[0].split('-').map((item) => item.replace('samples.', ''));
+        bands = bands[0].split('-').map((item) => item.replace('samples.', '').replace(';', ''));
       } else {
         equation = '(A/B)';
-        bands = bands.map((item) => item.replace('samples.', ''));
+        bands = bands.map((item) => item.replace('samples.', '').replace(';', ''));
       }
 
       bands = { a: bands[0], b: bands[1] };

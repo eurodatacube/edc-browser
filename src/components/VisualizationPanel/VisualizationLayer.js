@@ -24,10 +24,11 @@ function VisualizationLayer(props) {
         </div>
         {(evalscript || evalscriptUrl) && (
           <button
-            className="expand-collapse-evalscript"
+            className="expand-collapse-evalscript button-primary"
             onClick={() => setShowEvalscript((prevState) => !prevState)}
           >
             Evalscript
+            {showEvalscript ? <i className="fa fa-chevron-up" /> : <i className="fa fa-chevron-down" />}
           </button>
         )}
       </div>

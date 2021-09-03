@@ -58,3 +58,19 @@ export function getBoundsZoomLevel(bounds) {
 
   return Math.min(latZoom, lngZoom, ZOOM_MAX);
 }
+
+export function createPolygonFromBBox(bbox) {
+  const [minX, minY, maxX, maxY] = bbox;
+  return {
+    type: 'Polygon',
+    coordinates: [
+      [
+        [minX, minY],
+        [maxX, minY],
+        [maxX, maxY],
+        [minX, maxY],
+        [minX, minY],
+      ],
+    ],
+  };
+}

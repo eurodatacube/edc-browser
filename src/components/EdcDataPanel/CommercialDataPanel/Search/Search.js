@@ -17,7 +17,7 @@ const TPDICollectionsWithLabels = [
   { value: TPDICollections.AIRBUS_PLEIADES, label: 'Airbus Pleiades' },
   { value: TPDICollections.AIRBUS_SPOT, label: 'Airbus SPOT' },
   { value: TPDICollections.MAXAR_WORLDVIEW, label: 'Maxar WorldView ' },
-  { value: TPDICollections.PLANET_SCOPE, label: 'Planet Scope' },
+  { value: TPDICollections.PLANET_SCOPE, label: 'Planet PlanetScope' },
 ];
 
 const Search = ({

@@ -2,11 +2,11 @@ import React, { useEffect, useRef } from 'react';
 import { Map as LeafletMap, Pane, LayersControl, GeoJSON, FeatureGroup } from 'react-leaflet';
 import { connect } from 'react-redux';
 import L from 'leaflet';
-import 'leaflet.pm';
+import '@geoman-io/leaflet-geoman-free';
 import NProgress from 'nprogress';
 
 import 'leaflet/dist/leaflet.css';
-import 'leaflet.pm/dist/leaflet.pm.css';
+import '@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css';
 import 'nprogress/nprogress.css';
 
 import LeafletControls from './LeafletControls/LeafletControls';
@@ -79,7 +79,7 @@ function Map(props) {
     if (props.enableDrawing) {
       mapRef.current.leafletElement.pm.enableDraw('Poly', {
         finishOn: 'contextmenu',
-        allowSelfIntersection: true,
+        allowSelfIntersection: false,
       });
     } else {
       mapRef.current.leafletElement.pm.disableDraw('Poly');
@@ -115,12 +115,14 @@ function Map(props) {
 
   function enableEdit() {
     const AOILayerRef = getAOILayer();
-    AOILayerRef.pm.enable();
+    AOILayerRef.pm.enable({
+      allowSelfIntersection: false,
+    });
     AOILayerRef.on('pm:edit', (f) => {
       const layer = f.target;
       const aoiGeojson = removeAoiWithEmptyCoords(layer.toGeoJSON());
       // in edit we can remove a vertex with a right click
-      // when the 2nd last vertex is removed leaflet.pm will return an array with undefined
+      // when the 2nd last vertex is removed geoman will return an array with undefined
       // leaflet complains about this, and so we just simply remove the aoi.
       if (!aoiGeojson) {
         resetAoi(AOILayerRef);

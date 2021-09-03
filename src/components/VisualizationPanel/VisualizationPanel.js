@@ -38,6 +38,8 @@ function VisualizationPanel(props) {
   useEffect(() => {
     if (!selectedLayerId && !customVisualizationSelected && configurations.length > 0) {
       selectVisualizationLayer(configurations[0].layer_name);
+    } else if (configurations.length === 0 && supportsCustomScript) {
+      selectCustomVisualization();
     }
     // eslint-disable-next-line
   }, [selectedCollectionId]);
@@ -168,15 +170,14 @@ function VisualizationPanel(props) {
           />
         </div>
       )}
+
       {bestLocation && (
-        <div className="tools">
-          {bestLocation && (
-            <div className="zoom-to-location">
-              <i className="fa fa-crosshairs" onClick={goToBestLocation} />
-            </div>
-          )}
+        <div className="zoom-to-location button-secondary" onClick={goToBestLocation}>
+          <i className="fa fa-crosshairs" onClick={goToBestLocation} />
+          Zoom to data
         </div>
       )}
+
       {showEvalscriptEditor && (
         <EvalscriptEditor
           allBands={collection.bands}

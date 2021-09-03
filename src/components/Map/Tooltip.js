@@ -12,15 +12,20 @@ class Tooltip extends Component {
     } = this.props;
     return ReactDOM.createPortal(
       <div className="vector-data-tooltip" style={{ left: left, top: top }}>
-        {info.map(({ properties }, i) => (
-          <div className="single-geometry-data" key={i}>
-            {Object.keys(properties).map((key, j) => (
-              <div className="data-property" key={j}>
-                {key}: {properties[key]}
-              </div>
-            ))}
-          </div>
-        ))}
+        <div className="single-geometry-data">
+          {info.map(({ properties }, i) => (
+            <table key={i}>
+              <tbody>
+                {Object.keys(properties).map((key, j) => (
+                  <tr className="data-property" key={j}>
+                    <td className="property-name">{key}</td>
+                    <td className="property-value">{properties[key]}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ))}
+        </div>
       </div>,
       holderRef,
     );

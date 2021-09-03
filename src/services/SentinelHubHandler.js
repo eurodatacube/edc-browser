@@ -146,4 +146,8 @@ export default class SentinelHubHandler extends AbstractServiceHandler {
   supportsCustomScript() {
     return true;
   }
+
+  supportsDateSelection() {
+    return true;
+  }
 }

@@ -13,6 +13,13 @@
   background: $secondary;
   border: none;
   color: $textColor;
+
+  &.compact {
+    height: auto;
+    width: 100%;
+    padding: $spacing1;
+    font-size: $font3;
+  }
 }
 
 .input-primary:hover {

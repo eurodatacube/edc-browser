@@ -25,7 +25,7 @@ export const providerSpecificParameters = {
     },
     {
       id: 'maxCloudCoverage',
-      label: 'Max Cloud Coverage',
+      label: 'Max. cloud coverage',
       render: SliderInput,
       min: 0,
       max: 100,
@@ -36,7 +36,7 @@ export const providerSpecificParameters = {
   [TPDICollections.MAXAR_WORLDVIEW]: [
     {
       id: 'maxCloudCoverage',
-      label: 'Max Cloud Coverage',
+      label: 'Max. cloud coverage',
       render: SliderInput,
       min: 0,
       max: 100,
@@ -50,7 +50,7 @@ export const providerSpecificParameters = {
     },
     {
       id: 'minOffNadir',
-      label: 'Min Off Nadir',
+      label: 'Min. off nadir',
       render: SliderInput,
       min: 0,
       max: 45,
@@ -60,7 +60,7 @@ export const providerSpecificParameters = {
     },
     {
       id: 'maxOffNadir',
-      label: 'Max Off Nadir',
+      label: 'Max. off nadir',
       render: SliderInput,
       min: 0,
       max: 45,
@@ -70,7 +70,7 @@ export const providerSpecificParameters = {
     },
     {
       id: 'minSunElevation',
-      label: 'Min Sun Elevation',
+      label: 'Min. sun elevation',
       render: SliderInput,
       min: 0,
       max: 90,
@@ -81,7 +81,7 @@ export const providerSpecificParameters = {
     },
     {
       id: 'maxSunElevation',
-      label: 'Max Sun Elevation',
+      label: 'Max. sun elevation',
       render: SliderInput,
       min: 0,
       max: 90,
@@ -109,7 +109,7 @@ export const providerSpecificParameters = {
 
     {
       id: 'maxCloudCoverage',
-      label: 'Max Cloud Coverage',
+      label: 'Max. cloud coverage',
       render: SliderInput,
       min: 0,
       max: 100,
@@ -119,7 +119,7 @@ export const providerSpecificParameters = {
     },
     {
       id: 'processingLevel',
-      label: 'Processing Level',
+      label: 'Processing level',
       render: SelectInput,
       options: createSelectOptions(AirbusProcessingLevel),
       nullValues: true,
@@ -128,7 +128,7 @@ export const providerSpecificParameters = {
     },
     {
       id: 'maxSnowCoverage',
-      label: 'Snow Coverage',
+      label: 'Snow coverage',
       render: SliderInput,
       min: 0,
       max: 100,
@@ -139,7 +139,7 @@ export const providerSpecificParameters = {
     },
     {
       id: 'maxIncidenceAngle',
-      label: 'Incidence Angle',
+      label: 'Incidence angle',
       render: SliderInput,
       min: 0,
       max: 90,
@@ -158,7 +158,7 @@ export const providerSpecificParameters = {
 
     {
       id: 'maxCloudCoverage',
-      label: 'Max Cloud Coverage',
+      label: 'Max. cloud coverage',
       render: SliderInput,
       min: 0,
       max: 100,
@@ -168,7 +168,7 @@ export const providerSpecificParameters = {
     },
     {
       id: 'processingLevel',
-      label: 'Processing Level',
+      label: 'Processing level',
       render: SelectInput,
       options: createSelectOptions(AirbusProcessingLevel),
       nullValues: true,
@@ -177,7 +177,7 @@ export const providerSpecificParameters = {
     },
     {
       id: 'maxSnowCoverage',
-      label: 'Snow Coverage',
+      label: 'Snow coverage',
       render: SliderInput,
       min: 0,
       max: 100,
@@ -188,7 +188,7 @@ export const providerSpecificParameters = {
     },
     {
       id: 'maxIncidenceAngle',
-      label: 'Incidence Angle',
+      label: 'Incidence angle',
       render: SliderInput,
       min: 0,
       max: 90,
