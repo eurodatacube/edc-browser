@@ -49,7 +49,7 @@ function AlgorithmOptions({ options, algorithm, defaultValues }) {
     <div className="algorithm-options">
       {options.map(({ type, id, name, description, restriction, optional }, i) => (
         <AlgorithmOption
-          key={i}
+          key={`${algorithm}-${id}`}
           value={algorithmParams[id] && algorithmParams[id].value}
           isValid={algorithmParams[id] && algorithmParams[id].isValid}
           type={type}

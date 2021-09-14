@@ -2,7 +2,7 @@
 
 /* stylelint-disable */
 .advancedPanel {
-  padding: 10px;
+  padding: 10px 0;
   font-size: 14px;
 
   .grouped-bands-to-rgb {
@@ -65,8 +65,9 @@
   }
 
   .header {
+    padding-bottom: 10px;
     .back-button {
-      margin-left: 12px;
+      padding: 12px;
     }
   }
 

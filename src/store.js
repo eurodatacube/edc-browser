@@ -1,6 +1,6 @@
 import { configureStore, combineReducers, createSlice, getDefaultMiddleware } from '@reduxjs/toolkit';
 
-import { DEFAULT_LAT_LNG, DEFAULT_FROM_TIME, DEFAULT_TO_TIME } from './const';
+import { DEFAULT_LAT_LNG, DEFAULT_FROM_TIME, DEFAULT_TO_TIME, AOI_SHAPE } from './const';
 
 export const mainMapSlice = createSlice({
   name: 'mainMap',
@@ -9,7 +9,6 @@ export const mainMapSlice = createSlice({
     lng: DEFAULT_LAT_LNG.lng,
     zoom: 10,
     enabledOverlaysId: ['labels'],
-    enableDrawing: false,
   },
   reducers: {
     setPosition: (state, action) => {
@@ -44,9 +43,6 @@ export const mainMapSlice = createSlice({
       if (overlayIndex !== -1) {
         state.enabledOverlaysId.splice(overlayIndex, 1);
       }
-    },
-    setEnableDrawing: (state, action) => {
-      state.enableDrawing = action.payload;
     },
   },
 });
@@ -141,7 +137,10 @@ export const visualizationSlice = createSlice({
 
 export const aoiSlice = createSlice({
   name: 'aoi',
-  initialState: {},
+  initialState: {
+    drawingEnabled: false,
+    shape: AOI_SHAPE.rectangle,
+  },
   reducers: {
     set: (state, action) => {
       state.geometry = action.payload.geometry;
@@ -152,6 +151,14 @@ export const aoiSlice = createSlice({
       state.geometry = null;
       state.bounds = null;
       state.lastEdited = new Date().toISOString();
+      state.drawingEnabled = false;
+      state.shape = AOI_SHAPE.rectangle;
+    },
+    setShape: (state, action) => {
+      state.shape = action.payload;
+    },
+    setDrawingEnabled: (state, action) => {
+      state.drawingEnabled = action.payload;
     },
   },
 });

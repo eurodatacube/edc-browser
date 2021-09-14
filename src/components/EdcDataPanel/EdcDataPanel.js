@@ -6,7 +6,7 @@ import { PublicAndUserDataPanel } from './PublicAndUserDataPanel/PublicAndUserDa
 import CommercialData from './CommercialDataPanel/CommercialData';
 import store, { visualizationSlice, tabsSlice } from '../../store';
 import { groupBy } from './EdcDataPanel.utils';
-import { COLLECTION_TYPE } from '../../const';
+import { COLLECTION_TYPE, EDC_DATA_TAB } from '../../const';
 
 import './EdcDataPanel.scss';
 
@@ -56,13 +56,13 @@ function EdcDataPanel({ collectionsList, selectedEdcDataTabIndex, showVisualisat
         activeIndex={selectedEdcDataTabIndex}
         onSelect={(index) => store.dispatch(tabsSlice.actions.setEdcDataTabIndex(index))}
       >
-        <Tab title={`Public`} renderKey={0}>
+        <Tab title={`Public`} renderKey={EDC_DATA_TAB.PUBLIC}>
           <PublicAndUserDataPanel groups={publicCollections} handleCollectionClick={handleCollectionClick} />
         </Tab>
-        <Tab title={`Commercial`} renderKey={1}>
+        <Tab title={`Commercial`} renderKey={EDC_DATA_TAB.COMMERCIAL}>
           <CommercialData collectionsList={collectionsList} />
         </Tab>
-        <Tab title={`User`} renderKey={2} omit={omitUserCollections}>
+        <Tab title={`User`} renderKey={EDC_DATA_TAB.USER} omit={omitUserCollections}>
           <>
             <div className="toggle">
               <div className={`button ${displayAll ? 'selected' : ''}`} onClick={() => setDisplayAll(true)}>

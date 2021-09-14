@@ -17,7 +17,7 @@
     }
 
     .collection-name {
-      width: 50%;
+      width: 60%;
       color: $textColor;
       font-size: $font4;
       font-weight: $bold;
@@ -67,5 +67,12 @@
 
   .visualization-layers-wrapper {
     margin-top: 20px;
+  }
+
+  .accordion-wrap {
+    .accordion-title,
+    .accordion-content {
+      background-color: $secondary;
+    }
   }
 }

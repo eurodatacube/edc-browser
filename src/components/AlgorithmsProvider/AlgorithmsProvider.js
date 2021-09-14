@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 
 import EDCHandler from '../../services/EDCHandler';
+import store, { errorsSlice } from '../../store';
 
 function AlgorithmsProvider({ children }) {
   const [algorithmsList, setAlgorithmsList] = useState([]);
@@ -13,8 +14,12 @@ function AlgorithmsProvider({ children }) {
   }, []);
 
   async function fetchAndSetListOfAlgorithms() {
-    const algorithms = await EDCHandler.getAlgorithms();
-    setAlgorithmsList(algorithms);
+    try {
+      const algorithms = await EDCHandler.getAlgorithms();
+      setAlgorithmsList(algorithms);
+    } catch (err) {
+      store.dispatch(errorsSlice.actions.addError({ text: err.message }));
+    }
     setFetchingInProgress(false);
   }
 

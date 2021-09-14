@@ -6,7 +6,7 @@ import AlgorithmsPanel from '../AlgorithmsPanel/AlgorithmsPanel';
 import EdcDataPanel from '../EdcDataPanel/EdcDataPanel';
 import VisualizationPanel from '../VisualizationPanel/VisualizationPanel';
 import { getServiceHandlerForCollectionType } from '../../services';
-import store, { tabsSlice } from '../../store';
+import store, { aoiSlice, tabsSlice } from '../../store';
 import { PANEL_TAB } from '../../const';
 import { getCollectionInfo } from '../../utils/collections';
 import ErrorPanel from '../ErrorPanel/ErrorPanel';
@@ -25,6 +25,7 @@ function MainPanel(props) {
     evalscript,
     evalscriptUrl,
     selectedType,
+    aoiGeometry,
   } = props;
 
   const [panelOpen, setPanelOpen] = useState(true);
@@ -76,6 +77,14 @@ function MainPanel(props) {
     // eslint-disable-next-line
   }, [selectedCollectionId, collectionsList]);
 
+  const confirmSwitchingTabs = (index) => {
+    return window.confirm(
+      `With switching to the ${
+        PANEL_TAB.ALGORITHMS === index ? 'Algorithms' : 'EDC Data'
+      } tab your area of interest (AOI) will be removed. Do you want to continue?`,
+    );
+  };
+
   return (
     <>
       <div className={`open-main-panel ${panelOpen ? 'hidden' : ''}`} onClick={() => setPanelOpen(true)}>
@@ -96,7 +105,16 @@ function MainPanel(props) {
         <ErrorPanel />
         <Tabs
           activeIndex={selectedMainTabIndex}
-          onSelect={(index) => store.dispatch(tabsSlice.actions.setMainTabIndex(index))}
+          onSelect={(index) => {
+            if (aoiGeometry) {
+              if (confirmSwitchingTabs(index)) {
+                store.dispatch(aoiSlice.actions.reset());
+              } else {
+                return;
+              }
+            }
+            store.dispatch(tabsSlice.actions.setMainTabIndex(index));
+          }}
         >
           <Tab id="algorithms-tab" title={`Algorithms`} renderKey={PANEL_TAB.ALGORITHMS}>
             <AlgorithmsPanel
@@ -134,6 +152,7 @@ const mapStoreToProps = (store) => ({
   evalscript: store.visualization.evalscript,
   evalscriptUrl: store.visualization.evalscriptUrl,
   selectedType: store.visualization.type,
+  aoiGeometry: store.aoi.geometry,
 });
 
 export default connect(mapStoreToProps, null)(MainPanel);

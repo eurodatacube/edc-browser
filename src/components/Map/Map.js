@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { Map as LeafletMap, Pane, LayersControl, GeoJSON, FeatureGroup } from 'react-leaflet';
+import { Map as LeafletMap, Pane, LayersControl, GeoJSON, FeatureGroup, Rectangle } from 'react-leaflet';
 import { connect } from 'react-redux';
 import L from 'leaflet';
 import '@geoman-io/leaflet-geoman-free';
@@ -22,6 +22,7 @@ import { getCollectionInfo } from '../../utils/collections';
 import './Map.scss';
 
 import MaptilerLogo from '../../assets/icons/maptiler-logo-adaptive.svg';
+import { AOI_SHAPE, EDC_DATA_TAB, PANEL_TAB } from '../../const';
 
 const BASE_PANE_ID = 'baseMapPane';
 const BASE_PANE_ZINDEX = 5;
@@ -53,7 +54,10 @@ function Map(props) {
     lng,
     zoom,
     enabledOverlaysId,
+    drawingEnabled,
     aoiGeometry,
+    aoiBounds,
+    aoiShape,
     aoiLastEdited,
     previewAOI,
     collectionId,
@@ -76,31 +80,48 @@ function Map(props) {
   } = props;
 
   useEffect(() => {
-    if (props.enableDrawing) {
-      mapRef.current.leafletElement.pm.enableDraw('Poly', {
-        finishOn: 'contextmenu',
-        allowSelfIntersection: false,
-      });
+    if (drawingEnabled) {
+      enableDraw();
     } else {
-      mapRef.current.leafletElement.pm.disableDraw('Poly');
-      const AOILayerRef = getAOILayer();
-      resetAoi(AOILayerRef, false);
+      disableDraw();
+      resetAoi(getAOILayer(), false);
     }
     // eslint-disable-next-line
-  }, [props.enableDrawing]);
+  }, [drawingEnabled]);
 
   useEffect(() => {
-    mapRef.current.leafletElement.on('pm:create', (e) => {
-      if (e.shape && e.shape === 'Polygon') {
-        // e.layer.toGeoJSON() is a GeoJSON Feature, we convert it to a GeoJSON geometry type
-        const geometry = e.layer.toGeoJSON().geometry;
-        store.dispatch(aoiSlice.actions.set({ geometry: geometry, bounds: e.layer.getBounds() }));
-        mapRef.current.leafletElement.removeLayer(e.layer);
-        enableEdit();
-      }
-    });
+    if (drawingEnabled) {
+      disableDraw();
+      enableDraw();
+    }
+    // eslint-disable-next-line
+  }, [aoiShape]);
+
+  useEffect(() => {
+    handleCreate();
     // eslint-disable-next-line
   }, []);
+
+  function enableDraw() {
+    mapRef.current.leafletElement.pm.enableDraw(aoiShape, {
+      finishOn: 'contextmenu',
+      allowSelfIntersection: false,
+    });
+  }
+
+  function disableDraw() {
+    mapRef.current.leafletElement.pm.disableDraw();
+  }
+
+  function handleCreate() {
+    mapRef.current.leafletElement.on('pm:create', (e) => {
+      // e.layer.toGeoJSON() is a GeoJSON Feature, we convert it to a GeoJSON geometry type
+      const geometry = e.layer.toGeoJSON().geometry;
+      store.dispatch(aoiSlice.actions.set({ geometry: geometry, bounds: e.layer.getBounds() }));
+      mapRef.current.leafletElement.removeLayer(e.layer);
+      enableEdit();
+    });
+  }
 
   function getAOILayer() {
     let AOILayerRef;
@@ -128,22 +149,22 @@ function Map(props) {
         resetAoi(AOILayerRef);
         return;
       }
-      // aoiGeojson is a GeoJSON FeatureCollection, we convert it to a GeoJSON geometry type
-      const geometry = aoiGeojson.features[0].geometry;
+      // aoiGeojson is a GeoJSON Feature or FeatureCollection, we convert it to a GeoJSON geometry type
+      const geometry = aoiGeojson.geometry || aoiGeojson.features[0].geometry;
       store.dispatch(aoiSlice.actions.set({ geometry: geometry, bounds: layer.getBounds() }));
       enableEdit();
     });
   }
 
   function resetAoi(AOILayerRef, removeFromStore = true) {
-    mapRef.current.leafletElement.pm.disableDraw('Poly');
+    mapRef.current.leafletElement.pm.disableDraw(aoiShape);
     if (AOILayerRef) {
       AOILayerRef.pm.disable();
     }
     if (removeFromStore) {
       store.dispatch(aoiSlice.actions.reset());
     }
-    store.dispatch(mainMapSlice.actions.setEnableDrawing(false));
+    store.dispatch(aoiSlice.actions.setDrawingEnabled(false));
   }
 
   function updateViewport(viewport) {
@@ -177,6 +198,9 @@ function Map(props) {
     fromTime &&
     toTime
   );
+
+  const isGeometryVisible =
+    selectedMainTabIndex === PANEL_TAB.ALGORITHMS || selectedEdcDataTabIndex === EDC_DATA_TAB.COMMERCIAL;
 
   return (
     <>
@@ -244,7 +268,13 @@ function Map(props) {
             </Overlay>
           ))}
 
-          <GeoJSON id="aoi-layer" data={aoiGeometry ? aoiGeometry : null} key={aoiLastEdited} />
+          {isGeometryVisible && aoiShape === AOI_SHAPE.polygon && aoiGeometry && (
+            <GeoJSON id="aoi-layer" data={aoiGeometry} key={aoiLastEdited} />
+          )}
+
+          {isGeometryVisible && aoiShape === AOI_SHAPE.rectangle && aoiBounds && (
+            <Rectangle id="aoi-layer" bounds={aoiBounds} key={aoiLastEdited} />
+          )}
 
           <GeoJSON
             id="preview-aoi-layer"
@@ -283,7 +313,7 @@ function Map(props) {
 
         {commercialDataDisplaySearchResults &&
           !!commercialDataHighlightedResult &&
-          selectedMainTabIndex === 1 && (
+          selectedMainTabIndex === PANEL_TAB.DATA_PANEL && (
             <GeoJSON
               id="commercialDataResult"
               data={commercialDataHighlightedResult.geometry}
@@ -293,7 +323,7 @@ function Map(props) {
           )}
 
         {commercialDataDisplaySearchResults &&
-        selectedMainTabIndex === 1 &&
+        selectedMainTabIndex === PANEL_TAB.DATA_PANEL &&
         commercialDataSearchResults &&
         commercialDataSearchResults.length > 0 ? (
           <FeatureGroup
@@ -314,8 +344,8 @@ function Map(props) {
           !!commercialDataSelectedOrder.input &&
           !!commercialDataSelectedOrder.input.bounds &&
           !!commercialDataSelectedOrder.input.bounds.geometry &&
-          selectedMainTabIndex === 1 &&
-          selectedEdcDataTabIndex === 1 && (
+          selectedMainTabIndex === PANEL_TAB.DATA_PANEL &&
+          selectedEdcDataTabIndex === EDC_DATA_TAB.COMMERCIAL && (
             <GeoJSON
               id="commercialDataSelectedOrder"
               data={commercialDataSelectedOrder.input.bounds.geometry}
@@ -348,8 +378,10 @@ const mapStoreToProps = (store) => {
     zoom: store.mainMap.zoom,
     mapBounds: store.mainMap.bounds,
     enabledOverlaysId: store.mainMap.enabledOverlaysId,
-    enableDrawing: store.mainMap.enableDrawing,
+    drawingEnabled: store.aoi.drawingEnabled,
     aoiGeometry: store.aoi.geometry,
+    aoiBounds: store.aoi.bounds,
+    aoiShape: store.aoi.shape,
     aoiLastEdited: store.aoi.lastEdited,
     previewAOI: store.previewAOI.geometry,
     collectionId: store.visualization.collectionId,

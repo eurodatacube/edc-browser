@@ -18,6 +18,12 @@ export const PANEL_TAB = {
   DATA_PANEL: 1,
 };
 
+export const EDC_DATA_TAB = {
+  PUBLIC: 0,
+  COMMERCIAL: 1,
+  USER: 2,
+};
+
 export const ISO_DATE_FORMAT = 'YYYY-MM-DD';
 
 // SH services have a limit for a max image size of 2500px*2500px
@@ -26,6 +32,11 @@ export const MAX_SH_IMAGE_SIZE = 2500;
 export const DEFAULT_FROM_TIME = moment.utc('1970-01-01');
 export const DEFAULT_TO_TIME = moment.utc();
 
-export const DEFAULT_TIMEOUT = 20000;
+export const DEFAULT_TIMEOUT = 10000;
 
 export const MAXIMUM_GEOMETRY_SIZE_BYTES = 10000000;
+
+export const AOI_SHAPE = {
+  polygon: 'Polygon',
+  rectangle: 'Rectangle',
+};

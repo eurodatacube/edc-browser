@@ -27,7 +27,7 @@ const Search = ({
   searchInProgress,
   searchError,
   aoiGeometry,
-  aoiStartDrawing,
+  aoiDrawingEnabled,
   mapBounds,
 }) => {
   const fromTimeRef = useRef(null);
@@ -59,7 +59,7 @@ const Search = ({
 
   return (
     <div className="commercial-data-search">
-      <AOISelection aoiGeometry={aoiGeometry} aoiStartDrawing={aoiStartDrawing} mapBounds={mapBounds} />
+      <AOISelection aoiGeometry={aoiGeometry} aoiDrawingEnabled={aoiDrawingEnabled} mapBounds={mapBounds} />
       <DateInput
         id="fromTime-date-input"
         key="fromTime"
@@ -109,7 +109,7 @@ const Search = ({
 
 const mapStoreToProps = (store) => ({
   aoiGeometry: store.aoi.geometry,
-  aoiStartDrawing: store.aoi.startDrawing,
+  aoiDrawingEnabled: store.aoi.drawingEnabled,
   mapBounds: store.mainMap.bounds,
 });
 

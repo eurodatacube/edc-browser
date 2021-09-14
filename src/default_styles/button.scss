@@ -32,16 +32,21 @@
   i {
     margin-right: 5px;
   }
-}
 
-.button-primary:hover {
-  background: $primaryDark;
-}
+  &:hover {
+    background: $primaryDark;
+  }
 
-.button-primary:disabled {
-  background: $disabled;
-  opacity: 0.5;
-  cursor: auto;
+  &.inactive {
+    color: $textColor;
+    background: $secondaryDark;
+  }
+
+  &:disabled {
+    background: $disabled;
+    opacity: 0.5;
+    cursor: auto;
+  }
 }
 
 // SECONDARY
@@ -51,11 +56,12 @@
 
   border: 1px solid $textColorDisabled;
   color: $textColorFaded;
+
+  &:hover {
+    border: 1px solid $textColor;
+  }
 }
 
-.button-secondary:hover {
-  border: 1px solid $textColor;
-}
 // TERTIARY
 
 .button-tertiary {
@@ -65,12 +71,12 @@
   color: $textColorFaded;
   font-weight: $normal;
   letter-spacing: 0.3px;
-}
 
-.button-tertiary:hover {
-  color: white;
-  text-decoration: underline;
-  cursor: pointer;
+  &:hover {
+    color: white;
+    text-decoration: underline;
+    cursor: pointer;
+  }
 }
 
 // Button Icon
@@ -80,8 +86,8 @@
   border: none;
   color: #b2b2b2;
   cursor: pointer;
-}
 
-.button-icon:hover {
-  color: $textColor;
+  &:hover {
+    color: $textColor;
+  }
 }

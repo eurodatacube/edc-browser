@@ -68,12 +68,10 @@ class EvalscriptEditor extends React.Component {
     return allBands.length > 0 ? (
       <div className="advancedPanel">
         <div className="header">
-          {
-            <div onClick={onBack} className="back-button button-primary">
-              <i className="fa fa-arrow-left" />
-              Back
-            </div>
-          }
+          <div onClick={onBack} className="back-button button-primary">
+            <i className="fa fa-arrow-left" />
+            Close
+          </div>
         </div>
         <Accordion
           open={this.state.openAccordion === 0}

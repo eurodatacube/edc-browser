@@ -4,14 +4,14 @@ import { connect } from 'react-redux';
 
 import store, { aoiSlice, mainMapSlice } from '../../store';
 import { getFileExtension, loadFile, parseFile } from './AOISelect.utils';
-import { SUPPORTED_AOI_FORMATS } from '../../const';
+import { AOI_SHAPE, SUPPORTED_AOI_FORMATS } from '../../const';
 
 import './AOISelect.scss';
 
 function AOISelect(props) {
   const [error, setError] = useState(null);
   const [drawingInProgress, setDrawingInProgress] = useState(false);
-  const { drawnGeometry, drawingOnMapEnabled, geometry, onFinished } = props;
+  const { drawnGeometry, aoiShape, aoiDrawingEnabled, onFinished } = props;
 
   async function onFileUpload(e) {
     const file = e.target.files[0];
@@ -37,38 +37,70 @@ function AOISelect(props) {
     }
   }
 
+  function startDrawing() {
+    setDrawingInProgress(true);
+    store.dispatch(aoiSlice.actions.reset());
+    store.dispatch(aoiSlice.actions.setDrawingEnabled(true));
+  }
+
+  function clearDrawing() {
+    setDrawingInProgress(false);
+    store.dispatch(aoiSlice.actions.reset());
+  }
+
   function finishDrawing() {
     if (drawnGeometry) {
-      store.dispatch(mainMapSlice.actions.setEnableDrawing(false));
+      store.dispatch(aoiSlice.actions.setDrawingEnabled(false));
       onFinished(drawnGeometry);
     }
   }
 
-  if (geometry || drawingInProgress) {
+  function changeShape(shape) {
+    store.dispatch(aoiSlice.actions.setShape(shape));
+  }
+
+  if (drawingInProgress && aoiDrawingEnabled) {
     return (
       <div className="aoi-confirm-panel">
-        <button
-          disabled={!drawnGeometry}
-          className={`button-primary continue-button`}
-          onClick={finishDrawing}
-        >
-          Continue
-        </button>
-        <button
-          className="button-icon clear-aoi-button"
-          onClick={() => {
-            store.dispatch(aoiSlice.actions.reset());
-            store.dispatch(mainMapSlice.actions.setEnableDrawing(false));
-            setDrawingInProgress(false);
-          }}
-        >
+        {!drawnGeometry && (
+          <>
+            <button
+              className={'button-primary' + (aoiShape === AOI_SHAPE.rectangle ? '' : ' inactive')}
+              onClick={() => {
+                changeShape(AOI_SHAPE.rectangle);
+              }}
+            >
+              <i className="far fa-square" title={`Draw area of interest`} />
+              <span>{AOI_SHAPE.rectangle}</span>
+            </button>
+            <button
+              className={'button-primary' + (aoiShape === AOI_SHAPE.polygon ? '' : ' inactive')}
+              onClick={() => {
+                changeShape(AOI_SHAPE.polygon);
+              }}
+            >
+              <i className="fa fa-pencil" title={`Draw area of interest`} />
+              <span>{AOI_SHAPE.polygon}</span>
+            </button>
+          </>
+        )}
+        {drawnGeometry && (
+          <button
+            disabled={!drawnGeometry}
+            className={`button-primary continue-button`}
+            onClick={finishDrawing}
+          >
+            Continue
+          </button>
+        )}
+        <button className="button-icon clear-aoi-button" onClick={clearDrawing}>
           <i className="fas fa-times" />
         </button>
       </div>
     );
   }
 
-  const disabled = drawingOnMapEnabled && !drawingInProgress; // Some other AOI Select component is drawing
+  const disabled = aoiDrawingEnabled && !drawingInProgress; // Some other AOI Select component is drawing
 
   return (
     <div className="aoi-select-panel">
@@ -78,9 +110,7 @@ function AOISelect(props) {
           if (disabled) {
             return;
           }
-          setDrawingInProgress(true);
-          store.dispatch(aoiSlice.actions.reset());
-          store.dispatch(mainMapSlice.actions.setEnableDrawing(true));
+          startDrawing();
         }}
       >
         Select area of interest
@@ -109,7 +139,8 @@ function AOISelect(props) {
 const mapStoreToProps = (store) => {
   return {
     drawnGeometry: store.aoi.geometry,
-    drawingOnMapEnabled: store.mainMap.enableDrawing,
+    aoiShape: store.aoi.shape,
+    aoiDrawingEnabled: store.aoi.drawingEnabled,
   };
 };
 

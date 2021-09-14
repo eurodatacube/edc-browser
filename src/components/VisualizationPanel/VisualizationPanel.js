@@ -206,7 +206,7 @@ function VisualizationPanel(props) {
             <div className={`visualization-layer ${customVisualizationSelected ? 'selected' : ''}`}>
               <div className="main-row">
                 <div className="title" onClick={selectCustomVisualization}>
-                  Custom Script
+                  Custom visualizations
                 </div>
               </div>
             </div>

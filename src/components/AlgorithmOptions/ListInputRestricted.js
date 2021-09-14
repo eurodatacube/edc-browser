@@ -25,7 +25,8 @@ export default function ListInputRestricted({ restriction, value = [], setValue 
     control: (css) => ({
       ...css,
       color: '#eee',
-      height: '45px',
+      height: 'fit-content',
+      padding: '5px 0',
       background: '#2a2c37',
       border: 'none',
       borderRadius: '0px',

@@ -13,12 +13,15 @@ import { getBoundsAndLatLng } from '../EdcDataPanel/CommercialDataPanel/commerci
 
 function AOIAlgorithmOption(props) {
   const [displayAvailableArea, setDisplayAvailableArea] = useState(false);
-  const { setAlgorithmParameter, id, restriction, value = null, aoiGeometryOnMap } = props;
+  const { setAlgorithmParameter, id, restriction, value = null, aoiGeometryOnMap, aoiDrawingEnabled } = props;
   const geojson = value && wktToGeoJSON(value);
 
   function setAOIOption(geometry) {
-    const geojson = wktToGeoJSON(restriction.value);
-    const isValid = !booleanDisjoint(geometry, geojson);
+    let isValid = true;
+    if (restriction && restriction.value) {
+      const geojson = wktToGeoJSON(restriction.value);
+      isValid = !booleanDisjoint(geometry, geojson);
+    }
     const wkt = geojsonToWKT(geometry);
     setAlgorithmParameter(id, wkt, isValid);
     store.dispatch(previewAOISlice.actions.reset());
@@ -33,7 +36,7 @@ function AOIAlgorithmOption(props) {
   }
 
   function clearAOI() {
-    if (booleanEqual(aoiGeometryOnMap, geojson)) {
+    if (aoiGeometryOnMap && geojson && booleanEqual(aoiGeometryOnMap, geojson)) {
       store.dispatch(aoiSlice.actions.reset());
     }
     store.dispatch(previewAOISlice.actions.reset());
@@ -54,18 +57,25 @@ function AOIAlgorithmOption(props) {
     } else {
       store.dispatch(previewAOISlice.actions.reset());
     }
-  }, [displayAvailableArea, restriction.value]);
+    // eslint-disable-next-line
+  }, [displayAvailableArea, restriction && restriction.value]);
+
+  const canDisplayAvailableArea = restriction && restriction.value;
 
   return (
     <div className="algorithm-option-aoi">
       <div className="algorithm-option-aoi-restriction">
-        <input
-          type="checkbox"
-          value={displayAvailableArea}
-          onChange={() => setDisplayAvailableArea(!displayAvailableArea)}
-          checked={displayAvailableArea}
-        />
-        <label> Display available area</label>
+        {canDisplayAvailableArea && (
+          <>
+            <input
+              type="checkbox"
+              value={displayAvailableArea}
+              onChange={() => setDisplayAvailableArea(!displayAvailableArea)}
+              checked={displayAvailableArea}
+            />
+            <label> Display available area</label>
+          </>
+        )}
         {displayAvailableArea && (
           <i
             className="fa fa-crosshairs"
@@ -74,7 +84,7 @@ function AOIAlgorithmOption(props) {
           ></i>
         )}
       </div>
-      {value ? (
+      {value && aoiGeometryOnMap && !aoiDrawingEnabled ? (
         <div className="algorithm-option-aoi-tools">
           <button className="button-primary algorithm-option-aoi-display" onClick={displayAOIOnMap}>
             Show
@@ -94,6 +104,7 @@ function AOIAlgorithmOption(props) {
 
 const mapStoreToProps = (store) => ({
   aoiGeometryOnMap: store.aoi.geometry,
+  aoiDrawingEnabled: store.aoi.drawingEnabled,
 });
 
 export default connect(mapStoreToProps, null)(AOIAlgorithmOption);

@@ -3,8 +3,9 @@ import geo_area from '@mapbox/geojson-area';
 import L from 'leaflet';
 import store, { aoiSlice, mainMapSlice } from '../../../../store';
 import { UploadGeoFile } from '../../../junk/UploadGeoFile/UploadGeoFile';
+import { AOI_SHAPE } from '../../../../const';
 
-export const AOISelection = ({ aoiGeometry, aoiStartDrawing, mapBounds }) => {
+export const AOISelection = ({ aoiGeometry, aoiDrawingEnabled, mapBounds }) => {
   const [uploadDialog, setUploadDialog] = useState(false);
 
   const onFileUpload = (geometry) => {
@@ -13,7 +14,7 @@ export const AOISelection = ({ aoiGeometry, aoiStartDrawing, mapBounds }) => {
     setUploadDialog(false);
     const { lat, lng } = layer.getBounds().getCenter();
     store.dispatch(mainMapSlice.actions.setPosition({ lat: lat, lng: lng }));
-    store.dispatch(mainMapSlice.actions.setEnableDrawing(false));
+    store.dispatch(aoiSlice.actions.setDrawingEnabled(false));
   };
 
   const setCurrentDisplayArea = () => {
@@ -36,7 +37,6 @@ export const AOISelection = ({ aoiGeometry, aoiStartDrawing, mapBounds }) => {
 
   const clearAOI = () => {
     store.dispatch(aoiSlice.actions.reset());
-    store.dispatch(mainMapSlice.actions.setEnableDrawing(false));
   };
 
   return (
@@ -54,23 +54,37 @@ export const AOISelection = ({ aoiGeometry, aoiStartDrawing, mapBounds }) => {
           )}
         </div>
         <div className="aoi-buttons">
-          <i
-            className="fa fa-television"
-            title={`Use current display area`}
-            onClick={() => setCurrentDisplayArea()}
-          />
+          {!aoiGeometry && !aoiDrawingEnabled && (
+            <>
+              <i
+                className="fa fa-television"
+                title={`Use current display area`}
+                onClick={() => setCurrentDisplayArea()}
+              />
 
-          <i className="fa fa-upload" title={`Upload data`} onClick={() => setUploadDialog(true)} />
+              <i className="fa fa-upload" title={`Upload data`} onClick={() => setUploadDialog(true)} />
 
-          <i
-            className="fa fa-pencil"
-            title={`Draw area of interest`}
-            onClick={() => {
-              store.dispatch(mainMapSlice.actions.setEnableDrawing(true));
-            }}
-          />
+              <i
+                className="far fa-square"
+                title={`Draw rectangular area of interest`}
+                onClick={() => {
+                  store.dispatch(aoiSlice.actions.setShape(AOI_SHAPE.rectangle));
+                  store.dispatch(aoiSlice.actions.setDrawingEnabled(true));
+                }}
+              />
 
-          {(!!aoiGeometry || aoiStartDrawing) && (
+              <i
+                className="fa fa-pencil"
+                title={`Draw polygonal area of interest`}
+                onClick={() => {
+                  store.dispatch(aoiSlice.actions.setShape(AOI_SHAPE.polygon));
+                  store.dispatch(aoiSlice.actions.setDrawingEnabled(true));
+                }}
+              />
+            </>
+          )}
+
+          {(!!aoiGeometry || aoiDrawingEnabled) && (
             <i className="fa fa-close" title={`Cancel`} onClick={clearAOI} />
           )}
 

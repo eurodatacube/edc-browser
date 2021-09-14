@@ -17,6 +17,8 @@ function AlgorithmsPanel(props) {
     // eslint-disable-next-line
   }, [algorithmsList]);
 
+  const algorithmsExist = algorithmsList.length > 0;
+
   return (
     <div className="algorithms-panel panel-content-wrap">
       {fetchingInProgress ? (
@@ -30,18 +32,26 @@ function AlgorithmsPanel(props) {
               value={algorithm}
               onChange={(e) => setAlgorithm(e.target.value)}
             >
-              {algorithmsList.map((a, i) => (
-                <option key={i} value={a.link}>
-                  {a.name}
-                </option>
-              ))}
+              {algorithmsExist &&
+                algorithmsList.map((a, i) => (
+                  <option key={i} value={a.link}>
+                    {a.name}
+                  </option>
+                ))}
             </select>
           </div>
-          <OptionsHandler algorithm={algorithmsList.find((a) => a.link === algorithm)}>
-            {({ options, defaultValues }) => (
-              <AlgorithmOptions algorithm={algorithm} options={options} defaultValues={defaultValues} />
-            )}
-          </OptionsHandler>
+          {algorithmsExist && (
+            <OptionsHandler algorithm={algorithmsList.find((a) => a.link === algorithm)}>
+              {({ options, defaultValues }) => (
+                <AlgorithmOptions
+                  key={algorithm}
+                  algorithm={algorithm}
+                  options={options}
+                  defaultValues={defaultValues}
+                />
+              )}
+            </OptionsHandler>
+          )}
         </>
       )}
     </div>
