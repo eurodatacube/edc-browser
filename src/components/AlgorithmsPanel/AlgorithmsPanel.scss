@@ -10,4 +10,10 @@
     margin-bottom: $spacing2;
     font-size: $font3;
   }
+
+  .algorithm-error {
+    color: $error;
+    font-size: $font3;
+    padding: 0 0 10px 10px;
+  }
 }

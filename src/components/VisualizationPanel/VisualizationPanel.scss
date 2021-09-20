@@ -70,7 +70,8 @@
   }
 
   .accordion-wrap {
-    .accordion-title,
+    border-bottom: 2px solid $secondary;
+
     .accordion-content {
       background-color: $secondary;
     }

@@ -1,6 +1,6 @@
 import moment from 'moment';
 
-import store, { mainMapSlice, visualizationSlice, tabsSlice } from '../store';
+import store, { mainMapSlice, visualizationSlice, tabsSlice, algorithmsSlice } from '../store';
 import { DEFAULT_LAT_LNG, PANEL_TAB } from '../const';
 
 export function updatePath(props) {
@@ -16,6 +16,7 @@ export function updatePath(props) {
     evalscript,
     evalscriptUrl,
     type,
+    algorithm,
   } = props;
   lat = Math.round(100000 * lat) / 100000;
   lng = Math.round(100000 * lng) / 100000;
@@ -49,6 +50,9 @@ export function updatePath(props) {
   }
   if (toTime) {
     params.toTime = toTime.toISOString();
+  }
+  if (algorithm) {
+    params.algorithm = algorithm;
   }
 
   const escapedParams = Object.keys(params)
@@ -87,6 +91,7 @@ export function setStore(params) {
     evalscript,
     evalscriptUrl,
     type,
+    algorithm,
   } = params;
 
   let { lat: parsedLat, lng: parsedLng, zoom: parsedZoom } = parsePosition(lat, lng, zoom);
@@ -114,5 +119,8 @@ export function setStore(params) {
 
   if (collectionId) {
     store.dispatch(tabsSlice.actions.setMainTabIndex(PANEL_TAB.DATA_PANEL));
+  }
+  if (algorithm) {
+    store.dispatch(algorithmsSlice.actions.setSelectedAlgorithm(algorithm));
   }
 }

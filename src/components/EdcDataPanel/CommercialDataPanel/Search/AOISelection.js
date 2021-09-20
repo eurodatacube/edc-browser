@@ -10,6 +10,7 @@ export const AOISelection = ({ aoiGeometry, aoiDrawingEnabled, mapBounds }) => {
 
   const onFileUpload = (geometry) => {
     const layer = L.geoJSON(geometry);
+    store.dispatch(aoiSlice.actions.setShape(AOI_SHAPE.polygon));
     store.dispatch(aoiSlice.actions.set({ geometry, bounds: layer.getBounds() }));
     setUploadDialog(false);
     const { lat, lng } = layer.getBounds().getCenter();

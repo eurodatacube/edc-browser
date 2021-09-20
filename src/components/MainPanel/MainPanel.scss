@@ -34,7 +34,7 @@
   position: fixed;
   max-width: 450px;
   min-width: 260px;
-  max-height: 80%;
+  max-height: calc(100% - 70px);
   color: #868fa0;
   box-shadow: $boxShadow;
   background: $secondary;

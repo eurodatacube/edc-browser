@@ -28,6 +28,7 @@ function AOISelect(props) {
       const layer = L.geoJSON(geometry);
       const bounds = layer.getBounds();
       onFinished(geometry);
+      store.dispatch(aoiSlice.actions.setShape(AOI_SHAPE.polygon));
       store.dispatch(aoiSlice.actions.set({ geometry: geometry, bounds: bounds }));
       const { lat, lng } = bounds.getCenter();
       store.dispatch(mainMapSlice.actions.setPosition({ lat: lat, lng: lng }));
@@ -90,7 +91,7 @@ function AOISelect(props) {
             className={`button-primary continue-button`}
             onClick={finishDrawing}
           >
-            Continue
+            Confirm AOI
           </button>
         )}
         <button className="button-icon clear-aoi-button" onClick={clearDrawing}>

@@ -243,6 +243,18 @@ export const indexSlice = createSlice({
   },
 });
 
+export const algorithmsSlice = createSlice({
+  name: 'algorithms',
+  initialState: {
+    selectedAlgorithm: null,
+  },
+  reducers: {
+    setSelectedAlgorithm: (state, action) => {
+      state.selectedAlgorithm = action.payload;
+    },
+  },
+});
+
 const reducers = combineReducers({
   mainMap: mainMapSlice.reducer,
   tabs: tabsSlice.reducer,
@@ -252,6 +264,7 @@ const reducers = combineReducers({
   commercialData: commercialDataSlice.reducer,
   errors: errorsSlice.reducer,
   index: indexSlice.reducer,
+  algorithms: algorithmsSlice.reducer,
 });
 
 const store = configureStore({

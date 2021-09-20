@@ -36,6 +36,7 @@ const mapStoreToProps = (store) => ({
   type: store.visualization.type,
   fromTime: store.visualization.fromTime,
   toTime: store.visualization.toTime,
+  algorithm: store.algorithms.selectedAlgorithm,
 });
 
 export default connect(mapStoreToProps, null)(UrlHandler);
