@@ -98,6 +98,11 @@ export default class SentinelHubHandler extends AbstractServiceHandler {
     return {
       user: collectionsData.map((collection) => {
         const { subType, collectionId } = getSubTypeAndCollectionId(collection.id);
+        const bands =
+          (collection.additionalData &&
+            collection.additionalData.bands &&
+            Object.keys(collection.additionalData.bands)) ||
+          [];
         return collectionFactory({
           uniqueId: collection.id,
           id: collectionId,
@@ -105,6 +110,7 @@ export default class SentinelHubHandler extends AbstractServiceHandler {
           type: COLLECTION_TYPE.SENTINEL_HUB,
           group: collection.group,
           configurations: this.getConfigurations(collection),
+          bands: bands,
           ownedByUser: true,
           serviceSpecificInfo: {
             type: DATASET_BYOC.id,

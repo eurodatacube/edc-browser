@@ -23,6 +23,7 @@ export default class GeoDBHandler extends AbstractServiceHandler {
     this.geodb_token = null;
     this.geoserverInstances = [];
     this.collectionSRID = {};
+    this.geoDBLayer = null;
   }
 
   async authenticate() {
@@ -138,10 +139,17 @@ export default class GeoDBHandler extends AbstractServiceHandler {
   }
 
   getLayer(database, collectionId) {
-    return new GeoDBLayer({
-      database: database,
-      collectionId: collectionId,
-      geodb_token: this.geodb_token,
-    });
+    if (
+      this.geoDBLayer === null ||
+      this.geoDBLayer.database !== database ||
+      this.geoDBLayer.collectionId !== collectionId
+    ) {
+      this.geoDBLayer = new GeoDBLayer({
+        database: database,
+        collectionId: collectionId,
+        geodb_token: this.geodb_token,
+      });
+    }
+    return this.geoDBLayer;
   }
 }

@@ -43,9 +43,34 @@
     }
   }
 
+  .vector-features-panel {
+    display: flex;
+    flex-direction: column;
+    color: $textColor;
+
+    .maximum-feature-warning {
+      padding: 5px 0;
+    }
+
+    .load-more {
+      padding: 5px 0;
+
+      .n-features-fetched {
+        font-weight: bold;
+        display: inline-block;
+      }
+
+      .load-more-button {
+        margin-left: 10px;
+        padding: 5px 10px;
+        height: unset;
+      }
+    }
+  }
+
   .zoom-to-location {
     color: $textColor;
-    background: $primaryDark;
+    background: $primary;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -62,6 +87,7 @@
 
     &:hover {
       border: none;
+      background: $primaryDark;
     }
   }
 

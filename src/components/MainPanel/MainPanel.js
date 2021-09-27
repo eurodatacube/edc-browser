@@ -6,10 +6,12 @@ import AlgorithmsPanel from '../AlgorithmsPanel/AlgorithmsPanel';
 import EdcDataPanel from '../EdcDataPanel/EdcDataPanel';
 import VisualizationPanel from '../VisualizationPanel/VisualizationPanel';
 import { getServiceHandlerForCollectionType } from '../../services';
-import store, { aoiSlice, tabsSlice } from '../../store';
+import store, { aoiSlice, tabsSlice, errorsSlice } from '../../store';
 import { PANEL_TAB } from '../../const';
 import { getCollectionInfo } from '../../utils/collections';
 import ErrorPanel from '../ErrorPanel/ErrorPanel';
+
+import edcLogo from './EDC_logo_square_white.svg';
 
 import './MainPanel.scss';
 
@@ -39,6 +41,10 @@ function MainPanel(props) {
   const [bestLocation, setBestLocation] = useState(null);
 
   const collection = getCollectionInfo(collectionsList, selectedCollectionId, selectedType, selectedLayerId);
+  const TAB_TITLES = {
+    [PANEL_TAB.ALGORITHMS]: 'On demand data',
+    [PANEL_TAB.DATA_PANEL]: 'EDC Data',
+  };
 
   useEffect(() => {
     const getConfigurations = async (selectedCollectionId, selectedType, selectedLayerId) => {
@@ -62,11 +68,19 @@ function MainPanel(props) {
     const getBestLocation = async (selectedCollectionId, selectedType, selectedLayerId) => {
       if (collection) {
         const serviceHandler = getServiceHandlerForCollectionType(collection.type);
-        const bestLocation = await serviceHandler.getBestInitialLocation(
-          selectedCollectionId,
-          selectedLayerId,
-        );
-        setBestLocation(bestLocation);
+        try {
+          const bestLocation = await serviceHandler.getBestInitialLocation(
+            selectedCollectionId,
+            selectedLayerId,
+          );
+          setBestLocation(bestLocation);
+        } catch (error) {
+          store.dispatch(
+            errorsSlice.actions.addError({
+              text: error.message,
+            }),
+          );
+        }
       }
     };
     if (selectedCollectionId) {
@@ -80,7 +94,7 @@ function MainPanel(props) {
   const confirmSwitchingTabs = (index) => {
     return window.confirm(
       `With switching to the ${
-        PANEL_TAB.ALGORITHMS === index ? 'Algorithms' : 'EDC Data'
+        PANEL_TAB.ALGORITHMS === index ? TAB_TITLES[PANEL_TAB.ALGORITHMS] : TAB_TITLES[PANEL_TAB.DATA_PANEL]
       } tab your area of interest (AOI) will be removed. Do you want to continue?`,
     );
   };
@@ -98,6 +112,7 @@ function MainPanel(props) {
               <i className="fa fa-chevron-left" />
             </div>
             <div className="app-title">
+              <img className="app-logo" src={edcLogo} alt="Euro Data Cube" />
               <span>EDC Browser</span>
             </div>
           </div>
@@ -116,13 +131,7 @@ function MainPanel(props) {
             store.dispatch(tabsSlice.actions.setMainTabIndex(index));
           }}
         >
-          <Tab id="algorithms-tab" title={`Algorithms`} renderKey={PANEL_TAB.ALGORITHMS}>
-            <AlgorithmsPanel
-              algorithmsList={algorithmsList}
-              fetchingInProgress={algorithmsFetchingInProgress}
-            />
-          </Tab>
-          <Tab id="edc-data-tab" title={`EDC Data`} renderKey={PANEL_TAB.DATA_PANEL}>
+          <Tab id="edc-data-tab" title={TAB_TITLES[PANEL_TAB.DATA_PANEL]} renderKey={PANEL_TAB.DATA_PANEL}>
             {showVisualizationPanel && configurations ? (
               <VisualizationPanel
                 configurations={configurations}
@@ -137,6 +146,12 @@ function MainPanel(props) {
                 showVisualisationPanel={() => setShowVisualizationPanel(true)}
               />
             )}
+          </Tab>
+          <Tab id="algorithms-tab" title={TAB_TITLES[PANEL_TAB.ALGORITHMS]} renderKey={PANEL_TAB.ALGORITHMS}>
+            <AlgorithmsPanel
+              algorithmsList={algorithmsList}
+              fetchingInProgress={algorithmsFetchingInProgress}
+            />
           </Tab>
         </Tabs>
       </div>

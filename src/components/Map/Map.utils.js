@@ -1,6 +1,9 @@
 import { coordEach } from '@turf/meta';
 import { featureCollection } from '@turf/helpers';
 
+import store, { visualizationSlice, errorsSlice } from '../../store';
+import { constructErrorMessage } from '../../utils';
+
 export function isCoordsEmpty(geojsonFeature) {
   let coordsEmpty = false;
   coordEach(geojsonFeature, (currentCoord, coordIndex, featureIndex, multiFeatureIndex, geometryIndex) => {
@@ -33,4 +36,14 @@ export function removeAoiWithEmptyCoords(geojson) {
     default:
       return geojson;
   }
+}
+
+export function onUnload(tile) {
+  const { tileId } = tile;
+  store.dispatch(visualizationSlice.actions.removeTileDataGeometries(tileId));
+}
+
+export async function onTileImageError(error) {
+  const message = await constructErrorMessage(error);
+  store.dispatch(errorsSlice.actions.addError({ text: message }));
 }

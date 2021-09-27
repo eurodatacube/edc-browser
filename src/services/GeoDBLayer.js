@@ -3,8 +3,8 @@ import wkx from 'wkx';
 import { isCancelled } from '@sentinel-hub/sentinelhub-js';
 
 import { convertGeoJSONCrs, convertBBox } from '../utils/coords';
-import store, { visualizationSlice, errorsSlice } from '../store';
-import { MAXIMUM_GEOMETRY_SIZE_BYTES } from '../const';
+import store, { visualizationSlice, errorsSlice, paginationSlice } from '../store';
+import { MAXIMUM_GEOMETRY_SIZE_BYTES, MAX_GEODB_FEATURES } from '../const';
 
 export default class GeoDBLayer {
   constructor({ database, collectionId, geodb_token }) {
@@ -14,6 +14,7 @@ export default class GeoDBLayer {
     this.collectionSRID = null;
     this.fetchedTiles = [];
     this.fetchedDataIds = [];
+    this.fetchedDataOffsets = {};
   }
 
   async getCollectionSRID(database, collectionId) {
@@ -69,31 +70,47 @@ export default class GeoDBLayer {
     return true;
   }
 
-  hasDataAlreadyBeenFetched(tileCoords) {
-    return this.fetchedTiles.some((t) => this.isTileInsideOtherTile(tileCoords, t));
+  hasDataAlreadyBeenFetched(tileCoords, tileId, maxGeoDBFeatures) {
+    return (
+      this.fetchedTiles.some((t) => this.isTileInsideOtherTile(tileCoords, t)) &&
+      (this.fetchedDataOffsets[tileId] === null || this.fetchedDataOffsets[tileId] >= maxGeoDBFeatures)
+    );
+  }
+
+  anyTileHasMore() {
+    for (let tileId in this.fetchedDataOffsets) {
+      if (this.fetchedDataOffsets[tileId] !== null) {
+        return true;
+      }
+    }
   }
 
   async getMap(params, _, reqConfig) {
-    const { bbox, tileId, tileCoords } = params;
+    const { bbox, tileId, tileCoords, maxGeoDBFeatures = MAX_GEODB_FEATURES } = params;
     const { cancelToken } = reqConfig;
 
-    if (this.hasDataAlreadyBeenFetched(tileCoords)) {
+    if (!this.anyTileHasMore()) {
+      store.dispatch(paginationSlice.actions.setHasMore(false));
+    }
+
+    if (this.hasDataAlreadyBeenFetched(tileCoords, tileId, maxGeoDBFeatures)) {
       return;
     }
 
     const fullId = `${this.database}_${this.collectionId}`;
 
     let srid = this.collectionSRID;
-    if (!srid) {
+    if (srid === null) {
       srid = await this.getCollectionSRID(this.database, this.collectionId);
       this.collectionSRID = srid;
     }
 
     const [minx, miny, maxx, maxy] = convertBBox(bbox, srid);
 
-    const limit = 100;
-    let offset = 0;
+    let offset = this.fetchedDataOffsets[tileId] || 0;
+    let limit = Math.min(maxGeoDBFeatures - offset, 100);
     let data = [];
+    let largestChunkSize = 0;
 
     const requestConfig = this._getConfigWithAuth();
     requestConfig.cancelToken = cancelToken.token;
@@ -122,9 +139,24 @@ export default class GeoDBLayer {
         data = [...data, ...dataChunk];
 
         if (dataChunk.length < limit) {
+          this.fetchedDataOffsets[tileId] = null;
           break;
         }
+
+        const chunkSize = JSON.stringify(dataChunk).length;
+
         offset += dataChunk.length;
+
+        if (chunkSize > largestChunkSize) {
+          limit = Math.min(Math.ceil(limit * (10000000 / chunkSize)), maxGeoDBFeatures - offset);
+          largestChunkSize = chunkSize;
+        }
+
+        if (offset >= maxGeoDBFeatures) {
+          this.fetchedDataOffsets[tileId] = offset;
+          store.dispatch(paginationSlice.actions.setHasMore(true));
+          break;
+        }
       } catch (err) {
         if (!isCancelled(err)) {
           console.log(tileId, 'failed with err ', err);
@@ -165,6 +197,7 @@ export default class GeoDBLayer {
       return true;
     });
 
+    store.dispatch(paginationSlice.actions.addFetched(data.length));
     store.dispatch(visualizationSlice.actions.addDataGeometries(data));
     this.fetchedTiles.push(tileCoords);
     return null;

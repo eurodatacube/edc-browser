@@ -25,6 +25,8 @@ export function getSubTypeAndCollectionId(type) {
     subType = BYOCSubTypes.BYOC;
   } else if (subTypeStr === 'batch') {
     subType = BYOCSubTypes.BATCH;
+  } else if (subTypeStr === 'zarr') {
+    subType = BYOCSubTypes.ZARR;
   }
   return { subType: subType, collectionId: collectionId };
 }

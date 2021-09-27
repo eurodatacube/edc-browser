@@ -1,16 +1,19 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Accordion from '../../Accordion/Accordion';
 
 import './PublicAndUserDataPanel.scss';
 
-export const PublicAndUserDataPanel = ({ groups, handleCollectionClick }) => {
-  const [selectedAccordion, setSelectedAccordion] = useState(null);
-
+export const PublicAndUserDataPanel = ({
+  groups,
+  handleCollectionClick,
+  selectedGroup,
+  setSelectedGroup,
+}) => {
   const toggleAccordion = (index) => {
-    if (index !== selectedAccordion) {
-      setSelectedAccordion(index);
+    if (index !== selectedGroup) {
+      setSelectedGroup(index);
     } else {
-      setSelectedAccordion(null);
+      setSelectedGroup(null);
     }
   };
 
@@ -19,7 +22,7 @@ export const PublicAndUserDataPanel = ({ groups, handleCollectionClick }) => {
       {Object.keys(groups).map((groupKey) => {
         return (
           <Accordion
-            open={selectedAccordion === groupKey}
+            open={selectedGroup === groupKey}
             title={groupKey}
             key={groupKey}
             toggleOpen={() => toggleAccordion(groupKey)}

@@ -14,14 +14,19 @@ export const COLLECTION_TYPE = {
 };
 
 export const PANEL_TAB = {
-  ALGORITHMS: 0,
-  DATA_PANEL: 1,
+  DATA_PANEL: 0,
+  ALGORITHMS: 1,
 };
 
 export const EDC_DATA_TAB = {
   PUBLIC: 0,
   COMMERCIAL: 1,
   USER: 2,
+};
+
+export const USER_DATA_TAB = {
+  SHARED: 0,
+  PRIVATE: 1,
 };
 
 export const ISO_DATE_FORMAT = 'YYYY-MM-DD';
@@ -40,3 +45,9 @@ export const AOI_SHAPE = {
   polygon: 'Polygon',
   rectangle: 'Rectangle',
 };
+
+export const MAX_GEODB_FEATURES = 20000;
+
+export const EDC_PUBLIC_GROUPS = ['Sentinel', 'Landsat', 'ICEYE', 'DEM', 'ALOS', 'Copernicus service'];
+
+export const DEFAULT_EDC_PUBLIC_GROUP = EDC_PUBLIC_GROUPS[0];

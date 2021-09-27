@@ -5,6 +5,7 @@ import Loader from '../Loader/Loader';
 import AlgorithmOptions from '../AlgorithmOptions/AlgorithmOptions';
 import OptionsHandler from '../AlgorithmOptions/OptionsHandler';
 import store, { algorithmsSlice } from '../../store';
+import ExternalLink from '../ExternalLink/ExternalLink';
 
 import './AlgorithmsPanel.scss';
 
@@ -27,6 +28,14 @@ function AlgorithmsPanel(props) {
 
   return (
     <div className="algorithms-panel panel-content-wrap">
+      <div className="algorithms-about">
+        Select one of the available algorithms and order processing for your area of interest,{' '}
+        <ExternalLink href="https://eurodatacube.com/marketplace/data-products/on-demand">
+          more information
+        </ExternalLink>
+        .
+      </div>
+
       {fetchingInProgress ? (
         <Loader />
       ) : (
@@ -47,7 +56,6 @@ function AlgorithmsPanel(props) {
                     {a.name}
                   </option>
                 ))}
-              }
             </select>
           </div>
           {algorithmsExist && algorithmDefinitionExists && (

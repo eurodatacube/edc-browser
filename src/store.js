@@ -1,6 +1,13 @@
 import { configureStore, combineReducers, createSlice, getDefaultMiddleware } from '@reduxjs/toolkit';
 
-import { DEFAULT_LAT_LNG, DEFAULT_FROM_TIME, DEFAULT_TO_TIME, AOI_SHAPE } from './const';
+import {
+  DEFAULT_LAT_LNG,
+  DEFAULT_FROM_TIME,
+  DEFAULT_TO_TIME,
+  AOI_SHAPE,
+  MAX_GEODB_FEATURES,
+  DEFAULT_EDC_PUBLIC_GROUP,
+} from './const';
 
 export const mainMapSlice = createSlice({
   name: 'mainMap',
@@ -52,6 +59,8 @@ export const tabsSlice = createSlice({
   initialState: {
     selectedMainTabIndex: 0,
     selectedEdcDataTabIndex: 0,
+    selectedUserDataTabIndex: 0,
+    selectedGroup: DEFAULT_EDC_PUBLIC_GROUP,
   },
   reducers: {
     setMainTabIndex: (state, action) => {
@@ -59,6 +68,12 @@ export const tabsSlice = createSlice({
     },
     setEdcDataTabIndex: (state, action) => {
       state.selectedEdcDataTabIndex = action.payload;
+    },
+    setUserDataTabIndex: (state, action) => {
+      state.selectedUserDataTabIndex = action.payload;
+    },
+    setSelectedGroup: (state, action) => {
+      state.selectedGroup = action.payload;
     },
   },
 });
@@ -76,6 +91,7 @@ export const visualizationSlice = createSlice({
     toTime: DEFAULT_TO_TIME,
     dataGeometries: [],
     highlightedDataGeometry: undefined,
+    maxGeoDBFeatures: MAX_GEODB_FEATURES,
   },
   reducers: {
     setVisualizationParams: (state, action) => {
@@ -102,6 +118,9 @@ export const visualizationSlice = createSlice({
       }
       if (action.payload.toTime !== undefined) {
         state.toTime = action.payload.toTime;
+      }
+      if (action.payload.maxGeoDBFeatures !== undefined) {
+        state.maxGeoDBFeatures = action.payload.maxGeoDBFeatures;
       }
     },
     addDataGeometries: (state, action) => {
@@ -131,6 +150,7 @@ export const visualizationSlice = createSlice({
       state.highlightedDataGeometry = undefined;
       state.fromTime = DEFAULT_FROM_TIME;
       state.toTime = DEFAULT_TO_TIME;
+      state.maxGeoDBFeatures = MAX_GEODB_FEATURES;
     },
   },
 });
@@ -243,6 +263,26 @@ export const indexSlice = createSlice({
   },
 });
 
+export const paginationSlice = createSlice({
+  name: 'pagination',
+  initialState: {
+    hasMore: false,
+    nFetched: 0,
+  },
+  reducers: {
+    setHasMore: (state, action) => {
+      state.hasMore = action.payload;
+    },
+    addFetched: (state, action) => {
+      state.nFetched = state.nFetched + action.payload;
+    },
+    reset: (state, action) => {
+      state.hasMore = false;
+      state.nFetched = 0;
+    },
+  },
+});
+
 export const algorithmsSlice = createSlice({
   name: 'algorithms',
   initialState: {
@@ -264,6 +304,7 @@ const reducers = combineReducers({
   commercialData: commercialDataSlice.reducer,
   errors: errorsSlice.reducer,
   index: indexSlice.reducer,
+  pagination: paginationSlice.reducer,
   algorithms: algorithmsSlice.reducer,
 });
 

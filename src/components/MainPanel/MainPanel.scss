@@ -78,6 +78,13 @@
         text-decoration: none;
         align-items: center;
         margin-left: 20px;
+
+        .app-logo {
+          height: 36px;
+          vertical-align: middle;
+          padding-right: 10px;
+          padding-bottom: 5px;
+        }
       }
     }
   }

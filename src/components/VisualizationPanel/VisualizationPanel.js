@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
 
-import store, { visualizationSlice, mainMapSlice } from '../../store';
+import store, { visualizationSlice, mainMapSlice, paginationSlice } from '../../store';
 import { VisualizationTimeSelect } from '../DateSelectionComponents/VisualizationTimeSelect/VisualizationTimeSelect';
 import { getServiceHandlerForCollectionType } from '../../services';
 import {
@@ -12,6 +12,7 @@ import {
 } from '../../utils/evalscript';
 import VisualizationLayer from './VisualizationLayer';
 import EvalscriptEditor from '../EvalscriptEditor/EvalscriptEditor';
+import { MAX_GEODB_FEATURES, COLLECTION_TYPE } from '../../const';
 
 import './VisualizationPanel.scss';
 
@@ -29,6 +30,9 @@ function VisualizationPanel(props) {
     fromTime,
     toTime,
     mapBounds,
+    maxGeoDBFeatures,
+    nFeaturesFetched,
+    hasMore,
   } = props;
 
   const [showEvalscriptEditor, setShowEvalscriptEditor] = useState(
@@ -75,6 +79,7 @@ function VisualizationPanel(props) {
 
   function oncBackToCollectionList() {
     store.dispatch(visualizationSlice.actions.reset());
+    store.dispatch(paginationSlice.actions.reset());
     props.onBack();
   }
 
@@ -139,9 +144,19 @@ function VisualizationPanel(props) {
     window.location.hash = '';
   }
 
+  function loadMoreFeatures() {
+    store.dispatch(
+      visualizationSlice.actions.setVisualizationParams({
+        maxGeoDBFeatures: maxGeoDBFeatures + MAX_GEODB_FEATURES,
+      }),
+    );
+  }
+
   const serviceHandler = getServiceHandlerForCollectionType(collection.type);
   const supportsDateSelection = serviceHandler.supportsDateSelection(collection.type);
-  const supportsCustomScript = serviceHandler.supportsCustomScript(collection.type);
+  const supportsCustomScript =
+    serviceHandler.supportsCustomScript(collection.type) && collection.bands.length > 0;
+  const isGeoDB = collection.type === COLLECTION_TYPE.GEO_DB;
 
   const parsedBands = evalscript && parseBandsFromEvalscript(evalscript);
   const selectedBands = parsedBands || getDefaultSelectedBands();
@@ -154,6 +169,32 @@ function VisualizationPanel(props) {
         </button>
         <div className="collection-name">{collectionName}</div>
       </div>
+
+      {bestLocation && (
+        <div className="zoom-to-location button-secondary" onClick={goToBestLocation}>
+          <i className="fa fa-crosshairs" onClick={goToBestLocation} />
+          Zoom to data
+        </div>
+      )}
+
+      {isGeoDB && (
+        <div className="vector-features-panel">
+          {hasMore && (
+            <div className="maximum-feature-warning">
+              Maximum features for a tile exceeded. Features will be loaded in batches.
+            </div>
+          )}
+
+          <div className="load-more">
+            Features fetched: <div className="n-features-fetched">{nFeaturesFetched}</div>
+            {hasMore && (
+              <button className="button-primary load-more-button" onClick={loadMoreFeatures}>
+                Load more
+              </button>
+            )}
+          </div>
+        </div>
+      )}
 
       {supportsDateSelection && (
         <div className="date-selection">
@@ -168,13 +209,6 @@ function VisualizationPanel(props) {
             timespanSupported={true}
             timespanExpanded={shouldExpandTimespan()}
           />
-        </div>
-      )}
-
-      {bestLocation && (
-        <div className="zoom-to-location button-secondary" onClick={goToBestLocation}>
-          <i className="fa fa-crosshairs" onClick={goToBestLocation} />
-          Zoom to data
         </div>
       )}
 
@@ -226,6 +260,9 @@ const mapStoreToProps = (store) => ({
   fromTime: store.visualization.fromTime,
   toTime: store.visualization.toTime,
   mapBounds: store.mainMap.bounds,
+  maxGeoDBFeatures: store.visualization.maxGeoDBFeatures,
+  hasMore: store.pagination.hasMore,
+  nFeaturesFetched: store.pagination.nFetched,
 });
 
 export default connect(mapStoreToProps, null)(VisualizationPanel);

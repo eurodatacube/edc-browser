@@ -10,11 +10,11 @@ import '@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css';
 import 'nprogress/nprogress.css';
 
 import LeafletControls from './LeafletControls/LeafletControls';
-import store, { mainMapSlice, aoiSlice, visualizationSlice, commercialDataSlice } from '../../store';
+import store, { mainMapSlice, aoiSlice, commercialDataSlice } from '../../store';
 import GlTileLayer from './plugins/GlTileLayer';
 import PreviewLayer from './PreviewLayer';
 import { baseLayers, overlayTileLayers } from './Layers';
-import { removeAoiWithEmptyCoords } from './Map.utils';
+import { removeAoiWithEmptyCoords, onUnload, onTileImageError } from './Map.utils';
 import VisualizationLayerComponent from './plugins/VisualizationLayerComponent';
 import VectorDataLayer from './VectorDataLayer';
 import { getCollectionInfo } from '../../utils/collections';
@@ -71,6 +71,7 @@ function Map(props) {
     toTime,
     dataGeometries,
     highlightedDataGeometry,
+    maxGeoDBFeatures,
     selectedMainTabIndex,
     selectedEdcDataTabIndex,
     commercialDataDisplaySearchResults,
@@ -179,11 +180,6 @@ function Map(props) {
         pixelBounds: ev.target.getPixelBounds(),
       }),
     );
-  }
-
-  function onUnload(tile) {
-    const { tileId } = tile;
-    store.dispatch(visualizationSlice.actions.removeTileDataGeometries(tileId));
   }
 
   const progress = NProgress.configure({
@@ -296,8 +292,10 @@ function Map(props) {
                 fromTime={fromTime}
                 toTime={toTime}
                 pane={VISUALIZATION_LAYER_PANE_ID}
-                onUnload={onUnload}
+                onUnload={onUnload} // Careful: if a function is defined within the functional component, it will will be a separte instance on each rerender
                 progress={progress}
+                maxGeoDBFeatures={maxGeoDBFeatures}
+                onTileImageError={onTileImageError} // Careful: if a function is defined within the functional component, it will will be a separte instance on each rerender
               />
             </Overlay>
           )}
@@ -394,6 +392,7 @@ const mapStoreToProps = (store) => {
     toTime: store.visualization.toTime,
     dataGeometries: store.visualization.dataGeometries,
     highlightedDataGeometry: store.visualization.highlightedDataGeometry,
+    maxGeoDBFeatures: store.visualization.maxGeoDBFeatures,
     commercialDataSearchResults: store.commercialData.searchResults,
     commercialDataHighlightedResult: store.commercialData.highlightedResult,
     commercialDataDisplaySearchResults: store.commercialData.displaySearchResults,

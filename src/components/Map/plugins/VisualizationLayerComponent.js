@@ -1,6 +1,13 @@
 import L from 'leaflet';
 import { GridLayer, withLeaflet } from 'react-leaflet';
-import { ApiType, BBox, CRS_EPSG3857, MimeTypes, CancelToken } from '@sentinel-hub/sentinelhub-js';
+import {
+  ApiType,
+  BBox,
+  CRS_EPSG3857,
+  MimeTypes,
+  CancelToken,
+  isCancelled,
+} from '@sentinel-hub/sentinelhub-js';
 import isEqual from 'fast-deep-equal';
 
 import { LayersFactory } from '../../../services/layersFactory';
@@ -70,6 +77,7 @@ class VisualizationLayer extends L.TileLayer {
     const nw = L.CRS.EPSG3857.project(this._map.unproject(nwPoint, coords.z));
     const se = L.CRS.EPSG3857.project(this._map.unproject(sePoint, coords.z));
     const bbox = new BBox(CRS_EPSG3857, nw.x, se.y, se.x, nw.y);
+    const onTileImageError = this.options.onTileImageError;
 
     const individualTileParams = {
       ...this.options,
@@ -85,16 +93,27 @@ class VisualizationLayer extends L.TileLayer {
       this.layer.supportsApiType && this.layer.supportsApiType(ApiType.PROCESSING)
         ? ApiType.PROCESSING
         : ApiType.WMS;
-    this.layer.getMap(individualTileParams, apiType, reqConfig).then((blob) => {
-      tile.onload = function () {
-        URL.revokeObjectURL(tile.src);
-      };
-      if (blob) {
-        const objectURL = URL.createObjectURL(blob);
-        tile.src = objectURL;
-      }
-      done(null, tile);
-    });
+    this.layer
+      .getMap(individualTileParams, apiType, reqConfig)
+      .then((blob) => {
+        tile.onload = function () {
+          URL.revokeObjectURL(tile.src);
+        };
+        if (blob) {
+          const objectURL = URL.createObjectURL(blob);
+          tile.src = objectURL;
+        }
+        done(null, tile);
+      })
+      .catch(function (error) {
+        if (!isCancelled(error)) {
+          if (onTileImageError) {
+            onTileImageError(error);
+          }
+          console.error(error);
+        }
+        done(error, null);
+      });
     return tile;
   };
 
@@ -185,6 +204,12 @@ class VisualizationLayerComponent extends GridLayer {
     }
     if (params.pane || params.leaflet.pane) {
       options.pane = params.pane || params.leaflet.pane;
+    }
+    if (params.maxGeoDBFeatures) {
+      options.maxGeoDBFeatures = params.maxGeoDBFeatures;
+    }
+    if (params.onTileImageError) {
+      options.onTileImageError = params.onTileImageError;
     }
     return options;
   }

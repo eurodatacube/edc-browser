@@ -3,6 +3,9 @@ import crsDefs from 'epsg-index/all.json';
 import { coordEach } from '@turf/meta';
 
 export function convertGeoJSONCrs(geojson, srid, toSrid = null) {
+  if (!crsDefs[srid]) {
+    throw new Error(`Error converting GeoJSON: CRS ${srid} not supported!`);
+  }
   let toProj = 'EPSG:3857';
   if (toSrid) {
     toProj = crsDefs[toSrid].proj4;
@@ -17,6 +20,9 @@ export function convertGeoJSONCrs(geojson, srid, toSrid = null) {
 }
 
 export function convertBBox(bbox, srid) {
+  if (!crsDefs[srid]) {
+    throw new Error(`Error converting bbox: CRS ${srid} not supported!`);
+  }
   const { minX, maxX, minY, maxY, crs } = bbox;
   const fromProjection = crsDefs[crs.srid].proj4;
   const toProjection = crsDefs[srid].proj4;
