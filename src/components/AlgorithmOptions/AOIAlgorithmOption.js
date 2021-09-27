@@ -13,7 +13,19 @@ import { getBoundsAndLatLng } from '../EdcDataPanel/CommercialDataPanel/commerci
 
 function AOIAlgorithmOption(props) {
   const [displayAvailableArea, setDisplayAvailableArea] = useState(false);
-  const { setAlgorithmParameter, id, restriction, value = null, aoiGeometryOnMap, aoiDrawingEnabled } = props;
+
+  const {
+    setAlgorithmParameter,
+    id,
+    restriction,
+    value = null,
+    aoiGeometryOnMap,
+    aoiDrawingEnabled,
+    renderError,
+    showingError,
+    isValid,
+    isOptional,
+  } = props;
   const geojson = value && wktToGeoJSON(value);
 
   function setAOIOption(geometry) {
@@ -98,6 +110,14 @@ function AOIAlgorithmOption(props) {
           <AOISelect geometry={geojson} onFinished={setAOIOption} />
         </>
       )}
+      {showingError &&
+        renderError(
+          value,
+          isValid,
+          isOptional,
+          'Area of interest has to be selected.',
+          'Area of interest is out of restriction bounds.',
+        )}
     </div>
   );
 }

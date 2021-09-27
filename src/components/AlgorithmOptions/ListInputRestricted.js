@@ -1,7 +1,8 @@
 import React from 'react';
 import Select from 'react-select';
 
-export default function ListInputRestricted({ restriction, value = [], setValue }) {
+export default function ListInputRestricted(props) {
+  const { restriction, value = [], setValue, showingError, isValid, isOptional, renderError } = props;
   function onChange(val) {
     const newValue = val.map((i) => i.value);
     const isEmpty = val.length === 0;
@@ -70,14 +71,26 @@ export default function ListInputRestricted({ restriction, value = [], setValue 
   };
 
   return (
-    <div className="algorithm-option-list-restricted">
-      <Select
-        className="react-select-container"
-        options={options}
-        onChange={onChange}
-        styles={customStyles}
-        isMulti
-      />
-    </div>
+    <>
+      <div className={`algorithm-option-list-restricted ${showingError && !isValid ? 'invalid' : ''}`}>
+        <Select
+          className="react-select-container"
+          options={options}
+          onChange={onChange}
+          styles={customStyles}
+          isMulti
+        />
+      </div>
+      {showingError &&
+        renderError(
+          value,
+          isValid,
+          isOptional,
+          'Field can not be empty.',
+          `Restriction is not met. At least one of these values ${restriction.value.join(
+            ', ',
+          )} has to be selected.`,
+        )}
+    </>
   );
 }

@@ -17,7 +17,7 @@ class VisualizationLayer extends L.TileLayer {
     super(options);
     const defaultOptions = {
       tileSize: 512,
-      format: MimeTypes.JPEG,
+      format: MimeTypes.PNG,
       preview: 2,
       transparent: true,
     };

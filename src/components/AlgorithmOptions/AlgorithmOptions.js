@@ -7,6 +7,8 @@ import './AlgorithmOptions.scss';
 
 function AlgorithmOptions({ options, algorithm, defaultValues }) {
   const [algorithmParams, setAlgorithmParams] = useState(defaultValues);
+  const [showingError, setShowingError] = useState(false);
+  const [canPurchaseBtnBeDisabled, setCanPurchaseBtnBeDisabled] = useState(false);
 
   function setAlgorithmParameter(paramId, paramValue, isValid, isEmpty) {
     setAlgorithmParams((prevState) => ({
@@ -36,8 +38,10 @@ function AlgorithmOptions({ options, algorithm, defaultValues }) {
   }
 
   function submitPurchase() {
+    setShowingError(true);
     const allValid = checkIfAllParamsValid(algorithmParams, options);
     if (!allValid) {
+      setCanPurchaseBtnBeDisabled(true);
       return;
     }
     const inputValues = constructInputValuesFromAlgorithmParams(algorithmParams, options);
@@ -52,6 +56,7 @@ function AlgorithmOptions({ options, algorithm, defaultValues }) {
           key={`${algorithm}-${id}`}
           value={algorithmParams[id] && algorithmParams[id].value}
           isValid={algorithmParams[id] && algorithmParams[id].isValid}
+          showingError={showingError}
           type={type}
           id={id}
           name={name}
@@ -62,8 +67,9 @@ function AlgorithmOptions({ options, algorithm, defaultValues }) {
         />
       ))}
       <button
-        disabled={!checkIfAllParamsValid(algorithmParams, options)}
-        className={`button-primary purchase-button`}
+        className={`button-primary purchase-button ${
+          canPurchaseBtnBeDisabled && !checkIfAllParamsValid(algorithmParams, options) ? 'disabled' : ''
+        }`}
         onClick={submitPurchase}
       >
         Purchase

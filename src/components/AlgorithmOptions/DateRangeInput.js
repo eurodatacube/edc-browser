@@ -5,8 +5,9 @@ import DatePicker from '../DateSelectionComponents/DatePicker/DatePicker';
 import { momentToISODate } from '../../utils';
 import { DEFAULT_FROM_TIME } from '../../const';
 
-export default function DateRangeInput({ restriction, value, setValue }) {
+export default function DateRangeInput(props) {
   const calendarHolder = useRef(null);
+  const { restriction, value, setValue, showingError, isValid, isOptional, renderError } = props;
 
   function setTimeFrom(date) {
     setValue(`${momentToISODate(date)}/${momentToISODate(toMoment)}`, isDateRangeValid(date, toMoment));
@@ -52,6 +53,8 @@ export default function DateRangeInput({ restriction, value, setValue }) {
       {restriction && restriction.length > 0 && (
         <div className="algorithm-option-string-restriction">Supported values: {restriction.join(', ')}.</div>
       )}
+      {showingError &&
+        renderError(value, isValid, isOptional, 'Date has to be selected.', 'Date is not picked correctly.')}
     </div>
   );
 }

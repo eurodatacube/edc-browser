@@ -1,0 +1,12 @@
+@import '../../variables.scss';
+
+.invalid {
+  border: 1px solid $error;
+  border-radius: 3px;
+}
+
+.error-msg {
+  color: $error;
+  font-size: 14px;
+  margin-top: 5px;
+}
