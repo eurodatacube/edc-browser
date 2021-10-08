@@ -1,4 +1,4 @@
-@import './variables.scss';
+@import './variables.module.scss';
 
 html,
 body,
@@ -85,7 +85,7 @@ body,
   z-index: 9999;
   padding: 15px;
   border-radius: 3px;
-  background: $secondaryDark;
+  background: $colorBg50;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
@@ -102,6 +102,6 @@ body,
 }
 
 #nprogress .bar {
-  background: $primary;
+  background: $colorPrimary50;
   height: 3px;
 }

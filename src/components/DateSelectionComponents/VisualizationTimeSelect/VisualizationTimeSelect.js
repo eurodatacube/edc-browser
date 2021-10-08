@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import DatePicker from '../DatePicker/DatePicker';
 import { TimespanPicker } from '../TimespanPicker/TimespanPicker';
 import './VisualizationTimeSelect.scss';
+import Switch from '../../shared/Switch/Switch';
 
 export class VisualizationTimeSelect extends Component {
   state = {
@@ -79,47 +80,45 @@ export class VisualizationTimeSelect extends Component {
       <>
         <div className="visualization-time-select">
           <div>
-            <b className="time-select-type">{timespanExpanded ? 'Timespan:' : 'Date:'}</b>
+            <Switch checked={this.state.timespanExpanded} label="Timespan" onChange={this.toggleTimespan} />
+
             {!timespanExpanded &&
               (hasCloudCoverage ? (
-                <DatePicker
-                  id="cloud-cover-datepicker-wrap"
-                  calendarContainer={this.calendarHolder}
-                  selectedDay={toTime.clone().utc().startOf('day')}
-                  setSelectedDay={this.updateDate}
-                  minDate={minDate}
-                  maxDate={maxDate}
-                  showNextPrevDateArrows={showNextPrev}
-                  onQueryDatesForActiveMonth={onQueryFlyoversForActiveMonth}
-                  hasCloudCoverFilter={true}
-                  setMaxCloudCover={(value) => this.setState({ setMaxCloudCover: value })}
-                  maxCloudCover={maxCloudCover}
-                />
+                <div className="">
+                  <label htmlFor="" className="label-primary date-picker-label">
+                    Date
+                  </label>
+                  <DatePicker
+                    id="cloud-cover-datepicker-wrap"
+                    calendarContainer={this.calendarHolder}
+                    selectedDay={toTime.clone().utc().startOf('day')}
+                    setSelectedDay={this.updateDate}
+                    minDate={minDate}
+                    maxDate={maxDate}
+                    showNextPrevDateArrows={showNextPrev}
+                    onQueryDatesForActiveMonth={onQueryFlyoversForActiveMonth}
+                    hasCloudCoverFilter={true}
+                    setMaxCloudCover={(value) => this.setState({ setMaxCloudCover: value })}
+                    maxCloudCover={maxCloudCover}
+                  />
+                </div>
               ) : (
-                <DatePicker
-                  id="visualization-date-picker"
-                  calendarContainer={this.calendarHolder}
-                  selectedDay={toTime.clone().utc().startOf('day')}
-                  setSelectedDay={this.updateDate}
-                  minDate={minDate}
-                  maxDate={maxDate}
-                  showNextPrevDateArrows={showNextPrev}
-                  onQueryDatesForActiveMonth={onQueryDatesForActiveMonth}
-                />
+                <div>
+                  <label htmlFor="" className="label-primary date-picker-label">
+                    Date
+                  </label>
+                  <DatePicker
+                    id="visualization-date-picker"
+                    calendarContainer={this.calendarHolder}
+                    selectedDay={toTime.clone().utc().startOf('day')}
+                    setSelectedDay={this.updateDate}
+                    minDate={minDate}
+                    maxDate={maxDate}
+                    showNextPrevDateArrows={showNextPrev}
+                    onQueryDatesForActiveMonth={onQueryDatesForActiveMonth}
+                  />
+                </div>
               ))}
-          </div>
-          {timespanExpanded && (
-            <div className="timespan-title-wrap">
-              <div className="timespan-label" onClick={this.toggleTimespan}>
-                {`${fromTime.clone().utc().format('YYYY-MM-DD HH:mm')} - ${toTime
-                  .clone()
-                  .utc()
-                  .format('YYYY-MM-DD HH:mm')}`}
-              </div>
-            </div>
-          )}
-          <div className="timespan-toggle" onClick={this.toggleTimespan}>
-            {timespanExpanded ? 'Single date' : 'Timespan'}
           </div>
         </div>
         {timespanExpanded && (

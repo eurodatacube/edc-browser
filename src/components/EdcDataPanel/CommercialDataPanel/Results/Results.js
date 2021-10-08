@@ -195,23 +195,24 @@ export const Results = ({
         />
         Show results on map
       </label>
-
-      {results.map((product) => (
-        <Result
-          key={product.id}
-          provider={provider}
-          product={product}
-          searchParams={searchParams}
-          setPreviewLarge={setPreviewLarge}
-          addProduct={addProduct}
-          removeProduct={removeProduct}
-          isSelected={!!selectedProducts.find((id) => id === product.id)}
-          cachedPreviews={cachedPreviews}
-          setCachedPreviews={setCachedPreviews}
-          searchResults={searchResults}
-          quotasEnabled={quotasEnabled}
-        />
-      ))}
+      <div className="commercial-data-results-list">
+        {results.map((product) => (
+          <Result
+            key={product.id}
+            provider={provider}
+            product={product}
+            searchParams={searchParams}
+            setPreviewLarge={setPreviewLarge}
+            addProduct={addProduct}
+            removeProduct={removeProduct}
+            isSelected={!!selectedProducts.find((id) => id === product.id)}
+            cachedPreviews={cachedPreviews}
+            setCachedPreviews={setCachedPreviews}
+            searchResults={searchResults}
+            quotasEnabled={quotasEnabled}
+          />
+        ))}
+      </div>
       <div className="actions-container">
         <Button fluid onClick={onCreateOrder} text={`Prepare order`} disabled={!quotasEnabled} />
       </div>

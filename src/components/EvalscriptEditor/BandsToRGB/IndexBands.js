@@ -201,38 +201,62 @@ export const IndexBands = ({ bands, onChange, evalscript }) => {
     return Boolean(isNaN(parseFloat(min)) || isNaN(parseFloat(max)));
   };
 
+  const generateExtraLabelStyle = (band) => {
+    if (band === layers.a && layers.a === layers.b) {
+      return 'AB';
+    }
+
+    if (layers.a === band) {
+      return 'A';
+    }
+
+    if (layers.b === band) {
+      return 'B';
+    }
+
+    return null;
+  };
+
   if (loading) {
     return null;
   }
 
   return (
     <React.Fragment>
-      <p>Drag bands into the index equation</p>
-      <div className="colors-container">
-        {bands.map((band, index) => (
-          <DraggableBand key={index} band={band} onChange={onDraggableBandChange} />
-        ))}
-        <DraggableBandGhost bands={bands} />
-      </div>
-
-      {/* Equation select */}
-      <p>
-        Index
+      <div className="index-bands-equation-wrap">
+        <label htmlFor="" className="label-primary index-bands-label">
+          Index
+        </label>
         <select
           key={equation}
           defaultValue={equation}
-          className="dropdown index"
+          className="dropdown-primary index"
           onChange={(e) => onEquationChange(e.target.value)}
         >
           {EQUATIONS.map((equation, i) => (
             <option key={i}>{equation}</option>
           ))}
         </select>
-      </p>
+      </div>
+
+      <div className="colors-container index-container">
+        {bands.map((band, index) => (
+          <DraggableBand
+            extraLabelName={generateExtraLabelStyle(band)}
+            key={index}
+            band={band}
+            onChange={onDraggableBandChange}
+          />
+        ))}
+
+        <DraggableBandGhost bands={bands} />
+      </div>
+
+      {/* Equation select */}
 
       {/* Colors dropzones displayed in a math equation/formula style */}
-      <div className="colors-container">
-        <div className="colors-output index">
+      <div className="index-container panel-section">
+        <div className="colors-output index index-output">
           {equationArray.map((item, index) => {
             if (item === 'A' || item === 'B') {
               const band = layers[item.toLowerCase()];
@@ -247,18 +271,24 @@ export const IndexBands = ({ bands, onChange, evalscript }) => {
             }
             if (item === '/')
               return (
-                <div key={index} className="divide">
+                <div key={index} className="divide index-output-equation-operator">
                   /
                 </div>
               );
-            return <span key={index}>{item}</span>;
+            return (
+              <span className="index-output-equation-operator" key={index}>
+                {item}
+              </span>
+            );
           })}
         </div>
       </div>
       {/* Threshold gradient sliders */}
-      <div className="treshold">
-        <div style={{ padding: '20px 0' }}>
-          Threshold <i className="fa fa-cog" onClick={() => setOpen(!open)} />
+      <div className="threshold">
+        <div className="threshold-menu">
+          <button onClick={() => setOpen(!open)} className="button-tertiary">
+            Threshold <i className="fa fa-cog" />
+          </button>
           {open && (
             <div className="gradients-list">
               {GRADIENTS.map((g, index) => (
@@ -273,24 +303,24 @@ export const IndexBands = ({ bands, onChange, evalscript }) => {
               ))}
             </div>
           )}
-        </div>
-        <div className="add-remove-buttons">
-          <button
-            className="btn primary"
-            disabled={values.length === 2 || invalidMinMax()}
-            onClick={removeHandle}
-            title="Remove color picker"
-          >
-            <i className="fas fa-minus-square" />
-          </button>
-          <button
-            className="btn primary"
-            disabled={values.length === 8 || invalidMinMax()}
-            onClick={addHandle}
-            title="Add color picker"
-          >
-            <i className="fas fa-plus-square" />
-          </button>
+          <div className="add-remove-buttons">
+            <button
+              className="button-threshold-handle"
+              disabled={values.length === 2 || invalidMinMax()}
+              onClick={removeHandle}
+              title="Remove color picker"
+            >
+              <i className="fas fa-minus" />
+            </button>
+            <button
+              className="button-threshold-handle"
+              disabled={values.length === 8 || invalidMinMax()}
+              onClick={addHandle}
+              title="Add color picker"
+            >
+              <i className="fas fa-plus" />
+            </button>
+          </div>
         </div>
         <div style={{ padding: '4px 0' }}>
           <SliderThreshold

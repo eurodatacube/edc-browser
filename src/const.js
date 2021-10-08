@@ -15,7 +15,7 @@ export const COLLECTION_TYPE = {
 
 export const PANEL_TAB = {
   DATA_PANEL: 0,
-  ALGORITHMS: 1,
+  ON_DEMAND_DATA_PANEL: 1,
 };
 
 export const EDC_DATA_TAB = {

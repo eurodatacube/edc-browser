@@ -1,8 +1,7 @@
-@import '../../variables.scss';
+@import '../../variables.module.scss';
 
 .tabs-container {
   flex-grow: 1;
-  overflow-y: hidden;
   display: flex;
   flex-flow: column;
 }
@@ -15,13 +14,19 @@
   padding: 0;
   list-style: none;
 
+  .tab-text {
+    font-weight: $fontWeightMedium;
+    color: $colorText50;
+    font-size: $fontSize03;
+  }
+
   li {
     flex: auto;
     text-align: center;
     list-style: none;
     cursor: pointer;
-    color: #eee;
-    padding: $spacing3 $spacing2;
+    color: $colorText50;
+    padding: $spacing03 $spacing02;
 
     @media screen and (max-width: 430px) {
       padding: 9px 9px 7px 9px;
@@ -33,7 +38,7 @@
   }
 
   .fa-icon {
-    font-size: $font3;
+    font-size: $fontSize03;
     fill: #aaa;
     margin: 0 6px 0 0;
 
@@ -43,8 +48,8 @@
   }
 
   & .tab-selected {
-    color: #fff;
-    background: $secondaryLight;
+    color: $colorText50;
+    background: $colorBg50;
   }
 
   &::after {
@@ -54,10 +59,13 @@
   }
 }
 
+.tabs-content-container {
+  background: $colorBg50;
+}
+
 .tab-panel-container {
   max-height: 100%;
-  overflow-y: auto;
-  overflow-x: hidden;
+  height: 100%;
 
   > div {
     display: none;

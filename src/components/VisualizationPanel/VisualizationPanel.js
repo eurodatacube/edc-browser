@@ -78,6 +78,12 @@ function VisualizationPanel(props) {
   }
 
   function oncBackToCollectionList() {
+    if (collection && collection.type) {
+      const serviceHandler = getServiceHandlerForCollectionType(collection.type);
+      if (serviceHandler) {
+        serviceHandler.reset();
+      }
+    }
     store.dispatch(visualizationSlice.actions.reset());
     store.dispatch(paginationSlice.actions.reset());
     props.onBack();
@@ -163,20 +169,23 @@ function VisualizationPanel(props) {
 
   return (
     <div className="visualization-panel">
-      <div className="header">
-        <button className="back-button button-primary" onClick={oncBackToCollectionList}>
-          <i className="fas fa-arrow-left" /> Back to list
-        </button>
-        <div className="collection-name">{collectionName}</div>
-      </div>
+      <div className="panel-section">
+        <div className="header">
+          <button className="back-button" onClick={oncBackToCollectionList}>
+            <i className="fas fa-arrow-left" />
+          </button>
+          <div className="collection-info">
+            <div className="collection-name">{collectionName}</div>
 
-      {bestLocation && (
-        <div className="zoom-to-location button-secondary" onClick={goToBestLocation}>
-          <i className="fa fa-crosshairs" onClick={goToBestLocation} />
-          Zoom to data
+            {bestLocation && (
+              <button className="zoom-to-location button-tertiary" onClick={goToBestLocation}>
+                <i className="fa fa-crosshairs" onClick={goToBestLocation} />
+                Zoom to data
+              </button>
+            )}
+          </div>
         </div>
-      )}
-
+      </div>
       {isGeoDB && (
         <div className="vector-features-panel">
           {hasMore && (
@@ -197,7 +206,7 @@ function VisualizationPanel(props) {
       )}
 
       {supportsDateSelection && (
-        <div className="date-selection">
+        <div className="date-selection panel-section">
           <VisualizationTimeSelect
             fromTime={fromTime}
             toTime={toTime}
@@ -226,24 +235,22 @@ function VisualizationPanel(props) {
       )}
       {!showEvalscriptEditor && (
         <div className="visualization-layers-wrapper">
-          {configurations.map((configuration, i) => (
-            <VisualizationLayer
-              key={i}
-              title={configuration.layer_name}
-              evalscript={configuration.evalscript}
-              evalscriptUrl={configuration.evalscript_url}
-              selected={configuration.layer_name === selectedLayerId}
-              onSelect={() => selectVisualizationLayer(configuration.layer_name)}
-            />
-          ))}
+          <div className="panel-section">
+            {configurations.map((configuration, i) => (
+              <VisualizationLayer
+                key={i}
+                title={configuration.layer_name}
+                evalscript={configuration.evalscript}
+                evalscriptUrl={configuration.evalscript_url}
+                selected={configuration.layer_name === selectedLayerId}
+                onSelect={() => selectVisualizationLayer(configuration.layer_name)}
+              />
+            ))}
+          </div>
           {supportsCustomScript && (
-            <div className={`visualization-layer ${customVisualizationSelected ? 'selected' : ''}`}>
-              <div className="main-row">
-                <div className="title" onClick={selectCustomVisualization}>
-                  Custom visualizations
-                </div>
-              </div>
-            </div>
+            <button className="button-secondary" onClick={selectCustomVisualization}>
+              Create custom visualization
+            </button>
           )}
         </div>
       )}

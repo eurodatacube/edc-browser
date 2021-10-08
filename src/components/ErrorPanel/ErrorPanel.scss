@@ -1,4 +1,4 @@
-@import '../../variables';
+@import '../../variables.module.scss';
 
 .visualization-error-panel {
   margin: 10px 0 10px 0;
@@ -8,7 +8,7 @@
 
   .visualization-error-header {
     margin-bottom: 5px;
-    color: $error;
+    color: $colorUtilRed;
 
     .fa {
       margin-right: 6px;
@@ -18,7 +18,7 @@
   .textarea-wrapper {
     .error-container {
       color: $textColor;
-      background-color: $secondaryLight;
+      background-color: $colorBg50;
       padding: 5px;
       text-align: left;
       white-space: pre-wrap;

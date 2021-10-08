@@ -10,6 +10,7 @@ import L from 'leaflet';
 import AOISelect from '../AOISelect/AOISelect';
 import store, { aoiSlice, mainMapSlice, previewAOISlice } from '../../store';
 import { getBoundsAndLatLng } from '../EdcDataPanel/CommercialDataPanel/commercialData.utils';
+import Switch from '../shared/Switch/Switch';
 
 function AOIAlgorithmOption(props) {
   const [displayAvailableArea, setDisplayAvailableArea] = useState(false);
@@ -79,27 +80,27 @@ function AOIAlgorithmOption(props) {
       <div className="algorithm-option-aoi-restriction">
         {canDisplayAvailableArea && (
           <>
-            <input
-              type="checkbox"
+            <Switch
+              checked={displayAvailableArea}
               value={displayAvailableArea}
               onChange={() => setDisplayAvailableArea(!displayAvailableArea)}
-              checked={displayAvailableArea}
+              label="Display available area"
             />
-            <label> Display available area</label>
           </>
         )}
         {displayAvailableArea && (
-          <i
-            className="fa fa-crosshairs"
-            title="Zoom to available area"
-            onClick={zoomToRestrictionGeometry}
-          ></i>
+          <div>
+            <button onClick={zoomToRestrictionGeometry} className="button-tertiary">
+              <i className="fa fa-crosshairs" title="Zoom to available area"></i>
+              Zoom to available area
+            </button>
+          </div>
         )}
       </div>
       {value && aoiGeometryOnMap && !aoiDrawingEnabled ? (
         <div className="algorithm-option-aoi-tools">
           <button className="button-primary algorithm-option-aoi-display" onClick={displayAOIOnMap}>
-            Show
+            Zoom to AOI
           </button>
           <button className="button-tertiary algorithm-option-aoi-clear" onClick={clearAOI}>
             Clear

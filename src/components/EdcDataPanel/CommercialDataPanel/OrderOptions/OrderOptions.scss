@@ -1,4 +1,4 @@
-@import '../../../../variables.scss';
+@import '../../../../variables.module.scss';
 
 .commercial-data-order-options {
   .row {
@@ -50,7 +50,7 @@
       align-items: center;
 
       i {
-        color: $primary;
+        color: $colorPrimary50;
         cursor: pointer;
       }
     }

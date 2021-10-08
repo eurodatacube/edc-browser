@@ -1,55 +1,57 @@
-@import '../../variables';
+@import "../../variables.module.scss";
 
 .visualization-layer {
-  margin: 5px 0;
-  padding: 10px 20px;
-  background-color: $secondary;
+  position: relative;
+  width: 100%;
+  transition: 0.1s linear background;
+  display: flex;
+
+  .visualization-layer-radio {
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    cursor: pointer;
+  }
+
+  .visualization-layer-label {
+    color: $colorText50;
+    font-weight: $fontWeightMedium;
+  }
+
+  &-selected-bar {
+    position: absolute;
+    left: -$spacing02;
+    height: 60%;
+    width: 4px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: $colorPrimary50;
+  }
 
   .main-row {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
+    padding: 0;
+    border: none;
+    background: none;
+
+    .visualization-layer-subtitle {
+      color: $colorText70;
+      font-size: $fontSize02;
+    }
 
     .title {
       color: $textColor;
-      font-size: $font4;
-      font-weight: $medium;
+      font-size: $fontSize03;
+      font-weight: $fontWeightMedium;
       cursor: pointer;
-      width: 80%;
-    }
-
-    .expand-collapse-evalscript {
-      padding: 5px 10px;
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-
-      i {
-        margin-left: 5px;
-      }
     }
   }
 
-  &.selected {
-    border: 1px solid $primary;
-
-    .main-row {
-      .title {
-        color: $primaryLight;
-      }
-    }
-  }
-
-  .evalscript-holder {
-    pre {
-      color: $textColor;
-      background-color: $secondaryDark;
-      padding: 5px;
-      text-align: left;
-      white-space: pre-wrap;
-      max-height: 150px;
-      overflow-y: auto;
-    }
+  &:hover {
+    transition: 0.1s linear background;
+    background: $colorBg70;
+    cursor: pointer;
   }
 }

@@ -12,7 +12,13 @@ export default class Accordion extends React.PureComponent {
           onClick={!disabled ? toggleOpen : null}
         >
           {title}
-          {open && !hidden ? <i className="fa fa-chevron-up" /> : <i className="fa fa-chevron-down" />}
+          <div className="accordion-icon-wrap">
+            {open && !hidden ? (
+              <i className="fa accordion-icon fa-chevron-up" />
+            ) : (
+              <i className="fa accordion-icon fa-chevron-down" />
+            )}
+          </div>
         </div>
         {open && <div className={`accordion-content ${hidden ? 'hidden' : ''} `}>{children}</div>}
       </div>

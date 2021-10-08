@@ -1,4 +1,4 @@
-@import '../../variables.scss';
+@import '../../variables.module.scss';
 
 .edc-data-panel {
   color: #eee;
@@ -9,7 +9,7 @@
     color: $textColorDisabled;
 
     .tab-text {
-      padding: $spacing1;
+      padding: $spacing01;
     }
   }
 
@@ -18,13 +18,13 @@
   }
 
   .tab-list {
-    margin-bottom: $spacing2;
+    margin-bottom: $spacing02;
 
     .tab-selected {
-      color: #eee;
+      color: $colorText50;
 
       .tab-text {
-        border-bottom: 3px solid $primary;
+        border-bottom: 3px solid $colorPrimary50;
       }
     }
   }
@@ -41,12 +41,12 @@
       font-weight: 600;
       padding: 10px 15px;
       text-decoration: none;
-      background-color: $secondaryDark;
+      background-color: $colorBg50;
       margin-bottom: 10px;
       display: inline-block;
 
       &.selected {
-        background-color: $primary;
+        background-color: $colorPrimary50;
       }
     }
   }

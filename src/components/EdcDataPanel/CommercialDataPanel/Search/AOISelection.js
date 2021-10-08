@@ -42,7 +42,7 @@ export const AOISelection = ({ aoiGeometry, aoiDrawingEnabled, mapBounds }) => {
 
   return (
     <div className="row">
-      <label title="Area of interest">{`Area of interest`}</label>
+      <label title="Area of interest (AOI)">{`Area of interest (AOI)`}</label>
       <div className="aoi-selection">
         <div className="aoi-text">
           {!!aoiGeometry ? (
@@ -51,7 +51,7 @@ export const AOISelection = ({ aoiGeometry, aoiDrawingEnabled, mapBounds }) => {
               <sup>2</sup>
             </span>
           ) : (
-            <span>Select area</span>
+            <span>Create AOI</span>
           )}
         </div>
         <div className="aoi-buttons">

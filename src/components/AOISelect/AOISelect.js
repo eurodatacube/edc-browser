@@ -7,6 +7,7 @@ import { getFileExtension, loadFile, parseFile } from './AOISelect.utils';
 import { AOI_SHAPE, SUPPORTED_AOI_FORMATS } from '../../const';
 
 import './AOISelect.scss';
+import Radio from '../shared/Radio/Radio';
 
 function AOISelect(props) {
   const [error, setError] = useState(null);
@@ -65,24 +66,25 @@ function AOISelect(props) {
       <div className="aoi-confirm-panel">
         {!drawnGeometry && (
           <>
-            <button
-              className={'button-primary' + (aoiShape === AOI_SHAPE.rectangle ? '' : ' inactive')}
-              onClick={() => {
-                changeShape(AOI_SHAPE.rectangle);
-              }}
-            >
-              <i className="far fa-square" title={`Draw area of interest`} />
-              <span>{AOI_SHAPE.rectangle}</span>
-            </button>
-            <button
-              className={'button-primary' + (aoiShape === AOI_SHAPE.polygon ? '' : ' inactive')}
-              onClick={() => {
+            <label className="aoi-confirm-panel-label label-primary" htmlFor="">
+              Shape
+            </label>
+            <Radio
+              id={AOI_SHAPE.polygon}
+              checked={aoiShape === AOI_SHAPE.polygon}
+              onChange={() => {
                 changeShape(AOI_SHAPE.polygon);
               }}
-            >
-              <i className="fa fa-pencil" title={`Draw area of interest`} />
-              <span>{AOI_SHAPE.polygon}</span>
-            </button>
+              label={AOI_SHAPE.polygon}
+            />
+            <Radio
+              id={AOI_SHAPE.rectangle}
+              checked={aoiShape === AOI_SHAPE.rectangle}
+              onChange={() => {
+                changeShape(AOI_SHAPE.rectangle);
+              }}
+              label={AOI_SHAPE.rectangle}
+            />
           </>
         )}
         {drawnGeometry && (
@@ -114,24 +116,25 @@ function AOISelect(props) {
           startDrawing();
         }}
       >
-        Select area of interest
+        Create area of interest
       </button>
-      <button className={`button-secondary upload-aoi-button ${disabled ? 'disabled' : ''}`}>
-        <label htmlFor="upload-aoi" className="upload-label">
-          Upload GeoJSON/KML/KMZ/GPX
-        </label>
-        <input
-          id="upload-aoi"
-          type="file"
-          onChange={(e) => {
-            if (disabled) {
-              return;
-            }
-            onFileUpload(e);
-          }}
-          accept=".kml, .kmz, .gpx, .geojson"
-        />
-      </button>
+      <label
+        htmlFor="upload-aoi"
+        className={`button-secondary upload-aoi-button ${disabled ? 'disabled' : ''}`}
+      >
+        Upload GeoJSON/KML/KMZ/GPX
+      </label>
+      <input
+        id="upload-aoi"
+        type="file"
+        onChange={(e) => {
+          if (disabled) {
+            return;
+          }
+          onFileUpload(e);
+        }}
+        accept=".kml, .kmz, .gpx, .geojson"
+      />
       {error && <div className="error-panel">{error}</div>}
     </div>
   );

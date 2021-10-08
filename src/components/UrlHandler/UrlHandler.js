@@ -37,6 +37,7 @@ const mapStoreToProps = (store) => ({
   fromTime: store.visualization.fromTime,
   toTime: store.visualization.toTime,
   algorithm: store.algorithms.selectedAlgorithm,
+  selectedTabIndex: store.tabs.selectedMainTabIndex,
 });
 
 export default connect(mapStoreToProps, null)(UrlHandler);

@@ -1,31 +1,30 @@
-@import '../variables.scss';
+@import '../variables.module.scss';
 
 .input-base {
-  font-size: $font4;
-  height: 45px;
+  font-size: $fontSize04;
+  height: $formElementBaseHeight;
 }
 
 .input-primary {
   @extend .input-base;
 
   box-sizing: border-box;
-  padding: 0 $spacing2;
-  background: $secondary;
+  padding: 0 $spacing02;
+  background: $colorBg70;
   border: none;
   color: $textColor;
+  font-size: 14px;
+  border-radius: $borderRadius;
+  width: 100%;
 
   &.compact {
     height: auto;
     width: 100%;
-    padding: $spacing1;
-    font-size: $font3;
+    padding: $spacing01;
+    font-size: $fontSize03;
   }
-}
 
-.input-primary:hover {
-  background: $secondaryDark;
-}
-
-.input-primary:focus {
-  background: $secondaryDark;
+  :hover {
+    cursor: pointer;
+  }
 }

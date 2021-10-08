@@ -1,4 +1,4 @@
-@import '../../variables';
+@import '../../variables.module.scss';
 
 .info-tooltip {
   position: relative;
@@ -6,8 +6,8 @@
 
   .info-tooltip-text {
     position: absolute;
-    background: $secondary;
-    padding: $spacing3;
+    background: $colorBg70;
+    padding: $spacing03;
     border-radius: 5px;
     box-shadow: $boxShadow;
     right: 100%;

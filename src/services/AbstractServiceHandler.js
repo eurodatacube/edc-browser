@@ -36,4 +36,6 @@ export default class AbstractServiceHandler {
   supportsCustomScript() {
     return false;
   }
+
+  reset() {}
 }

@@ -1,22 +1,36 @@
-@import '../../variables.scss';
+@import '../../variables.module.scss';
 
 .accordion-wrap {
-  border-bottom: 2px solid $secondary;
+  .accordion-icon-wrap {
+    background: $colorBg70;
+    height: $spacing05;
+    width: $spacing05;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: $borderRadius;
+
+    .accordion-icon {
+      font-size: $fontSize02;
+    }
+  }
 }
 
 .accordion-title {
   align-items: center;
-  background-color: $secondaryLight;
+  background-color: $colorBg50;
   display: flex;
   justify-content: space-between;
-  padding: 12px;
-  color: white;
-  font-size: 14px;
+  padding: $spacing03 $spacing02;
+  color: $colorText50;
+  font-weight: $fontWeightMedium;
+  font-size: 16px;
   cursor: pointer;
+  transition: 0.1s linear background;
 
   &:hover {
-    background-color: $secondaryDark;
-    color: $primary;
+    background: $colorBg60;
+    transition: 0.1s linear background;
   }
 
   &.disabled {
@@ -26,7 +40,5 @@
 }
 
 .accordion-content {
-  background-color: $secondaryLight;
-  padding: 8px 12px;
   border-top: none;
 }

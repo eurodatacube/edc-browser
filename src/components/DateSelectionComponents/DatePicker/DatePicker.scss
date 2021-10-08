@@ -1,27 +1,68 @@
-@import '../../../variables.scss';
+@import '../../../variables.module.scss';
+
+.date-pickers-wrapper {
+  display: flex;
+  border-radius: $borderRadius;
+
+  > div:nth-child(1) {
+    margin-right: $spacing01;
+  }
+
+  > div:nth-child(2) {
+    margin-left: $spacing01;
+  }
+}
 
 .date-picker {
-  border-bottom: 1px solid #fff;
+  background: $colorBg70;
+  width: 100%;
   color: #fff;
-  display: inline-flex;
-  align-items: baseline;
+  flex-grow: 1;
+  padding: 0 $spacing01;
+  height: $formElementBaseHeight;
+  border-radius: $borderRadius;
+  position: relative;
 
   :hover {
     cursor: pointer;
   }
 
+  .fa-calendar {
+    margin-right: $spacing01;
+    margin-left: $spacing01;
+  }
+
+  .fa-caret-left,
+  .fa-caret-right {
+    display: flex;
+    justify-content: center;
+  }
+
+  .date-picker-loader {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: $spacing01;
+  }
+
   .date-picker-input-wrapper {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    position: relative;
+
     .date-picker-input-icon {
-      color: #fff;
+      color: $colorText50;
       text-align: center;
       width: 20px;
     }
 
     .date-picker-input {
       background: none;
-      color: #eee;
+      color: $colorText50;
       border: none;
-      width: 75px;
+      height: 100%;
+      width: 100%;
     }
 
     .cal-icon-left,

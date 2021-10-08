@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-import Loader from '../Loader/Loader';
 import './VisualizationLayer.scss';
 
 function VisualizationLayer(props) {
   const { title, evalscript, evalscriptUrl, selected } = props;
 
   const [evalscriptText, setEvalscriptText] = useState(evalscript);
-  const [showEvalscript, setShowEvalscript] = useState(false);
+  const [showEvalscript] = useState(false);
 
   useEffect(() => {
     if (showEvalscript && evalscriptUrl && !evalscriptText) {
@@ -18,23 +17,17 @@ function VisualizationLayer(props) {
 
   return (
     <div className={`visualization-layer ${selected ? 'selected' : ''}`}>
-      <div className="main-row">
-        <div className="title" onClick={props.onSelect}>
-          {title}
-        </div>
-        {(evalscript || evalscriptUrl) && (
-          <button
-            className="expand-collapse-evalscript button-primary"
-            onClick={() => setShowEvalscript((prevState) => !prevState)}
-          >
-            Evalscript
-            {showEvalscript ? <i className="fa fa-chevron-up" /> : <i className="fa fa-chevron-down" />}
-          </button>
-        )}
-      </div>
-      {showEvalscript && (
-        <div className="evalscript-holder">{evalscriptText ? <pre>{evalscriptText}</pre> : <Loader />}</div>
-      )}
+      {selected && <div className="visualization-layer-selected-bar"></div>}
+      <input
+        className="visualization-layer-radio"
+        type="radio"
+        id={title}
+        onChange={props.onSelect}
+        checked={selected}
+      />
+      <label className="visualization-layer-label" htmlFor={title}>
+        {title}
+      </label>
     </div>
   );
 }

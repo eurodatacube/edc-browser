@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react';
 import { connect } from 'react-redux';
+import moment from 'moment';
 
 import { Tabs, Tab } from '../Tabs/Tabs';
 import { PublicAndUserDataPanel } from './PublicAndUserDataPanel/PublicAndUserDataPanel';
@@ -45,6 +46,20 @@ function EdcDataPanel({
           collectionId: selectedCollection.id,
         };
       }
+      if (selectedCollection.temporalExtent && selectedCollection.temporalExtent.interval) {
+        let interval = selectedCollection.temporalExtent.interval;
+        // some collections have more intervals, let's take the last (latest) one
+        if (Array.isArray(interval[0])) {
+          interval = interval[interval.length - 1];
+        }
+
+        let lastIntervalDate = interval[interval.length - 1];
+        if (lastIntervalDate === null) {
+          lastIntervalDate = moment.utc();
+        }
+        visualizationParams.fromTime = moment.utc(lastIntervalDate).subtract(1, 'year');
+        visualizationParams.toTime = moment.utc(lastIntervalDate);
+      }
       visualizationParams.type = selectedCollection.type;
       store.dispatch(visualizationSlice.actions.setVisualizationParams(visualizationParams));
       showVisualisationPanel();
@@ -55,7 +70,7 @@ function EdcDataPanel({
     collectionsList.user.length === 0 || process.env.REACT_APP_PUBLIC_DEPLOY === 'true';
 
   return (
-    <div className="edc-data-panel panel-content-wrap">
+    <div className="edc-data-panel">
       <Tabs
         activeIndex={selectedEdcDataTabIndex}
         onSelect={(index) => store.dispatch(tabsSlice.actions.setEdcDataTabIndex(index))}

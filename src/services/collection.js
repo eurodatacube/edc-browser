@@ -7,6 +7,7 @@ export const collectionFactory = ({
   ownedByUser = false,
   configurations = null,
   bands = [],
+  temporalExtent = null,
   serviceSpecificInfo = {},
 }) => {
   return {
@@ -18,6 +19,7 @@ export const collectionFactory = ({
     ownedByUser,
     configurations,
     bands,
+    temporalExtent,
     serviceSpecificInfo,
   };
 };

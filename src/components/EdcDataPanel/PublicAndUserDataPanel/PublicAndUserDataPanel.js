@@ -27,21 +27,23 @@ export const PublicAndUserDataPanel = ({
             key={groupKey}
             toggleOpen={() => toggleAccordion(groupKey)}
           >
-            {groups[groupKey].map((collection) => {
-              return (
-                <div
-                  className="selection-item"
-                  key={collection.uniqueId}
-                  onClick={(evt) => {
-                    evt.stopPropagation();
-                    handleCollectionClick(collection);
-                  }}
-                >
-                  {collection.title}
-                  <i className="fas fa-chevron-right"></i>
-                </div>
-              );
-            })}
+            <div className="selection-items">
+              {groups[groupKey].map((collection) => {
+                return (
+                  <div
+                    className="selection-item"
+                    key={collection.uniqueId}
+                    onClick={(evt) => {
+                      evt.stopPropagation();
+                      handleCollectionClick(collection);
+                    }}
+                  >
+                    {collection.title}
+                    <i className="fas fa-chevron-right"></i>
+                  </div>
+                );
+              })}
+            </div>
           </Accordion>
         );
       })}

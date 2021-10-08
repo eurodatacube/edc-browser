@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDrag } from 'react-dnd';
 
-export const DraggableBand = ({ band, onChange, style }) => {
+export const DraggableBand = ({ band, onChange, style, extraLabelName }) => {
   const [{ isDragging }, drag] = useDrag({
     item: { name: band, type: 'band' },
     type: 'band',
@@ -22,9 +22,10 @@ export const DraggableBand = ({ band, onChange, style }) => {
       key={band}
       className="band-item"
       title={band}
-      style={{ ...style, backgroundColor: undefined, opacity: isDragging ? 0.4 : 1 }}
+      style={{ ...style, opacity: isDragging ? 0.4 : 1 }}
     >
       {band}
+      {extraLabelName && <div className="draggable-band-extra-label">{extraLabelName}</div>}
     </div>
   );
 };

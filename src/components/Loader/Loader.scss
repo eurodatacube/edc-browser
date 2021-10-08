@@ -1,4 +1,4 @@
-@import '../../variables.scss';
+@import '../../variables.module.scss';
 
 .loader {
   text-align: center;
@@ -7,7 +7,7 @@
     position: relative;
     width: 100vw;
     height: 100vh;
-    background-color: $secondaryLight;
+    background-color: $colorBg50;
   }
 
   & span {

@@ -1,19 +1,36 @@
-@import '../variables.scss';
+@import '../variables.module.scss';
 
 // BUTTON
 
 .button-base {
+  background: none;
   cursor: pointer;
-  font-size: $font3;
-  padding: 14px 20px;
+  font-size: $fontSize02;
+  padding: 0 $spacing03;
   transition: 0.05s linear background;
-  font-weight: $medium;
+  font-weight: $fontWeightMedium;
   border: none;
   letter-spacing: 0.3px;
+  border-radius: $borderRadius;
+  min-height: $formElementBaseHeight;
 
   &.fluid {
     width: 100%;
   }
+}
+
+.button-base-small {
+  background: none;
+  cursor: pointer;
+  font-size: $fontSize02;
+  padding: 0 $spacing03;
+  transition: 0.05s linear background;
+  font-weight: $fontWeightMedium;
+  border: none;
+  letter-spacing: 0.3px;
+  border-radius: $borderRadius;
+  min-height: 24px;
+  height: 40px;
 }
 
 .button:hover {
@@ -25,8 +42,9 @@
 .button-primary {
   @extend .button-base;
 
-  background-color: $primary;
-  color: $textColorFaded;
+  width: 100%;
+  background-color: $colorPrimary50;
+  color: $colorText50;
   border: none;
 
   i {
@@ -34,16 +52,16 @@
   }
 
   &:hover {
-    background: $primaryDark;
+    background: $colorPrimary30;
   }
 
   &.inactive {
     color: $textColor;
-    background: $secondaryDark;
+    background: $colorBg50;
   }
 
   &:disabled {
-    background: $disabled;
+    background: $colorUtilGrey;
     opacity: 0.5;
     cursor: auto;
   }
@@ -54,11 +72,13 @@
 .button-secondary {
   @extend .button-base;
 
-  border: 1px solid $textColorDisabled;
-  color: $textColorFaded;
+  border: 1px solid $colorText70;
+  color: $colorText70;
+  width: 100%;
 
   &:hover {
-    border: 1px solid $textColor;
+    border: 1px solid $colorText50;
+    color: $colorText50;
   }
 }
 
@@ -69,8 +89,9 @@
   padding: 14px 0;
   background: none;
   color: $textColorFaded;
-  font-weight: $normal;
+  font-weight: $fontWeightNormal;
   letter-spacing: 0.3px;
+  font-size: $fontSize02;
 
   &:hover {
     color: white;
@@ -90,4 +111,11 @@
   &:hover {
     color: $textColor;
   }
+}
+
+.button-secondary-small {
+  @extend .button-base-small;
+
+  border: 1px solid $colorBgLight50;
+  color: $colorText70;
 }

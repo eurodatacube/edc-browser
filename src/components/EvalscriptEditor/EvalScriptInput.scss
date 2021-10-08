@@ -1,54 +1,59 @@
-@import '../../variables.scss';
+@import "../../variables.module.scss";
 
-.code-mirror-wrapper {
-  height: 300px;
+.code-editor-wrapper {
+  position: relative;
 
-  .cm-s-readonly {
-    opacity: 0.7;
-    cursor: not-allowed;
-  }
-
-  /* stylelint-disable-next-line */
-  .cm-s-readonly .CodeMirror-lines {
-    cursor: not-allowed;
-  }
-
-  .react-code-mirror-not-resizable {
-    width: 100% !important;
-
-    .fas.fa-times {
-      display: none;
-    }
-  }
-
-  .react-code-mirror-resizable {
-    position: absolute;
-    left: 20px;
-    top: 50%;
-    transform: translateY(-50%);
-    border: 2px solid $secondary;
-    width: 500px;
-    min-width: 350px;
+  .code-mirror-wrapper {
     height: 300px;
-    resize: horizontal;
-    overflow: auto;
+    margin-bottom: $spacing03;
 
-    @media screen and (max-width: 400px) {
-      & {
-        left: 0;
-        min-width: unset;
-        width: 100%;
+    .cm-s-readonly {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+
+    /* stylelint-disable-next-line */
+    .cm-s-readonly .CodeMirror-lines {
+      cursor: not-allowed;
+    }
+
+    .react-code-mirror-not-resizable {
+      width: 100% !important;
+
+      .fas.fa-times {
+        display: none;
       }
     }
 
-    .fas.fa-times {
-      position: absolute;
-      top: 7px;
-      right: 7px;
-      color: $secondary;
-      font-size: 18px;
-      z-index: 50;
-      cursor: pointer;
+    .react-code-mirror-resizable {
+      position: fixed;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      border: 2px solid $colorBg70;
+      min-width: 500px;
+      height: 300px;
+      resize: horizontal;
+      overflow: hidden;
+      z-index: 9999999;
+
+      @media screen and (max-width: 400px) {
+        & {
+          left: 0;
+          min-width: unset;
+          width: 100%;
+        }
+      }
+
+      .fas.fa-times {
+        position: absolute;
+        top: $spacing02;
+        right: $spacing04;
+        color: $colorBg70;
+        font-size: 18px;
+        z-index: 50;
+        cursor: pointer;
+      }
     }
   }
 }
@@ -56,14 +61,4 @@
 /* stylelint-disable-next-line */
 .cm-s-default.CodeMirror-lint-tooltip {
   z-index: 1000;
-}
-
-.info-uncheck-url {
-  font-size: 12px;
-  margin-top: 5px;
-
-  i {
-    padding-right: 5px;
-    padding-left: 5px;
-  }
 }

@@ -1,0 +1,79 @@
+// Colors
+$colorPrimary50: #508aa8;
+$colorPrimary30: #497d97;
+
+$colorBg40: #353149;
+$colorBg50: #1f1d2b;
+$colorBg60: #252735;
+$colorBg70: #2a2c3c;
+
+$colorBgLight50: #c1c1c1;
+$colorBgLight30: #c1c1c1;
+
+$colorUtilGrey: #a29c9b;
+$colorUtilRed: #f9627d;
+$colorUtilGreen: #62f97a;
+$colorUtilBlue: #62ccf9;
+
+$colorText50: #f1f1f1;
+$colorText70: #d7d7d7;
+
+$textColor: #eee;
+$textColorFaded: #ececec;
+$textColorDisabled: #c8c8c8;
+
+// Padding and margin
+$spacing01: 0.3rem;
+$spacing02: 0.5rem;
+$spacing03: 1rem;
+$spacing04: 1.5rem;
+$spacing05: 2rem;
+$spacing06: 2.5rem;
+$spacing07: 3rem;
+$spacing08: 3.5rem;
+$spacing09: 4rem;
+$spacing10: 4.5rem;
+
+// Font
+$fontSize01: 12px;
+$fontSize02: 14px;
+$fontSize03: 16px;
+$fontSize04: 16px;
+$fontSize05: 24px;
+$fontSize06: 32px;
+$fontSize07: 40px;
+$fontSize08: 48px;
+
+// Weights
+$fontWeightNormal: 400;
+$fontWeightMedium: 600;
+$fontWeightBold: 700;
+
+// Box Shadow
+$boxShadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+
+// Border radius
+$borderRadius: 4px;
+
+// Misc
+
+$formElementBaseHeight: 48px;
+
+:export {
+  // stylelint-disable property-case
+  colorBgUI70: $colorBg70;
+  colorBgUI50: $colorBg50;
+  colorBgLight50: $colorBgLight50;
+  colorText50: $colorText50;
+  colorText70: $colorText70;
+  fontSize03: $fontSize03;
+  formElementBaseHeight: $formElementBaseHeight;
+  borderRadius: $borderRadius;
+  spacing01: $spacing01;
+  spacing02: $spacing02;
+  spacing03: $spacing03;
+  colorUtilRed: $colorUtilRed;
+  colorUtilBlue: $colorUtilBlue;
+  colorUtilGreen: $colorUtilGreen;
+  // stylelint-enable
+}

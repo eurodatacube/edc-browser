@@ -47,8 +47,8 @@ export class DateTimeInput extends Component {
 
     return (
       <div className="date-time-input">
-        <div className="date-time-input-label">{label}</div>
         <div className="date-input">
+          <div className="date-time-input-label label-primary">{label}</div>
           <DatePicker
             id={id}
             calendarContainer={calendarContainer}
@@ -60,14 +60,16 @@ export class DateTimeInput extends Component {
           />
         </div>
         <div className="time-input">
-          <div>
-            <i className={`fa fa-clock-o`} />
-          </div>
-          <div className="time-input-hours-minutes">
+          <div className="time-input-section">
+            <label htmlFor="" className="label-primary numeric-input-label">
+              Hours
+            </label>
             <NumericInput label={'hh'} min="0" max="23" value={hours} setValue={this.setHours} />
           </div>
-          <div className="time-input-hours-minutes">:</div>
-          <div className="time-input-hours-minutes">
+          <div className="time-input-section">
+            <label htmlFor="" className="label-primary numeric-input-label">
+              Minutes
+            </label>
             <NumericInput label={'mm'} min="0" max="59" value={minutes} setValue={this.setMinutes} />
           </div>
         </div>

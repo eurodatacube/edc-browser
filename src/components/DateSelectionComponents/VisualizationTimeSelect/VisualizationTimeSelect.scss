@@ -1,14 +1,7 @@
 /* stylelint-disable */
-@import '../../../variables';
+@import '../../../variables.module.scss';
 
 .visualization-time-select {
-  display: flex;
-  align-items: flex-end;
-  justify-content: flex-start;
-  text-transform: none;
-  color: white;
-  text-align: center;
-  margin-top: 25px;
 
   .time-select-type {
     text-transform: none;
@@ -21,6 +14,12 @@
 
   div:last-child {
     margin-left: auto;
+  }
+
+
+  .date-picker-label { 
+    margin-bottom: $spacing02;
+    display: block;
   }
 
   .timespan-label {
@@ -37,12 +36,12 @@
 
     &:hover {
       cursor: pointer;
-      border-color: $primary;
+      border-color: $colorPrimary50;
     }
   }
 
   .timespan-toggle {
-    color: $primary;
+    color: $colorPrimary50;
     font-size: 13px;
     cursor: pointer;
   }

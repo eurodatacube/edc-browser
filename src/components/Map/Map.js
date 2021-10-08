@@ -196,7 +196,8 @@ function Map(props) {
   );
 
   const isGeometryVisible =
-    selectedMainTabIndex === PANEL_TAB.ALGORITHMS || selectedEdcDataTabIndex === EDC_DATA_TAB.COMMERCIAL;
+    selectedMainTabIndex === PANEL_TAB.ON_DEMAND_DATA_PANEL ||
+    selectedEdcDataTabIndex === EDC_DATA_TAB.COMMERCIAL;
 
   return (
     <>

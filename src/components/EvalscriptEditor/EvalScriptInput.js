@@ -7,6 +7,8 @@ import 'codemirror/theme/dracula.css';
 import './EvalScriptInput.scss';
 import { JSHINT } from 'jshint';
 
+import Switch from '../shared/Switch/Switch';
+
 require('codemirror/addon/lint/javascript-lint');
 require('codemirror/addon/lint/lint.css');
 require('codemirror/addon/lint/lint.js');
@@ -21,6 +23,7 @@ export class EvalScriptInput extends React.Component {
       evalscript,
       isEvalUrl,
       evalscripturl,
+      error: '',
       evalScriptFocused: false,
     };
   }
@@ -91,9 +94,18 @@ export class EvalScriptInput extends React.Component {
     this.setState({ evalScriptFocused: false });
   };
 
-  render() {
-    const { error, loading, success, evalscript, evalscripturl, isEvalUrl } = this.state;
+  handleURLSubmit = () => {
+    const { evalscripturl } = this.state;
+
     const hasWarning = evalscripturl.length > 0 && !evalscripturl.startsWith('https://');
+
+    if (hasWarning) {
+      this.setState({ error: 'Only HTTPS domains are allowed.' });
+    }
+  };
+
+  render() {
+    const { error, evalscript, evalscripturl, isEvalUrl } = this.state;
     const options = {
       lineNumbers: true,
       mode: 'javascript',
@@ -105,7 +117,7 @@ export class EvalScriptInput extends React.Component {
       gutters: ['CodeMirror-lint-markers'],
     };
     return (
-      <div style={{ clear: 'both' }}>
+      <div className="code-editor-wrapper" style={{ clear: 'both' }}>
         <div className="code-mirror-wrapper">
           <div
             className={`react-code-mirror${this.state.evalScriptFocused ? '-resizable' : '-not-resizable'}`}
@@ -122,67 +134,51 @@ export class EvalScriptInput extends React.Component {
             />
           </div>
         </div>
-        {isEvalUrl && (
-          <div className="info-uncheck-url">
-            <i className="fa fa-info" />
-            Uncheck Load script from URL to edit the code
-          </div>
-        )}
-        {error && (
-          <div className="notification">
-            <i className="fa fa-warning" /> {error}
-          </div>
-        )}
         <div style={{ padding: '5px 0px 5px 0px', fontSize: 12, marginTop: '5px' }}>
           <span className="checkbox-holder use-url">
-            <input
-              type="checkbox"
+            <Switch
               id="evalscriptUrlCB"
               onChange={(e) => this.selectEvalMode(e.target.checked)}
               checked={isEvalUrl}
+              label="Load script from URL"
             />
-            <label htmlFor="evalscriptUrlCB" style={{ marginTop: '-3px' }}>
-              Load script from URL
-            </label>
           </span>
           {isEvalUrl && (
             <div className="insert-url-block">
+              <label className="label-primary" htmlFor="">
+                Evalscript URL
+              </label>
               <input
-                placeholder={'Enter URL to your script'}
+                className={`input-primary ${error ? 'evalscripturl-input-error' : ''}`}
                 onKeyDown={this.onKeyDown}
                 disabled={!isEvalUrl}
-                style={{ width: 'calc(100% - 40px)', marginTop: '5px' }}
                 value={evalscripturl}
                 onChange={this.updateUrl}
+                onBlur={this.handleURLSubmit}
+                onFocus={() => this.setState({ error: '' })}
               />
-              {success || hasWarning ? (
-                <i
-                  title={success ? 'Script loaded.' : 'Only HTTPS domains are allowed.'}
-                  className={`fa fa-${success ? 'check' : 'warning'}`}
-                  style={{ marginLeft: 7 }}
-                />
-              ) : evalscripturl ? (
-                // eslint-disable-next-line
-                <a onClick={this.loadCode}>
-                  <i
-                    className={`fa fa-refresh ${loading && 'fa-spin'}`}
-                    style={{ marginLeft: 7 }}
-                    title={'Load script into code editor'}
-                  />
-                </a>
-              ) : null}
+              {error && <div className="evalscripturl-input-error-text">{error}</div>}
             </div>
           )}
         </div>
         <div className="scriptBtnPanel">
-          <button
-            onClick={this.handleRefreshClick}
-            className="btn button-primary"
-            disabled={this.refreshEvalscriptDisabled()}
-          >
-            <i className="fa fa-refresh" />
-            Refresh
-          </button>
+          {isEvalUrl ? (
+            <button
+              onClick={this.loadCode}
+              className="btn button-primary"
+              disabled={this.refreshEvalscriptDisabled()}
+            >
+              Load evalscript URL
+            </button>
+          ) : (
+            <button
+              onClick={this.handleRefreshClick}
+              className="btn button-primary"
+              disabled={this.refreshEvalscriptDisabled()}
+            >
+              Run evalscript
+            </button>
+          )}
         </div>
       </div>
     );

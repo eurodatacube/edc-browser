@@ -41,8 +41,10 @@ export class Tabs extends Component {
 
   renderContent() {
     return this.getChildren().map((pane, index) => (
-      <div id={pane.props.id} key={pane.props.renderKey} className="tab-panel-container">
-        <div className={pane.props.renderKey === this.props.activeIndex ? 'active' : 'none'}>{pane}</div>
+      <div className="tabs-content-container">
+        <div id={pane.props.id} key={pane.props.renderKey} className="tab-panel-container">
+          <div className={pane.props.renderKey === this.props.activeIndex ? 'active' : 'none'}>{pane}</div>
+        </div>
       </div>
     ));
   }

@@ -37,18 +37,16 @@ export default function DateRangeInput(props) {
             minDate={DEFAULT_FROM_TIME}
             maxDate={toMoment}
           />
-
-          <span className="date-picker-separator">-</span>
           <DatePicker
             id="to-search-datepicker"
             selectedDay={toMoment}
             setSelectedDay={setTimeTo}
-            calendarContainer={calendarHolder.current}
+            calendarContainer={calendarHolder}
             minDate={fromMoment}
             maxDate={moment.utc()}
           />
-          <div className="calendar-holder-algorithm" ref={calendarHolder} />
         </div>
+        <div className="calendar-holder-algorithm" ref={calendarHolder} />
       </div>
       {restriction && restriction.length > 0 && (
         <div className="algorithm-option-string-restriction">Supported values: {restriction.join(', ')}.</div>

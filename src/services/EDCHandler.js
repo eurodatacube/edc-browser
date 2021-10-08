@@ -362,6 +362,7 @@ export default class EDCHandler extends AbstractServiceHandler {
           ownedByUser: true,
           configurations: collection.links.filter((l) => l.rel === 'processing-expression'),
           bands: collection['cube:dimensions'].band.values,
+          temporalExtent: collection.extent.temporal,
           serviceSpecificInfo: {
             type: isCustom(collection.datasource_type) ? DATASET_BYOC.id : collection.datasource_type,
             providers: collection.providers,

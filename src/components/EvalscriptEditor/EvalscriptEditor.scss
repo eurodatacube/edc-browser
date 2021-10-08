@@ -1,15 +1,13 @@
-@import '../../variables.scss';
+@import '../../variables.module.scss';
 
 /* stylelint-disable */
 .advancedPanel {
-  padding: 10px 0;
-  font-size: 14px;
 
   .grouped-bands-to-rgb {
     button {
       border: none;
       background-color: #22232d;
-      color: #eee;
+      color: $colorText50;
       font-size: 15px;
       padding: 3px 25px;
       margin: 20px 15px 0 0;
@@ -20,6 +18,41 @@
         padding: 1px 23px;
       }
     }
+  }
+
+  .accordion-subtitle-open { 
+    font-size: $fontSize02;
+    color: $colorText70;
+    font-weight: $fontWeightNormal;
+    margin-top: $spacing01;
+  }
+
+  .insert-url-block { 
+    margin-bottom: $spacing02;
+     margin-top: $spacing03;
+     .label-primary { 
+       display: inline-block;
+       margin-bottom: $spacing02;
+     }
+  }
+
+  .evalscripturl-input-error {
+    border: 1px solid $colorUtilRed;
+  }
+  .evalscripturl-input-success { 
+    border: 1px solid $colorUtilGreen;  
+  }
+
+  .evalscripturl-input-error-text { 
+    margin-top: $spacing02;
+    font-size: $fontSize02;
+    color: $colorUtilRed;
+  }
+  
+  .evalscripturl-input-success-text  { 
+    color: $colorUtilGreen;
+    font-size: $fontSize02;
+    margin-top: $spacing02;
   }
 
   .toggleBandMode {
@@ -67,16 +100,14 @@
   .header {
     padding-bottom: 10px;
     .back-button {
+      transition: 0.1s linear background;
       padding: 12px;
+      &:hover {
+        background: $colorBg40;
+        transition: 0.1s linear background;
+      }
     }
   }
 
-  .scriptBtnPanel {
-    text-align: center;
-    padding: 5px;
-  }
 
-  .insert-url-block {
-    padding: 2px 20px;
-  }
 }

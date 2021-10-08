@@ -1,4 +1,4 @@
-@import '../../../variables.scss';
+@import '../../../variables.module.scss';
 
 div.commercial-data-description {
   padding: 5px;
@@ -16,7 +16,7 @@ div.commercial-data-description {
   }
 
   a {
-    color: $primary;
+    color: $colorPrimary50;
   }
 
   ul {

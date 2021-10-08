@@ -12,6 +12,7 @@ import GeoDBLayer from './GeoDBLayer';
 
 export default class GeoDBHandler extends AbstractServiceHandler {
   HANDLER_ID = 'GEO_DB';
+  SHARED_COLLECTIONS = new Set(['lpis_iacs', 'truck_detection']);
 
   constructor(params) {
     super();
@@ -77,16 +78,20 @@ export default class GeoDBHandler extends AbstractServiceHandler {
     );
 
     return {
-      user: data[0].src.map((collection) =>
-        collectionFactory({
-          uniqueId: `${collection.database}-${collection.collection}`,
-          id: collection.collection,
-          type: COLLECTION_TYPE.GEO_DB,
-          title: collection.collection,
-          group: collection.database,
-          ownedByUser: collection.owner === userId,
-        }),
-      ),
+      user: data[0].src
+        .filter(
+          (collection) => collection.owner === userId || this.SHARED_COLLECTIONS.has(collection.database),
+        )
+        .map((collection) =>
+          collectionFactory({
+            uniqueId: `${collection.database}-${collection.collection}`,
+            id: collection.collection,
+            type: COLLECTION_TYPE.GEO_DB,
+            title: collection.collection,
+            group: collection.database,
+            ownedByUser: collection.owner === userId,
+          }),
+        ),
     };
   }
 
@@ -151,5 +156,9 @@ export default class GeoDBHandler extends AbstractServiceHandler {
       });
     }
     return this.geoDBLayer;
+  }
+
+  reset() {
+    this.geoDBLayer = null;
   }
 }

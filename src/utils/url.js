@@ -17,6 +17,7 @@ export function updatePath(props) {
     evalscriptUrl,
     type,
     algorithm,
+    selectedTabIndex,
   } = props;
   lat = Math.round(100000 * lat) / 100000;
   lng = Math.round(100000 * lng) / 100000;
@@ -51,7 +52,7 @@ export function updatePath(props) {
   if (toTime) {
     params.toTime = toTime.toISOString();
   }
-  if (algorithm) {
+  if (algorithm && selectedTabIndex === PANEL_TAB.ON_DEMAND_DATA_PANEL) {
     params.algorithm = algorithm;
   }
 
@@ -122,5 +123,6 @@ export function setStore(params) {
   }
   if (algorithm) {
     store.dispatch(algorithmsSlice.actions.setSelectedAlgorithm(algorithm));
+    store.dispatch(tabsSlice.actions.setMainTabIndex(PANEL_TAB.ON_DEMAND_DATA_PANEL));
   }
 }

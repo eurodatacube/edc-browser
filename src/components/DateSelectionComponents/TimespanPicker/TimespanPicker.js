@@ -58,34 +58,41 @@ export class TimespanPicker extends Component {
 
     return (
       <div className="timespan-picker">
-        <DateTimeInput
-          id={`${id}-from`}
-          label={'From:'}
-          calendarContainer={this.calendarHolder}
-          selectedTime={fromTime}
-          setSelectedTime={this.setFromTime}
-          minDate={this.props.minDate}
-          maxDate={toTime}
-          onQueryDatesForActiveMonth={onQueryDatesForActiveMonth}
-        />
-        <DateTimeInput
-          id={`${id}-to`}
-          label={'Until:'}
-          calendarContainer={this.calendarHolder}
-          selectedTime={toTime}
-          setSelectedTime={this.setToTime}
-          minDate={fromTime}
-          maxDate={this.props.maxDate}
-          onQueryDatesForActiveMonth={onQueryDatesForActiveMonth}
-        />
-        <div className="timespan-calendar-holder" ref={(e) => (this.calendarHolder = e)} />
-        {!autoApply && (
-          <div className="apply-button">
-            <button className="btn button-primary" onClick={this.apply}>
+        <div className="date-picker-calendar-wrap">
+          <DateTimeInput
+            id={`${id}-from`}
+            label={'From:'}
+            calendarContainer={this.calendarHolder1}
+            selectedTime={fromTime}
+            setSelectedTime={this.setFromTime}
+            minDate={this.props.minDate}
+            maxDate={toTime}
+            onQueryDatesForActiveMonth={onQueryDatesForActiveMonth}
+          />
+          <div className="timespan-calendar-holder" ref={(e) => (this.calendarHolder1 = e)} />
+        </div>
+
+        <div className="date-picker-calendar-wrap">
+          <DateTimeInput
+            id={`${id}-to`}
+            label={'Until:'}
+            calendarContainer={this.calendarHolder2}
+            selectedTime={toTime}
+            setSelectedTime={this.setToTime}
+            minDate={fromTime}
+            maxDate={this.props.maxDate}
+            onQueryDatesForActiveMonth={onQueryDatesForActiveMonth}
+          />
+
+          <div className="timespan-calendar-holder" ref={(e) => (this.calendarHolder2 = e)} />
+          {!autoApply && (
+            <div className="apply-button">
+              {/* <button className="btn button-primary" onClick={this.apply}>
               Apply
-            </button>
-          </div>
-        )}
+            </button> */}
+            </div>
+          )}
+        </div>
       </div>
     );
   }

@@ -1,4 +1,4 @@
-@import '../../../../variables.scss';
+@import '../../../../variables.module.scss';
 
 .commercial-data-orders {
   display: flex;
@@ -7,7 +7,7 @@
   .actions-container {
     position: sticky;
     bottom: 0;
-    background: $primaryLight;
+    background: $colorPrimary50;
   }
 
   .orders-list {
@@ -55,7 +55,7 @@
 
           &:hover {
             cursor: pointer;
-            color: $primary;
+            color: $colorPrimary50;
           }
 
           .order-title {
@@ -85,7 +85,7 @@
             }
 
             i {
-              color: $primary;
+              color: $colorPrimary50;
             }
           }
 

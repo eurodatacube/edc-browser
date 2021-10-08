@@ -1,10 +1,14 @@
-@import './variables.scss';
+@import './variables.module.scss';
 @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap');
 
 body,
 div {
   margin: 0;
   padding: 0;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 div,
@@ -20,7 +24,7 @@ span {
 .leaflet-container {
   /* stylelint-disable-next-line */
   .controlsWrapper .panelButton i {
-    color: $primary;
+    color: $colorPrimary50;
   }
 }
 
@@ -32,23 +36,23 @@ span {
 
 .react-toggle--checked .react-toggle-track,
 .react-toggle.react-toggle--checked:hover .react-toggle-track {
-  background: $primary;
+  background: $colorPrimary50;
 }
 
 .react-toggle--focus .react-toggle-thumb {
-  box-shadow: 0 0 2px 3px $primary;
+  box-shadow: 0 0 2px 3px $colorPrimary50;
 }
 
 .react-toggle:active .react-toggle-thumb {
-  box-shadow: 0 0 5px 5px $primary;
+  box-shadow: 0 0 5px 5px $colorPrimary50;
 }
 
 .react-toggle.react-toggle--focus .react-toggle-thumb {
-  box-shadow: 0 0 3px $primary;
+  box-shadow: 0 0 3px $colorPrimary50;
 }
 
 .react-toggle--checked .react-toggle-thumb {
-  border-color: $primary;
+  border-color: $colorPrimary50;
 }
 
 .react-toggle:active:not(.react-toggle--disabled) .react-toggle-thumb {
@@ -60,6 +64,6 @@ span {
 }
 
 .react-toggle.react-toggle--checked:hover .react-toggle-track {
-  background-color: $primary;
+  background-color: $colorPrimary50;
 }
 /* stylelint-enable */

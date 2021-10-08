@@ -1,109 +1,77 @@
 /* stylelint-disable */
-@import '../../../variables.scss';
+@import '../../../variables.module.scss';
+
+
 
 .timespan-picker {
-  display: flex;
-  flex-direction: column;
-  background: $secondary;
-  font-size: 14px;
-  text-transform: none;
-  margin-top: 10px;
-  padding-top: 5px;
-
-  .date-time-input-label {
-    min-width: 45px;
-    font-size: 14px;
-    padding-top: 6px;
+  .fa-calendar {
+     margin-right: $spacing02;
+  }
+  .date-picker-calendar-wrap { 
+    
+    margin-bottom: $spacing04;
+  }
+  .date-time-input { 
+    display: flex;
   }
 
-  .date-time-input {
-    color: $textColor;
+  .date-time-input-label { 
+    margin-bottom: $spacing02;
+
+  }
+
+  .numeric-input-label {
+    margin-bottom: $spacing02;
+    display:block;
+  }
+
+  .date-picker-input-icon {
+    color: $colorBgLight50;
+  }
+
+  .date-picker-input {
+    height: $formElementBaseHeight;
+  }
+  .time-input {
+    width: 50%;
     display: flex;
-    flex-direction: row;
+
+  }
+
+  .time-input-section { 
+    width: 100%;
+  }
+
+  .numeric-input {
+    display: flex;
     align-items: center;
-    flex-wrap: wrap;
-    margin-left: 10px;
-    margin-right: 5px;
     justify-content: space-between;
-
-    .date-input {
-      display: flex;
-      align-items: center;
-      position: relative;
-      width: 115px;
-
-      .date-picker-loader {
-        position: absolute;
-        right: 0;
-        top: 50%;
-        transform: translateY(-50%);
-      }
-    }
-
-    .time-input {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      margin-top: 3px;
-
-      > div {
-        margin-right: 5px;
-      }
-
-      i {
-        color: $primary;
-        margin-right: 5px;
-      }
+    height: $formElementBaseHeight;
+    background: $colorBg70;
+    border-radius: $borderRadius;
+    margin-right: $spacing02;
+    padding: 0 $spacing01;
+    .input-value {
+      background: $colorBg70;
+      border: none;
+      color: $colorText50;
+      font-size: $fontSize03;
+      height: 100%;
+      width: 100%;
     }
   }
 
-  .apply-button {
-    display: flex;
-    justify-content: flex-end;
 
-    .btn {
-      margin: 10px 6px 6px 6px;
-      height: unset;
-      padding: 10px 15px;
-    }
+
+  .up, .down { 
+    color: $colorText70;
   }
-}
-
-.numeric-input {
-  display: flex;
-  align-items: center;
-  border: 1px solid $primary;
-  border-radius: 5px;
-  height: 25px;
-  padding-right: 5px;
-
-  label {
-    color: $textColor;
-    padding-left: 5px;
+  .date-input {
+     width: 50%;
+     margin-right: $spacing02;
   }
-
-  input {
-    text-align: center;
-    background: $secondary;
-    color: white;
-    border: none;
-    max-width: 41px;
-    padding: 0 5px;
-  }
-
-  .spinner {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    cursor: pointer;
-
-    .up,
-    .down {
-      margin: -3px 0;
-
-      i {
-        color: $textColor;
-      }
-    }
+  .time-input-hours-minutes { 
+    flex-grow: 1;
+    background: $colorBg70;
   }
 }

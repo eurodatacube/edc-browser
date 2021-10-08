@@ -1,32 +1,37 @@
-@import '../../../variables.scss';
+@import '../../../variables.module.scss';
 
-.accordion-title {
-  font-weight: 500;
-  font-size: 16px;
-}
+.selection-items {
+  border-left: 1px solid $colorBgLight50;
+  margin-left: $spacing03;
 
-.selection-item {
-  padding: 5px;
-  cursor: pointer;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
+  .selection-item {
+    padding: $spacing03;
+    padding-left: $spacing03;
+    width: 100%;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    word-break: break-word;
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 16px;
+    color: $colorText70;
+    border-radius: $borderRadius;
+    transition: 0.1s linear background;
 
-  .fas.fa-chevron-right {
-    height: fit-content;
-    opacity: 0;
-    padding-right: 5px;
-    font-size: 12px;
-  }
-
-  &:hover {
-    box-shadow: $boxShadow;
-    background: $secondaryDark;
-    color: $primary;
+    &:hover {
+      background: $colorBg60;
+      color: $colorText50;
+      transition: 0.1s linear background;
+    }
 
     .fas.fa-chevron-right {
-      opacity: 1;
+      height: fit-content;
+      opacity: 0;
+      padding-right: 5px;
+      font-size: 12px;
     }
   }
 }

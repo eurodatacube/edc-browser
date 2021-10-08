@@ -2,7 +2,6 @@ import React from 'react';
 
 export const NumericInput = ({ label, value, min, max, setValue }) => (
   <div className="numeric-input">
-    <label className="input-label"> {label}</label>
     <input
       className="input-value"
       type="text"

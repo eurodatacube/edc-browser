@@ -1,28 +1,26 @@
-@import '../../variables';
+@import '../../variables.module.scss';
 
 .algorithms-panel {
-  color: $textColor;
+  color: $colorText50;
   display: flex;
   flex-direction: column;
-  padding: 20px 40px 20px 40px;
 
   .algorithms-about {
-    margin: 0 0 $spacing6 0;
+    margin: 0 0 $spacing06 0;
     text-align: center;
 
     a {
-      color: $primary;
+      color: $colorPrimary50;
     }
   }
 
   .title-label {
-    margin-bottom: $spacing2;
-    font-size: $font3;
+    margin-bottom: $spacing02;
   }
 
   .algorithm-error {
-    color: $error;
-    font-size: $font3;
+    color: $colorUtilRed;
+    font-size: $fontSize03;
     padding: 0 0 10px 10px;
   }
 }

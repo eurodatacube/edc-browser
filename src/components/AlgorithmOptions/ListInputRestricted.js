@@ -1,5 +1,6 @@
 import React from 'react';
 import Select from 'react-select';
+import styleVariables from '../../variables.module.scss';
 
 export default function ListInputRestricted(props) {
   const { restriction, value = [], setValue, showingError, isValid, isOptional, renderError } = props;
@@ -14,57 +15,72 @@ export default function ListInputRestricted(props) {
   }
 
   const options = restriction.value.map((v) => ({ value: v, label: v }));
-
   const customStyles = {
     menu: (css) => ({
       ...css,
-      background: '#2a2c37',
-      borderRadius: '0px',
+      background: styleVariables.colorBgUI70,
+      borderRadius: '4px',
       marginTop: '0px',
       padding: '0px',
     }),
     control: (css) => ({
       ...css,
-      color: '#eee',
-      height: 'fit-content',
-      padding: '5px 0',
-      background: '#2a2c37',
+      color: styleVariables.colorText50,
+      borderRadius: styleVariables.borderRadius,
       border: 'none',
-      borderRadius: '0px',
+      minHeight: styleVariables.formElementBaseHeight,
+      background: styleVariables.colorBgUI70,
+      ':hover': {
+        cursor: 'pointer',
+      },
     }),
     indicatorsContainer: (css) => ({
       ...css,
-      color: '#eee',
+      color: styleVariables.colorText50,
       cursor: 'pointer',
     }),
+    selectContainer: (css) => ({
+      ...css,
+    }),
+    clearIndicator: (css) => ({
+      ...css,
+      color: styleVariables.colorText50,
+    }),
     indicatorSeparator: (css) => ({
+      ...css,
       display: 'none',
     }),
     placeholder: (css) => ({
       ...css,
-      color: '#eee',
+      color: styleVariables.colorText50,
     }),
     option: (css) => ({
       ...css,
       fontSize: '14px',
       cursor: 'pointer',
-      background: '#2a2c37',
-      color: '#eee',
-      ':hover': {
-        background: '#1b1c23',
-      },
+      background: styleVariables.colorBgUI70,
+      color: styleVariables.colorText50,
     }),
     multiValue: (css) => ({
       ...css,
-      background: '#5dbdd5',
-      fontSize: '20px',
+      fontSize: styleVariables.fontSize03,
+      color: styleVariables.colorText50,
+      borderRadius: '50px',
+      padding: `${'1px'} ${styleVariables.spacing01}`,
+      margin: 4,
+      background: 'none',
+      border: `1px solid ${styleVariables.colorBgLight50}`,
+      display: 'flex',
+      alignItems: 'center',
     }),
-
+    multiValueLabel: (css) => ({
+      ...css,
+      color: styleVariables.colorText70,
+    }),
     multiValueRemove: (css) => ({
       ...css,
+      color: styleVariables.colortex50,
       ':hover': {
-        color: '#eee',
-        background: '#267c92',
         cursor: 'pointer',
       },
     }),

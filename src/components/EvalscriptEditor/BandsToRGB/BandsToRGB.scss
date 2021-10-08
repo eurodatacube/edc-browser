@@ -1,100 +1,116 @@
-@import '../../../variables.scss';
+@import '../../../variables.module.scss';
 
 .colors-container {
   min-height: 50px;
-  background: rgba(255, 255, 255, 0.2);
   border-radius: 6px;
   text-align: center;
-  padding: 10px;
+  display: flex;
+  flex-wrap: wrap;
 
   .band-item {
-    border-radius: 50px;
-    border: 2px solid #333;
-    color: #fff;
-    cursor: move;
-    display: inline-block;
-    font-size: 14px;
-    font-weight: bold;
-    height: 42px;
-    line-height: 42px;
-    margin: 5px 8px;
-    overflow: hidden;
-    text-align: center;
-    text-overflow: ellipsis;
-    transform: translate(0, 0);
-    user-select: none;
-    white-space: nowrap;
-    width: 42px;
+    border: 1px solid $colorBgLight50;
+    font-size: $fontSize02;
+    padding: $spacing02 $spacing02;
+    border-radius: $borderRadius;
+    margin: $spacing01;
+    color: $colorText70;
+    position: relative;
+    font-weight: $fontWeightMedium;
   }
 }
 
-.colors-output {
+.index-bands-equation-wrap {
+  margin: $spacing03 0;
+}
+
+.index-bands-label {
+  display: block;
+  margin-bottom: $spacing02;
+}
+
+.selected-band-wrap {
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.index-output {
   display: flex;
   align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 10px 0;
+  max-width: 100%;
+  margin-top: $spacing04;
+
+  .selected-band-wrap {
+    min-width: 70px;
+    width: 100%;
+  }
+}
+
+.index-output-equation-operator {
+  color: $colorBgLight50;
+  font-size: 20px;
+  padding: 0 2px;
+}
+
+.draggable-band-extra-label {
+  position: absolute;
+  height: 20px;
+  width: 20px;
+  top: -8px;
+  right: -8px;
+  font-weight: $fontWeightMedium;
+  border-radius: 50%;
+  color: black;
+  background: $colorPrimary50;
+}
+
+.rgb-output {
+  width: 100%;
+  max-width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-gap: $spacing02;
+  margin-top: $spacing04;
 
   &.index {
-    font-size: 24px;
     color: $textColor;
   }
+}
 
-  .divide {
-    padding: 0 10px;
-  }
+.selected-band-label {
+  margin-bottom: $spacing02;
+  display: block;
 }
 
 .col-holder {
-  display: inline-block;
-  vertical-align: middle;
-  width: 50px;
-  height: 50px;
-  margin: 10px;
-  background: #222;
-  border-radius: 50px;
   position: relative;
-
-  &::before {
-    position: absolute;
-    left: -5px;
-    right: -5px;
-    top: -5px;
-    bottom: -5px;
-    opacity: 0.3;
-    border: 1px solid #fff;
-    border-radius: 100px;
-    content: '';
-    display: block;
-  }
+  width: 100%;
 
   &.is-active {
     opacity: 0.4;
 
     &::before {
       opacity: 0.8;
-      border: 2px solid $primary;
+      border: 2px solid $colorPrimary50;
     }
   }
 
   &.can-drop {
     &::before {
       opacity: 1;
-      border: 2px solid $primary;
+      border: 2px solid $colorPrimary50;
     }
   }
 
   .selected-band {
-    border-radius: 50px;
-    background: purple;
-    color: #fff;
-    font-size: 14px;
-    font-weight: bold;
-    line-height: 50px;
-    overflow: hidden;
     text-align: center;
+    background: $colorBg70;
+    border-radius: $borderRadius;
+    color: $colorText50;
+    padding: $spacing03 $spacing02;
     text-overflow: ellipsis;
     white-space: nowrap;
+    font-size: $fontSize02;
+    overflow: hidden;
   }
 }
 
@@ -113,12 +129,17 @@ select:-moz-focusring {
 }
 
 // this could probably go in a seperate css
-.treshold {
+.threshold {
   position: relative;
 
+  .threshold-menu {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
   .fa {
-    color: $primary;
-    cursor: pointer;
+    margin-left: $spacing02;
   }
 
   .scale-wrap {
@@ -127,9 +148,9 @@ select:-moz-focusring {
     margin-bottom: 12px;
 
     input {
-      background: $secondaryDark;
+      background: $colorBg70;
       border-radius: 2px;
-      border: 2px solid $secondaryLight;
+      border: 2px solid $colorBg50;
       color: white;
       font-size: 14px;
       font-weight: bold;
@@ -147,7 +168,7 @@ select:-moz-focusring {
   }
 
   .gradients-list {
-    border: 1px solid $secondaryDark;
+    border: 1px solid $colorBg50;
     position: absolute;
     margin-top: 0;
     z-index: 9000;
@@ -161,16 +182,37 @@ select:-moz-focusring {
   }
 
   .add-remove-buttons {
-    display: flex;
-    justify-content: flex-end;
-    margin-top: -38px;
+    .button-threshold-handle {
+      display: inline-block;
+      border: none;
+      cursor: pointer;
+      border-radius: $borderRadius;
+      padding: $spacing02;
+      color: $colorText70;
+      font-size: $fontSize03;
+      max-height: $spacing05;
+      max-width: $spacing05;
+      background: $colorBg70;
+
+      .fa {
+        margin: 0;
+      }
+
+      &:nth-child(1) {
+        margin-right: $spacing02;
+      }
+
+      &:hover {
+        color: $colorText50;
+      }
+
+      &:disabled {
+        border: none;
+        color: $colorUtilGrey;
+      }
+    }
 
     .btn.primary {
-      border-radius: 2px;
-      padding: 1px 3px;
-      margin-left: 4px;
-      margin-bottom: 16px;
-
       i {
         margin-right: 0;
       }
@@ -189,7 +231,7 @@ select:-moz-focusring {
     &::before {
       content: '';
       display: block;
-      background: $error;
+      background: $colorUtilRed;
       height: 34px;
       width: 4px;
       position: absolute;
@@ -216,7 +258,7 @@ select:-moz-focusring {
         margin-left: -10px;
         font-size: 12px;
         display: none;
-        background-color: $secondaryDark;
+        background-color: $colorBg50;
         border-radius: 4px;
         border: 2px solid rgba(255, 255, 255, 0.8);
         width: 28px;

@@ -1,4 +1,4 @@
-@import '../../variables';
+@import '../../variables.module.scss';
 
 .open-main-panel {
   left: 10px;
@@ -6,7 +6,7 @@
   position: absolute;
   display: block;
   color: $textColor;
-  background: $secondaryLight;
+  background: $colorBg50;
   border-radius: 40px;
   text-align: center;
   cursor: pointer;
@@ -21,10 +21,14 @@
     display: block;
     width: 24px;
     height: 24px;
-    font-size: $font3;
+    font-size: $fontSize03;
     line-height: 24px;
     transition: all ease 0.4s;
   }
+}
+
+.panel-content-wrap {
+  padding: $spacing05 $spacing04;
 }
 
 .main-panel-wrapper {
@@ -32,23 +36,31 @@
   right: 10px;
   top: 10px;
   position: fixed;
-  max-width: 450px;
-  min-width: 260px;
-  max-height: calc(100% - 70px);
-  color: #868fa0;
   box-shadow: $boxShadow;
-  background: $secondary;
+  background: $colorBg70;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+  border-radius: $borderRadius;
+  max-height: 90vh;
+  max-width: 550px;
 
   &.hidden {
     display: none;
   }
 
+  .tabs-container {
+    overflow-y: auto;
+  }
+
+  .panel-wrapper {
+    padding: $spacing06 $spacing04;
+  }
+
   #header {
     display: flex;
     flex-direction: row;
-    padding: $spacing3;
+    padding: $spacing03;
 
     .header-left {
       display: flex;
@@ -57,7 +69,7 @@
 
       .close-main-panel {
         color: $textColor;
-        background: $secondaryLight;
+        background: $colorBg50;
         border-radius: 40px;
         text-align: center;
         cursor: pointer;
@@ -67,13 +79,13 @@
           display: block;
           width: 24px;
           height: 24px;
-          font-size: $font3;
+          font-size: $fontSize03;
           line-height: 24px;
         }
       }
 
       .app-title {
-        font-size: $font5;
+        font-size: $fontSize05;
         color: $textColor;
         text-decoration: none;
         align-items: center;

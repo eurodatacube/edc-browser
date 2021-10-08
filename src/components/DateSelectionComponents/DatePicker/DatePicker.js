@@ -82,7 +82,6 @@ class DatePicker extends Component {
     } else {
       dateArray = dateArray.map((date) => ({ date: convertDateToUTC(date), cloudCoverPercent: 100 }));
     }
-
     this.setState({ loading: false });
     return dateArray;
   };
@@ -309,12 +308,12 @@ class DatePicker extends Component {
             minDate={minDate}
             maxDate={maxDate}
           />
+          {loading && (
+            <div className="date-picker-loader">
+              <i className="fa fa-spinner fa-spin fa-fw" />
+            </div>
+          )}
         </div>
-        {loading && (
-          <div className="date-picker-loader">
-            <i className="fa fa-spinner fa-spin fa-fw" />
-          </div>
-        )}
         {displayCalendar && (
           <Calendar
             hasCloudCoverFilter={hasCloudCoverFilter}

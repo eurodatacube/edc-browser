@@ -1,0 +1,57 @@
+@import '../../../variables.module.scss';
+
+.switch-wrap {
+  height: 24px;
+  width: 40px;
+  background: $colorUtilGrey;
+  position: relative;
+  border-radius: 50px;
+  cursor: pointer;
+
+  &-active {
+    background: $colorPrimary50;
+  }
+
+  .switch-button {
+    position: absolute;
+    top: 50%;
+    height: 18px;
+    width: 18px;
+    background: white;
+    pointer-events: none;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+
+  .switch-button-inactive {
+    transform: translate(calc(0% + 2px), -50%);
+    transition: 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) transform;
+  }
+
+  .switch-button-active {
+    transform: translate(calc(38px - 18px), -50%);
+    transition: 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) transform;
+  }
+
+  .switch-input {
+    cursor: pointer;
+    opacity: 0;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    padding: 0;
+    margin: 0;
+  }
+}
+
+.switch {
+  display: flex;
+  align-items: center;
+
+  .switch-label {
+    margin-left: $spacing02;
+    font-weight: $fontWeightNormal;
+  }
+}

@@ -27,7 +27,7 @@ function AlgorithmsPanel(props) {
   const algorithmDefinitionExists = !!algorithmInfo;
 
   return (
-    <div className="algorithms-panel panel-content-wrap">
+    <div className="algorithms-panel">
       <div className="algorithms-about">
         Select one of the available algorithms and order processing for your area of interest,{' '}
         <ExternalLink href="https://eurodatacube.com/marketplace/data-products/on-demand">

@@ -1,29 +1,26 @@
-@import '../variables.scss';
+@import '../variables.module.scss';
 
 .dropdown-base {
-  height: 45px;
-  font-size: $font3;
+  height: $formElementBaseHeight;
+  font-size: $fontSize02;
   border: none;
+  border-radius: $borderRadius;
 }
 
 .dropdown-primary {
   @extend .dropdown-base;
 
-  background: $secondary;
-  color: #eee;
+  background: $colorBg70;
+  color: $colorText50;
   width: 100%;
-  padding: 0 $spacing2;
+  padding: 0 $spacing02;
 
   &.compact {
     height: auto;
-    padding: $spacing1;
+    padding: $spacing01;
   }
 }
 
 .dropdown-primary:hover {
-  background: $secondaryDark;
-}
-
-.dropdown-primary:focus {
-  background: $secondaryDark;
+  cursor: pointer;
 }

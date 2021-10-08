@@ -1,105 +1,70 @@
-@import '../../variables';
+@import "../../variables.module.scss";
 
 .visualization-panel {
-  padding: $spacing3 $spacing4;
-  background-color: $secondaryLight;
+  background-color: $colorBg50;
+
+  .switch {
+    margin-bottom: $spacing02;
+  }
 
   .header {
     display: flex;
-    flex-direction: row;
-    width: 100%;
-    justify-content: space-between;
     align-items: center;
+    width: 100%;
 
     .back-button {
-      padding: 7px 10px;
-      height: unset;
+      height: $spacing06;
+      width: $spacing06;
+      color: $colorText50;
+      border-radius: $borderRadius;
+      background: $colorBg70;
+      border: none;
+      margin-right: $spacing04;
+      flex-shrink: 0;
+      transition: 0.1s linear background;
+
+      &:hover {
+        cursor: pointer;
+        background: $colorBg40;
+        transition: 0.1s linear background;
+      }
+    }
+
+    .collection-info {
+      max-width: 100%;
     }
 
     .collection-name {
-      width: 60%;
-      color: $textColor;
-      font-size: $font4;
-      font-weight: $bold;
-      text-align: right;
-      word-break: break-all;
-    }
-  }
-
-  .date-selection {
-    .timespan-toggle {
-      font-weight: bold;
+      color: $colorText50;
+      font-size: $fontSize03;
+      font-weight: $fontWeightMedium;
+      margin-bottom: $spacing01;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
+      word-wrap: break-word;
     }
 
-    .timespan-picker {
-      .date-time-input {
-        margin-left: 5px;
-        margin-right: 0;
+    .zoom-to-location {
+      color: $colorText70;
+      padding: 0;
+      display: flex;
+      align-items: center;
 
-        .numeric-input input {
-          max-width: 30px;
-        }
+      .fa-crosshairs {
+        margin-right: $spacing01;
       }
     }
   }
 
   .vector-features-panel {
-    display: flex;
-    flex-direction: column;
-    color: $textColor;
-
-    .maximum-feature-warning {
-      padding: 5px 0;
-    }
-
-    .load-more {
-      padding: 5px 0;
-
-      .n-features-fetched {
-        font-weight: bold;
-        display: inline-block;
-      }
-
-      .load-more-button {
-        margin-left: 10px;
-        padding: 5px 10px;
-        height: unset;
-      }
-    }
-  }
-
-  .zoom-to-location {
-    color: $textColor;
-    background: $primary;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: row;
-    cursor: pointer;
-    margin-top: 5px;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    border: none;
-
-    i {
-      margin-right: 5px;
-    }
-
-    &:hover {
-      border: none;
-      background: $primaryDark;
-    }
+    color: $colorText50;
   }
 
   .visualization-layers-wrapper {
-    margin-top: 20px;
-  }
-
-  .accordion-wrap {
-    border-bottom: 2px solid $secondary;
-
-    .accordion-content {
-      background-color: $secondary;
+    .visualization-layer {
+      padding: $spacing03 $spacing01;
     }
   }
 }

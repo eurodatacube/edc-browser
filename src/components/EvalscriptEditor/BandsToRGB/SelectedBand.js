@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDrop } from 'react-dnd';
 
-export const SelectedBand = ({ band, bandName, index, showName }) => {
+export const SelectedBand = ({ band, bandName, index, showName, labelName }) => {
   const [{ canDrop, isOver }, drop] = useDrop({
     accept: 'band',
     drop: () => ({
@@ -14,24 +14,18 @@ export const SelectedBand = ({ band, bandName, index, showName }) => {
   });
 
   return (
-    <React.Fragment key={bandName}>
-      {showName && <b>{bandName.toUpperCase()}:</b>}
+    <div className="selected-band-wrap" key={bandName}>
+      {showName && <label className="label-primary selected-band-label">{bandName.toUpperCase()}:</label>}
       <div
         className={`col-holder${canDrop ? ' can-drop' : ''}${canDrop && isOver ? ' is-active' : ''}`}
         id={bandName}
         name={bandName}
         ref={drop}
       >
-        <div
-          className="selected-band"
-          style={{
-            backgroundColor: (band && band.color) || '#22232d',
-          }}
-          title={(band && band.description) || 'Drag band'}
-        >
+        <div className="selected-band" title={(band && band.description) || 'Drag band'}>
           {band || bandName.toUpperCase()}
         </div>
       </div>
-    </React.Fragment>
+    </div>
   );
 };

@@ -1,4 +1,4 @@
-@import '../../../../variables.scss';
+@import '../../../../variables.module.scss';
 
 .commercial-data-results {
   display: flex;
@@ -28,6 +28,7 @@
       display: flex;
       flex-flow: row;
       font-size: 14px;
+      background: $colorBg50;
 
       .preview {
         border: 1px solid $textColor;
@@ -99,7 +100,7 @@
           cursor: pointer;
 
           i {
-            color: $primary;
+            color: $colorPrimary50;
           }
         }
       }
@@ -119,10 +120,16 @@
     }
   }
 
+  .commercial-data-results-list {
+    overflow-y: auto;
+    max-height: 400px;
+    background-color: $colorBg70;
+  }
+
   .actions-container {
-    position: sticky;
-    bottom: 0;
-    background: $secondaryLight;
+    margin-top: $spacing04;
+    background: $colorBg50;
+    margin-bottom: $spacing02;
   }
 
   .toggle-display-results {
@@ -136,7 +143,7 @@
 
 .commercial-data-results-modal {
   .header {
-    border-bottom: 1px solid $primary;
+    border-bottom: 1px solid $colorPrimary50;
     margin-bottom: 10px;
     padding: 5px;
     font-weight: 600;
@@ -147,6 +154,6 @@
   .commercial-data-results {
     overflow-y: auto;
     max-height: 400px;
-    background-color: $secondary;
+    background-color: $colorBg70;
   }
 }

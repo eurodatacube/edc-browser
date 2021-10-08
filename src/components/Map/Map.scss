@@ -1,4 +1,4 @@
-@import '../../variables.scss';
+@import '../../variables.module.scss';
 
 #map {
   background-color: #fff;
@@ -19,7 +19,7 @@
   .leaflet-control-container {
     .leaflet-top.leaflet-right {
       .leaflet-control-layers {
-        background: $secondaryDark;
+        background: $colorBg50;
         color: #fff;
         border-radius: 0;
         border: none;
@@ -60,21 +60,21 @@
   .vector-data-tooltip {
     z-index: 400;
     position: absolute;
-    background: $secondaryDark;
+    background: $colorBg50;
     color: $textColor;
     padding: 20px;
     min-width: 300px;
     pointer-events: all;
 
     .single-geometry-data {
-      background: $secondary;
+      background: $colorBg70;
       max-height: 300px;
       overflow: auto;
 
       table,
       th,
       td {
-        border: 1px solid $secondaryDark;
+        border: 1px solid $colorBg50;
         border-collapse: collapse;
       }
 

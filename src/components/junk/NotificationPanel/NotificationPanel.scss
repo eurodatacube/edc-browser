@@ -1,4 +1,4 @@
-@import '../../../variables.scss';
+@import '../../../variables.module.scss';
 
 .notification {
   margin: auto;
@@ -6,10 +6,10 @@
   padding: 10px;
   position: relative;
   text-align: center;
-  color: $error;
+  color: $colorUtilRed;
   font-size: 14px;
 
   a {
-    color: $primary;
+    color: $colorPrimary50;
   }
 }

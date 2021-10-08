@@ -1,37 +1,37 @@
-@import '../../variables';
+@import '../../variables.module.scss';
 
 .algorithm-options {
   .option {
     display: flex;
     flex-direction: column;
-    font-size: $font3;
+    font-size: $fontSize03;
 
     .option-header {
       display: flex;
       flex-direction: row;
       justify-content: space-between;
-      margin-bottom: $spacing2;
+      margin-bottom: $spacing02;
       align-items: center;
 
       .option-name {
         font-weight: 600;
-        font-size: $font3;
+        font-size: $fontSize03;
       }
     }
 
     .algorithm-option-string {
       display: flex;
       flex-direction: column;
-      font-size: $font3;
+      font-size: $fontSize03;
 
       .algorithm-option-string-input {
         color: $textColor;
-        background: $secondaryDark;
+        background: $colorBg50;
         padding: 5px;
       }
 
       .algorithm-option-string-restriction {
-        padding-top: $spacing2;
+        padding-top: $spacing02;
       }
     }
 
@@ -44,7 +44,7 @@
           text-align: center;
           border: none;
           cursor: pointer;
-          font-size: $font3;
+          font-size: $fontSize03;
           font-weight: 600;
           padding: 10px 12px;
           text-decoration: none;
@@ -61,10 +61,10 @@
 
       .algorithm-option-aoi-restriction {
         display: flex;
-        align-items: center;
+        flex-direction: column;
         cursor: pointer;
-        font-size: $font3;
-        padding: 5px 0;
+        font-size: $fontSize03;
+        margin-bottom: $spacing02;
 
         i {
           padding: 0 6px;
@@ -75,7 +75,7 @@
     .algorithm-option-list {
       display: flex;
       flex-flow: row wrap;
-      font-size: $font3;
+      font-size: $fontSize03;
 
       .list-input {
         width: 40%;
@@ -113,5 +113,5 @@
 }
 
 .algorithm-option-list-restricted {
-  font-size: $font3;
+  font-size: $fontSize03;
 }

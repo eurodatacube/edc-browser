@@ -68,14 +68,20 @@ class EvalscriptEditor extends React.Component {
     return allBands.length > 0 ? (
       <div className="advancedPanel">
         <div className="header">
-          <div onClick={onBack} className="back-button button-primary">
+          <button onClick={onBack} className="back-button">
             <i className="fa fa-arrow-left" />
-            Close
-          </div>
+          </button>
         </div>
         <Accordion
           open={this.state.openAccordion === 0}
-          title="Composite"
+          title={
+            <div>
+              Composite
+              {this.state.openAccordion === 0 && (
+                <div className="accordion-subtitle-open">Drag bands onto RGB fields.</div>
+              )}
+            </div>
+          }
           toggleOpen={() => this.toggleAccordion(0)}
         >
           <BandsToRGB bands={allBands} selectedBands={selectedBands} onChange={this.onCompositeChange} />
@@ -83,7 +89,14 @@ class EvalscriptEditor extends React.Component {
 
         <Accordion
           open={this.state.openAccordion === 1}
-          title="Index"
+          title={
+            <div>
+              Index
+              {this.state.openAccordion === 1 && (
+                <div className="accordion-subtitle-open">Drag bands into the index equation</div>
+              )}
+            </div>
+          }
           toggleOpen={() => this.toggleAccordion(1)}
         >
           <IndexBands bands={allBands} onChange={onIndexScriptChange} evalscript={evalscript} />

@@ -42,7 +42,7 @@ function MainPanel(props) {
 
   const collection = getCollectionInfo(collectionsList, selectedCollectionId, selectedType, selectedLayerId);
   const TAB_TITLES = {
-    [PANEL_TAB.ALGORITHMS]: 'On demand data',
+    [PANEL_TAB.ON_DEMAND_DATA_PANEL]: 'On demand data',
     [PANEL_TAB.DATA_PANEL]: 'EDC Data',
   };
 
@@ -94,7 +94,9 @@ function MainPanel(props) {
   const confirmSwitchingTabs = (index) => {
     return window.confirm(
       `With switching to the ${
-        PANEL_TAB.ALGORITHMS === index ? TAB_TITLES[PANEL_TAB.ALGORITHMS] : TAB_TITLES[PANEL_TAB.DATA_PANEL]
+        PANEL_TAB.ON_DEMAND_DATA_PANEL === index
+          ? TAB_TITLES[PANEL_TAB.ON_DEMAND_DATA_PANEL]
+          : TAB_TITLES[PANEL_TAB.DATA_PANEL]
       } tab your area of interest (AOI) will be removed. Do you want to continue?`,
     );
   };
@@ -132,26 +134,34 @@ function MainPanel(props) {
           }}
         >
           <Tab id="edc-data-tab" title={TAB_TITLES[PANEL_TAB.DATA_PANEL]} renderKey={PANEL_TAB.DATA_PANEL}>
-            {showVisualizationPanel && configurations ? (
-              <VisualizationPanel
-                configurations={configurations}
-                collectionName={collection.title}
-                collection={collection}
-                bestLocation={bestLocation}
-                onBack={() => setShowVisualizationPanel(false)}
-              />
-            ) : (
-              <EdcDataPanel
-                collectionsList={collectionsList}
-                showVisualisationPanel={() => setShowVisualizationPanel(true)}
-              />
-            )}
+            <div className="panel-wrapper">
+              {showVisualizationPanel && configurations ? (
+                <VisualizationPanel
+                  configurations={configurations}
+                  collectionName={collection.title}
+                  collection={collection}
+                  bestLocation={bestLocation}
+                  onBack={() => setShowVisualizationPanel(false)}
+                />
+              ) : (
+                <EdcDataPanel
+                  collectionsList={collectionsList}
+                  showVisualisationPanel={() => setShowVisualizationPanel(true)}
+                />
+              )}
+            </div>
           </Tab>
-          <Tab id="algorithms-tab" title={TAB_TITLES[PANEL_TAB.ALGORITHMS]} renderKey={PANEL_TAB.ALGORITHMS}>
-            <AlgorithmsPanel
-              algorithmsList={algorithmsList}
-              fetchingInProgress={algorithmsFetchingInProgress}
-            />
+          <Tab
+            id="algorithms-tab"
+            title={TAB_TITLES[PANEL_TAB.ON_DEMAND_DATA_PANEL]}
+            renderKey={PANEL_TAB.ON_DEMAND_DATA_PANEL}
+          >
+            <div className="panel-wrapper">
+              <AlgorithmsPanel
+                algorithmsList={algorithmsList}
+                fetchingInProgress={algorithmsFetchingInProgress}
+              />
+            </div>
           </Tab>
         </Tabs>
       </div>
