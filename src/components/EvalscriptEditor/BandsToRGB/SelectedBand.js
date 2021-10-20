@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDrop } from 'react-dnd';
 
-export const SelectedBand = ({ band, bandName, index, showName, labelName }) => {
+export const SelectedBand = ({ band, bandName, index, showName, labelName, bandColor }) => {
   const [{ canDrop, isOver }, drop] = useDrop({
     accept: 'band',
     drop: () => ({
@@ -22,7 +22,11 @@ export const SelectedBand = ({ band, bandName, index, showName, labelName }) => 
         name={bandName}
         ref={drop}
       >
-        <div className="selected-band" title={(band && band.description) || 'Drag band'}>
+        <div
+          style={{ border: `2px solid ${bandColor}` }}
+          className="selected-band"
+          title={(band && band.description) || 'Drag band'}
+        >
           {band || bandName.toUpperCase()}
         </div>
       </div>

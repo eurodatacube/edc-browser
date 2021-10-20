@@ -7,6 +7,7 @@ import { GeoJsonLayer } from '@deck.gl/layers';
 import DeckGlOverlayLayer from './plugins/DeckGlOverlayLayer';
 import Tooltip from './Tooltip';
 import store, { visualizationSlice } from '../../store';
+import { MINIMUM_GEOMETRY_SIZE_TO_RENDER_OWN_LAYER } from '../../const';
 
 const GEOMETRY_COLOR = [93, 189, 213, 110];
 const GEOMETRY_BORDER_COLOR = [93, 189, 213, 255];
@@ -16,8 +17,8 @@ const CLICKED_GEOMETRY_COLOUR = [38, 124, 146, 200];
 function VectorDataLayer({ data, highlightedDataGeometry, tooltipHolder }) {
   const [tooltip, setTooltip] = useState(null);
 
-  function onGeometryClick(info) {
-    store.dispatch(visualizationSlice.actions.setHighlightedDataGeometry(info.object.id));
+  function onGeometryClick(info, object) {
+    store.dispatch(visualizationSlice.actions.setHighlightedDataGeometry(object.id));
     const clickedPoint = {
       type: 'Feature',
       geometry: {
@@ -26,10 +27,10 @@ function VectorDataLayer({ data, highlightedDataGeometry, tooltipHolder }) {
       },
     };
     const tooltipInfo = [];
-    if (info.object.geometry.type !== 'Polygon') {
+    if (object.geometry.type !== 'Polygon') {
       tooltipInfo.push({
-        tileId: info.object.tileId,
-        properties: info.object.properties,
+        tileId: object.tileId,
+        properties: object.properties,
       });
     } else {
       const intersected = data.filter((d) => booleanPointInPolygon(clickedPoint, d.geometry));
@@ -52,20 +53,21 @@ function VectorDataLayer({ data, highlightedDataGeometry, tooltipHolder }) {
     store.dispatch(visualizationSlice.actions.resetHighlightedDataGeometry());
   }
 
-  const polygons = useMemo(() => {
+  function constructGeoJsonLayer(id, feature, highlightedDataGeometry, data = null) {
     return new GeoJsonLayer({
-      id: 'data-geometries',
-      data: data,
-      getPolygon: (d) => d.geometry.coordinates,
+      id: id,
+      data: data !== null ? data : feature.geometry,
+      getPolygon: (d) => (data !== null ? d.geometry.coordinates : d),
       getFillColor: (d) => (highlightedDataGeometry === d.id ? CLICKED_GEOMETRY_COLOUR : GEOMETRY_COLOR),
       pickable: true,
       visible: true,
       stroked: true,
       getLineWidth: 1,
       lineWidthUnits: 'pixels',
-      onClick: onGeometryClick,
+      onClick: (info) =>
+        data !== null ? onGeometryClick(info, info.object) : onGeometryClick(info, feature),
       pointType: 'circle',
-      getLineColor: () => GEOMETRY_BORDER_COLOR,
+      getLineColor: GEOMETRY_BORDER_COLOR,
       getPointRadius: 20,
       pointRadiusUnits: 'pixels',
       autoHighlight: true,
@@ -74,13 +76,34 @@ function VectorDataLayer({ data, highlightedDataGeometry, tooltipHolder }) {
         getFillColor: [highlightedDataGeometry],
       },
     });
+  }
+
+  const polygons = useMemo(() => {
+    const smallGeometries = [];
+    const largeGeometries = data.filter((d) => {
+      if (d.geometrySize > MINIMUM_GEOMETRY_SIZE_TO_RENDER_OWN_LAYER) {
+        return true;
+      }
+      smallGeometries.push(d);
+      return false;
+    });
+    const largeGeometriesLayers = largeGeometries.map((g, i) =>
+      constructGeoJsonLayer(`data-geometries ${i}`, g, highlightedDataGeometry),
+    );
+    const smallGeometriesLayer = constructGeoJsonLayer(
+      'data-geometries-small',
+      null,
+      highlightedDataGeometry,
+      smallGeometries,
+    );
+    return [smallGeometriesLayer, ...largeGeometriesLayers];
     // eslint-disable-next-line
   }, [data, highlightedDataGeometry]);
 
   return (
     <>
       {tooltip && <Tooltip holderRef={tooltipHolder} tooltip={tooltip} onClose={onCloseTooltip} />}
-      <DeckGlOverlayLayer layers={[polygons]} />
+      <DeckGlOverlayLayer layers={polygons} />
     </>
   );
 }

@@ -30,14 +30,33 @@
       font-size: 14px;
       background: $colorBg50;
 
-      .preview {
-        border: 1px solid $textColor;
+      .product-button {
+        min-height: $spacing04;
+        background: $colorPrimary50;
+        border: none;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: $fontWeightMedium;
+        color: $colorText50;
+        border-radius: 0 0 $borderRadius $borderRadius;
+        cursor: pointer;
 
+        &:hover {
+          background: $colorPrimary30;
+        }
+      }
+
+      .preview {
         button {
           padding: 5px;
         }
 
         .preview-small {
+          border-radius: $borderRadius   $borderRadius 0  0;
+          border: 1px solid $colorText70;
+
           .image-loader {
             display: flex;
             flex-direction: column;
@@ -59,6 +78,7 @@
               max-width: 100%;
               min-height: 100%;
               max-height: 100%;
+              border-radius: $borderRadius;
             }
 
             .overlay {
@@ -82,10 +102,21 @@
       }
 
       .basic-info {
-        padding: 0 0 0 10px;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
+        margin-left: $spacing03;
+
+        .basic-info-item {
+          display: flex;
+          align-items: center;
+          flex-wrap: wrap;
+
+          .basic-info-title {
+            color: $colorText50;
+          }
+
+          .basic-info-text {
+            color: $colorText70;
+          }
+        }
 
         > * {
           padding: 3px 0;
@@ -98,9 +129,17 @@
 
         .toggle-details {
           cursor: pointer;
+          border: none;
+          background: none;
+          color: $colorText50;
+          font-weight: $fontWeightMedium;
+
+          &:hover {
+            text-decoration: underline;
+          }
 
           i {
-            color: $colorPrimary50;
+            color: $colorText50;
           }
         }
       }
@@ -110,8 +149,16 @@
       .product-property {
         display: flex;
         justify-content: flex-start;
-        padding: 2px;
+        margin-bottom: $spacing02;
         font-size: 14px;
+
+        .product-property-title {
+          color: $colorText50;
+        }
+
+        .product-property-text {
+          color: $colorText70;
+        }
 
         div {
           margin-right: 5px;
@@ -123,7 +170,6 @@
   .commercial-data-results-list {
     overflow-y: auto;
     max-height: 400px;
-    background-color: $colorBg70;
   }
 
   .actions-container {

@@ -64,6 +64,16 @@ export const BandsToRGB = ({ bands, selectedBands, onChange }) => {
     };
   }
 
+  function getOutputBorder(bandName) {
+    const bandNameToColor = {
+      r: colorUtilRed,
+      g: colorUtilGreen,
+      b: colorUtilBlue,
+    };
+
+    return bandNameToColor[bandName];
+  }
+
   return (
     <React.Fragment>
       <div className="colors-container">
@@ -74,7 +84,14 @@ export const BandsToRGB = ({ bands, selectedBands, onChange }) => {
       </div>
       <div className="colors-output rgb-output">
         {['r', 'g', 'b'].map((bandName, i) => (
-          <SelectedBand key={i} band={selectedBands[i]} bandName={bandName} index={i} showName />
+          <SelectedBand
+            bandColor={getOutputBorder(bandName)}
+            key={i}
+            band={selectedBands[i]}
+            bandName={bandName}
+            index={i}
+            showName
+          />
         ))}
       </div>
     </React.Fragment>

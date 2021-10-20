@@ -11,17 +11,31 @@
       display: flex;
       flex-direction: row;
       justify-content: space-between;
+      align-items: center;
 
       i {
-        color: $colorPrimary50;
-        padding: 0 4px;
         cursor: pointer;
+        color: $colorText70;
         font-size: 16px;
 
         &.disabled {
           color: $textColor;
           cursor: not-allowed;
         }
+      }
+    }
+
+    .aoi-button {
+      height: $spacing06;
+      width: $spacing06;
+      border: none;
+      border-radius: $borderRadius;
+      margin: 0 $spacing01;
+      background: $colorBg70;
+      cursor: pointer;
+
+      &:hover {
+        background: $colorBg60;
       }
     }
 

@@ -19,7 +19,7 @@ class Tooltip extends Component {
                 {Object.keys(properties).map((key, j) => (
                   <tr className="data-property" key={j}>
                     <td className="property-name">{key}</td>
-                    <td className="property-value">{properties[key]}</td>
+                    <td className="property-value">{String(properties[key])}</td>
                   </tr>
                 ))}
               </tbody>

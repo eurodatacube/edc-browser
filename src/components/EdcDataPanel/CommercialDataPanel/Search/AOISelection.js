@@ -51,42 +51,43 @@ export const AOISelection = ({ aoiGeometry, aoiDrawingEnabled, mapBounds }) => {
               <sup>2</sup>
             </span>
           ) : (
-            <span>Create AOI</span>
+            <></>
           )}
         </div>
         <div className="aoi-buttons">
           {!aoiGeometry && !aoiDrawingEnabled && (
             <>
-              <i
-                className="fa fa-television"
-                title={`Use current display area`}
-                onClick={() => setCurrentDisplayArea()}
-              />
-
-              <i className="fa fa-upload" title={`Upload data`} onClick={() => setUploadDialog(true)} />
-
-              <i
-                className="far fa-square"
-                title={`Draw rectangular area of interest`}
+              <button onClick={() => setCurrentDisplayArea()} className="aoi-button">
+                <i className="fa fa-television" title={`Use current display area`} />
+              </button>
+              <button onClick={() => setUploadDialog(true)} className="aoi-button">
+                <i className="fa fa-upload" title={`Upload data`} />
+              </button>
+              <button
                 onClick={() => {
                   store.dispatch(aoiSlice.actions.setShape(AOI_SHAPE.rectangle));
                   store.dispatch(aoiSlice.actions.setDrawingEnabled(true));
                 }}
-              />
-
-              <i
-                className="fa fa-pencil"
-                title={`Draw polygonal area of interest`}
+                className="aoi-button"
+              >
+                <i className="far fa-square" title={`Draw rectangular area of interest`} />
+              </button>
+              <button
                 onClick={() => {
                   store.dispatch(aoiSlice.actions.setShape(AOI_SHAPE.polygon));
                   store.dispatch(aoiSlice.actions.setDrawingEnabled(true));
                 }}
-              />
+                className="aoi-button"
+              >
+                <i className="fa fa-pencil" title={`Draw polygonal area of interest`} />
+              </button>
             </>
           )}
 
           {(!!aoiGeometry || aoiDrawingEnabled) && (
-            <i className="fa fa-close" title={`Cancel`} onClick={clearAOI} />
+            <button onClick={clearAOI} className="aoi-button">
+              <i className="fa fa-close" title={`Cancel`} />
+            </button>
           )}
 
           {uploadDialog && <UploadGeoFile onUpload={onFileUpload} onClose={() => setUploadDialog(false)} />}

@@ -9,6 +9,7 @@ import { Button } from '../../../junk/Button/Button';
 import PreviewSmall from './PreviewSmall';
 import PreviewLarge from './PreviewLarge';
 import { filterSearchResults, formatNumberAsRoundedUnit } from '../commercialData.utils';
+import Switch from '../../../shared/Switch/Switch';
 
 import './Results.scss';
 
@@ -76,7 +77,7 @@ const renderProductDetails = (provider, product) => {
         .filter((property) => !['id', 'date', 'geometry'].includes(property))
         .map((property) => (
           <div key={property} className="product-property">
-            <div className="bold">
+            <div className="bold product-propery-title">
               {ProductProperties[provider] &&
               ProductProperties[provider][property] &&
               ProductProperties[provider][property].label
@@ -84,7 +85,7 @@ const renderProductDetails = (provider, product) => {
                 : property}
               :
             </div>
-            <div>
+            <div className="product-propery-text">
               {ProductProperties[provider] &&
               ProductProperties[provider][property] &&
               ProductProperties[provider][property].format
@@ -128,29 +129,37 @@ const Result = ({
             setCachedPreviews={setCachedPreviews}
           ></PreviewSmall>
           {!!quotasEnabled && !isSelected && (
-            <Button fluid onClick={() => addProduct(product.id)} text={`add`} />
+            <div onClick={() => addProduct(product.id)} className="product-button">
+              Add
+            </div>
           )}
           {!!quotasEnabled && isSelected && (
-            <Button fluid onClick={() => removeProduct(product.id)} text={`remove`} />
+            <button className="product-button" onClick={() => removeProduct(product.id)}>
+              Remove
+            </button>
           )}
         </div>
         <div className="basic-info">
-          <div className="bold" title={`Product id`}>
-            <i className="fa fa-info" />
-            {product.id}
+          <div className="basic-info-item">
+            <i className="fa fa-info basic-info-icon" />
+            <div className="basic-info-text">{product.id}</div>
           </div>
-          <div title={`Accuisition date`}>
-            <i className="fa fa-calendar" />
-            {formatDate(product.date)}
+
+          <div className="basic-info-item">
+            <div className="basic-info-title" title={`Accuisition date`}>
+              {' '}
+            </div>
+            <i className="fa fa-calendar basic-info-icon" />
+            <div className="basic-info-text">{formatDate(product.date)}</div>
           </div>
-          <div
+          <button
             className="toggle-details"
             title={toggleDetailsLabel}
             onClick={() => setShowDetails(!showDetails)}
           >
             {toggleDetailsLabel}{' '}
             <i className={`fa ${showDetails ? 'fa-angle-double-up' : 'fa-angle-double-down'}`}></i>
-          </div>
+          </button>
         </div>
       </div>
       {!!showDetails && renderProductDetails(provider, product)}
@@ -185,15 +194,14 @@ export const Results = ({
   return (
     <div className="commercial-data-results">
       <label className="toggle-display-results">
-        <input
-          type="checkbox"
+        <Switch
+          label="Show results on map"
           checked={displaySearchResults}
           value={displaySearchResults}
           onChange={() =>
             store.dispatch(commercialDataSlice.actions.setDisplaySearchResults(!displaySearchResults))
           }
         />
-        Show results on map
       </label>
       <div className="commercial-data-results-list">
         {results.map((product) => (

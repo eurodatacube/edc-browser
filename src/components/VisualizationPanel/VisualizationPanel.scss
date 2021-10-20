@@ -39,10 +39,10 @@
       font-size: $fontSize03;
       font-weight: $fontWeightMedium;
       margin-bottom: $spacing01;
-      white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
       max-width: 100%;
+      white-space: pre-wrap;
       word-wrap: break-word;
     }
 

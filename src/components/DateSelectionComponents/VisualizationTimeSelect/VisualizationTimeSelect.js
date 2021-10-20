@@ -129,6 +129,7 @@ export class VisualizationTimeSelect extends Component {
             timespan={{ fromTime: fromTime, toTime: toTime }}
             applyTimespan={this.updateTimespan}
             onQueryDatesForActiveMonth={onQueryDatesForActiveMonth}
+            autoApply={true}
           />
         )}
         <div className="visualization-calendar-holder" ref={(e) => (this.calendarHolder = e)} />

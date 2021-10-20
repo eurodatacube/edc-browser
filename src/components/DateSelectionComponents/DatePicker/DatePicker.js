@@ -73,7 +73,7 @@ class DatePicker extends Component {
     if (!this.props.onQueryDatesForActiveMonth) return [];
     this.setState({ loading: true, availableDays: [] });
     const { hasCloudCoverFilter } = this.props;
-    let dateArray = await this.props.onQueryDatesForActiveMonth(date);
+    let dateArray = await this.props.onQueryDatesForActiveMonth(moment.utc(date).endOf('month'));
     if (hasCloudCoverFilter) {
       dateArray = dateArray.map((date) => ({
         date: convertDateToUTC(date.fromTime),

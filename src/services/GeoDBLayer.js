@@ -43,6 +43,7 @@ export default class GeoDBLayer {
     return data.map((entry) => {
       const newEntry = {};
       let { geometry, id } = entry;
+      newEntry['geometrySize'] = geometry.length;
       geometry = wkx.Geometry.parse(Buffer.from(geometry, 'hex')).toGeoJSON();
       newEntry['geometry'] = geometry;
       newEntry['id'] = id;
@@ -71,10 +72,12 @@ export default class GeoDBLayer {
   }
 
   hasDataAlreadyBeenFetched(tileCoords, tileId, maxGeoDBFeatures) {
-    return (
-      this.fetchedTiles.some((t) => this.isTileInsideOtherTile(tileCoords, t)) &&
-      (this.fetchedDataOffsets[tileId] === null || this.fetchedDataOffsets[tileId] >= maxGeoDBFeatures)
-    );
+    const parentTile = this.fetchedTiles.find((t) => this.isTileInsideOtherTile(tileCoords, t));
+    if (parentTile) {
+      const { x, y, z } = parentTile;
+      tileId = `${x}_${y}_${z}`;
+    }
+    return this.fetchedDataOffsets[tileId] === null || this.fetchedDataOffsets[tileId] >= maxGeoDBFeatures;
   }
 
   anyTileHasMore() {
@@ -108,7 +111,7 @@ export default class GeoDBLayer {
     const [minx, miny, maxx, maxy] = convertBBox(bbox, srid);
 
     let offset = this.fetchedDataOffsets[tileId] || 0;
-    let limit = Math.min(maxGeoDBFeatures - offset, 100);
+    let limit = Math.min(maxGeoDBFeatures - offset, 1);
     let data = [];
     let largestChunkSize = 0;
 
@@ -187,6 +190,7 @@ export default class GeoDBLayer {
       id: e.id,
       geometry: convertGeoJSONCrs(e.geometry, srid, 4326),
       properties: e.properties,
+      geometrySize: e.geometrySize,
     }));
 
     data = data.filter((d) => {
@@ -196,9 +200,10 @@ export default class GeoDBLayer {
       this.fetchedDataIds.push(d.id);
       return true;
     });
-
-    store.dispatch(paginationSlice.actions.addFetched(data.length));
-    store.dispatch(visualizationSlice.actions.addDataGeometries(data));
+    if (data.length) {
+      store.dispatch(paginationSlice.actions.addFetched(data.length));
+      store.dispatch(visualizationSlice.actions.addDataGeometries(data));
+    }
     this.fetchedTiles.push(tileCoords);
     return null;
   }

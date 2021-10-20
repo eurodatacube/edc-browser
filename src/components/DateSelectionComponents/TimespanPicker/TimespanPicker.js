@@ -85,14 +85,14 @@ export class TimespanPicker extends Component {
           />
 
           <div className="timespan-calendar-holder" ref={(e) => (this.calendarHolder2 = e)} />
-          {!autoApply && (
-            <div className="apply-button">
-              {/* <button className="btn button-primary" onClick={this.apply}>
-              Apply
-            </button> */}
-            </div>
-          )}
         </div>
+        {!autoApply && (
+          <div className="apply-button">
+            <button className="btn button-primary" onClick={this.apply}>
+              Apply
+            </button>
+          </div>
+        )}
       </div>
     );
   }
