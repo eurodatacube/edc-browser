@@ -107,7 +107,7 @@ const MOCKED_ZARR_COLLECTIONS = [
       x: { type: 'spatial', axis: 'x', extent: [18, 20] },
       y: { type: 'spatial', axis: 'y', extent: [58, 60] },
       t: { type: 'temporal', extent: ['2000-01-01T00:00:00Z', '2021-12-31T00:00:00Z'] },
-      band: { type: 'bands', values: ['CHL'] },
+      bands: { type: 'bands', values: ['CHL'] },
     },
   },
   {
@@ -154,7 +154,7 @@ const MOCKED_ZARR_COLLECTIONS = [
       x: { type: 'spatial', axis: 'x', extent: [-8, 0] },
       y: { type: 'spatial', axis: 'y', extent: [50, 58] },
       t: { type: 'temporal', extent: ['2000-01-01T00:00:00Z', '2021-12-31T00:00:00Z'] },
-      band: { type: 'bands', values: ['CHL'] },
+      bands: { type: 'bands', values: ['CHL'] },
     },
   },
   {
@@ -201,7 +201,7 @@ const MOCKED_ZARR_COLLECTIONS = [
       x: { type: 'spatial', axis: 'x', extent: [5, 20] },
       y: { type: 'spatial', axis: 'y', extent: [30, 45] },
       t: { type: 'temporal', extent: ['2000-01-01T00:00:00Z', '2021-12-31T00:00:00Z'] },
-      band: { type: 'bands', values: ['CHL'] },
+      bands: { type: 'bands', values: ['CHL'] },
     },
   },
   {
@@ -248,7 +248,7 @@ const MOCKED_ZARR_COLLECTIONS = [
       x: { type: 'spatial', axis: 'x', extent: [27, 35] },
       y: { type: 'spatial', axis: 'y', extent: [40, 48] },
       t: { type: 'temporal', extent: ['2000-01-01T00:00:00Z', '2021-12-31T00:00:00Z'] },
-      band: { type: 'bands', values: ['CHL'] },
+      bands: { type: 'bands', values: ['CHL'] },
     },
   },
   {
@@ -295,7 +295,7 @@ const MOCKED_ZARR_COLLECTIONS = [
       x: { type: 'spatial', axis: 'x', extent: [0, 10] },
       y: { type: 'spatial', axis: 'y', extent: [40, 45] },
       t: { type: 'temporal', extent: ['2000-01-01T00:00:00Z', '2021-12-31T00:00:00Z'] },
-      band: { type: 'bands', values: ['KD490'] },
+      bands: { type: 'bands', values: ['KD490'] },
     },
   },
 ];
@@ -361,7 +361,7 @@ export default class EDCHandler extends AbstractServiceHandler {
           group: this._getGroupName(collection.title, collection.keywords),
           ownedByUser: true,
           configurations: collection.links.filter((l) => l.rel === 'processing-expression'),
-          bands: collection['cube:dimensions'].band.values,
+          bands: collection['cube:dimensions'].bands.values,
           temporalExtent: collection.extent.temporal,
           serviceSpecificInfo: {
             type: isCustom(collection.datasource_type) ? DATASET_BYOC.id : collection.datasource_type,
