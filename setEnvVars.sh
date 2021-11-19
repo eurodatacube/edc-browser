@@ -1,11 +1,14 @@
 #!/bin/bash
 
 # Recreate config file
-rm -rf ./runtimeEnvVars.js
-touch ./runtimeEnvVars.js
+rm -rf $runtimeEnvVarsFilePath
+touch $runtimeEnvVarsFilePath
 
 # Add assignment
-echo "window._env_ = {" >>./runtimeEnvVars.js
+echo "window._env_ = {" >> $runtimeEnvVarsFilePath
+
+# save an array of needed environment variables from envVarNames.json to variable
+envVarNames=( $(jq -r '.[].runTimeName' $envVarNamesFilePath) )
 
 # Read each line from printenv (https://man7.org/linux/man-pages/man1/printenv.1.html)
 # Each line represents key=value pairs
@@ -23,8 +26,12 @@ printenv | while read -r line || [[ -n "$line" ]]; do
   # if value is already wrapped in quotation marks (""), don't wrap it again
   [[ $value = \"* ]] && cleanValue=$value || cleanValue=\"$value\"
 
-  # Append configuration property to JS file
-  echo "  $varname: $cleanValue," >>./runtimeEnvVars.js
+  # if variable name is in the array of needed variables, add it to JS file
+  if [[ " ${envVarNames[*]} " =~ " ${varname} " ]]; then
+    # Append configuration property to JS file
+    echo "  $varname: $cleanValue," >> $runtimeEnvVarsFilePath
+  fi
+  
 done
 
-echo "}" >>./runtimeEnvVars.js
+echo "}" >> $runtimeEnvVarsFilePath

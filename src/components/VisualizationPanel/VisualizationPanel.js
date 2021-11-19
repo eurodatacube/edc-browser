@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
+import axios from 'axios';
 
 import store, { visualizationSlice, mainMapSlice, paginationSlice } from '../../store';
 import { VisualizationTimeSelect } from '../DateSelectionComponents/VisualizationTimeSelect/VisualizationTimeSelect';
@@ -11,7 +12,7 @@ import {
   generateIndexEvalscript,
 } from '../../utils/evalscript';
 import VisualizationLayer from './VisualizationLayer';
-import EvalscriptEditor from '../EvalscriptEditor/EvalscriptEditor';
+import EvalscriptEditor, { CUSTOM_VISUALIZATION_URL_ROUTES } from '../EvalscriptEditor/EvalscriptEditor';
 import { MAX_GEODB_FEATURES, COLLECTION_TYPE } from '../../const';
 
 import './VisualizationPanel.scss';
@@ -64,14 +65,13 @@ function VisualizationPanel(props) {
     return [...bands, ...bands, ...bands].slice(0, 3);
   }
 
-  function selectCustomVisualization() {
+  function selectCustomVisualization(evalscript) {
     const selectedBands = getDefaultSelectedBands();
-    const evalscript = generateReflectanceCompositeEvalscript(selectedBands);
     store.dispatch(
       visualizationSlice.actions.setVisualizationParams({
         layerId: null,
         customVisualizationSelected: true,
-        evalscript: evalscript,
+        evalscript: evalscript ? evalscript : generateReflectanceCompositeEvalscript(selectedBands),
       }),
     );
     setShowEvalscriptEditor(true);
@@ -158,15 +158,31 @@ function VisualizationPanel(props) {
     );
   }
 
+  async function handleCustomVisualizationClick(evalscriptUrl) {
+    const CODE_EDITOR_TAB = CUSTOM_VISUALIZATION_URL_ROUTES[2];
+    window.location.hash = CODE_EDITOR_TAB;
+    try {
+      const response = await axios.get(evalscriptUrl);
+      selectCustomVisualization(response.data);
+    } catch {
+      selectCustomVisualization();
+    }
+  }
+
   const serviceHandler = getServiceHandlerForCollectionType(collection.type);
   const supportsDateSelection = serviceHandler.supportsDateSelection(collection.type);
   const supportsCustomScript =
     serviceHandler.supportsCustomScript(collection.type) && collection.bands.length > 0;
   const isGeoDB = collection.type === COLLECTION_TYPE.GEO_DB;
 
-  const parsedBands = evalscript && parseBandsFromEvalscript(evalscript);
-  const selectedBands = parsedBands || getDefaultSelectedBands();
-
+  let selectedBands;
+  const parsedBands = parseBandsFromEvalscript(evalscript);
+  if (Array.isArray(parsedBands)) {
+    const areValidBands = parsedBands.every((band) => collection.bands.includes(band));
+    selectedBands = areValidBands ? parsedBands : getDefaultSelectedBands();
+  } else {
+    selectedBands = getDefaultSelectedBands();
+  }
   return (
     <div className="visualization-panel">
       <div className="panel-section">
@@ -238,6 +254,7 @@ function VisualizationPanel(props) {
           <div className="panel-section">
             {configurations.map((configuration, i) => (
               <VisualizationLayer
+                onCustomVisualizationClick={handleCustomVisualizationClick}
                 key={i}
                 title={configuration.layer_name}
                 evalscript={configuration.evalscript}
@@ -248,7 +265,10 @@ function VisualizationPanel(props) {
             ))}
           </div>
           {supportsCustomScript && (
-            <button className="button-secondary" onClick={selectCustomVisualization}>
+            <button
+              className="button-secondary"
+              onClick={(event, evalscript) => selectCustomVisualization(evalscript)}
+            >
               Create custom visualization
             </button>
           )}

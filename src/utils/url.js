@@ -2,6 +2,7 @@ import moment from 'moment';
 
 import store, { mainMapSlice, visualizationSlice, tabsSlice, algorithmsSlice } from '../store';
 import { DEFAULT_LAT_LNG, PANEL_TAB } from '../const';
+import { b64EncodeUnicode, b64DecodeUnicode } from './base64MDN';
 
 export function updatePath(props) {
   let {
@@ -38,7 +39,7 @@ export function updatePath(props) {
     params.customVisualizationSelected = customVisualizationSelected;
   }
   if (evalscript) {
-    params.evalscript = evalscript;
+    params.evalscript = b64EncodeUnicode(evalscript);
   }
   if (evalscriptUrl) {
     params.evalscriptUrl = evalscriptUrl;
@@ -102,11 +103,23 @@ export function setStore(params) {
     parsedLat = DEFAULT_LAT_LNG.lat;
   }
   store.dispatch(mainMapSlice.actions.setPosition({ zoom: parsedZoom, lat: parsedLat, lng: parsedLng }));
+
+  // backward compatibility: evalscript in URL was not always base64 encoded
+  let decodedEvalscript = undefined;
+  if (evalscript) {
+    try {
+      atob(evalscript); // b64DecodeUnicode doesn't fail if evalscript is already raw
+      decodedEvalscript = b64DecodeUnicode(evalscript);
+    } catch (e) {
+      decodedEvalscript = evalscript;
+    }
+  }
+
   const newVisualizationParams = {
     collectionId: collectionId,
     layerId: layerId,
     customVisualizationSelected: customVisualizationSelected,
-    evalscript: evalscript,
+    evalscript: decodedEvalscript,
     evalscriptUrl: evalscriptUrl,
     type: type,
   };

@@ -8,14 +8,17 @@ import DeckGlOverlayLayer from './plugins/DeckGlOverlayLayer';
 import Tooltip from './Tooltip';
 import store, { visualizationSlice } from '../../store';
 import { MINIMUM_GEOMETRY_SIZE_TO_RENDER_OWN_LAYER } from '../../const';
+import { useSelector } from 'react-redux';
 
-const GEOMETRY_COLOR = [93, 189, 213, 110];
-const GEOMETRY_BORDER_COLOR = [93, 189, 213, 255];
-const HIGHLIGHTED_GEOMETRY_COLOUR = [45, 147, 173, 130];
-const CLICKED_GEOMETRY_COLOUR = [38, 124, 146, 200];
+const GEOMETRY_COLOR = [239, 111, 108, 110];
+const GEOMETRY_BORDER_COLOR = [233, 56, 53, 255];
+const HIGHLIGHTED_GEOMETRY_COLOUR = [235, 74, 71, 130];
+const CLICKED_GEOMETRY_COLOUR = [220, 28, 24, 130];
 
 function VectorDataLayer({ data, highlightedDataGeometry, tooltipHolder }) {
   const [tooltip, setTooltip] = useState(null);
+
+  const { zoom } = useSelector(({ mainMap }) => mainMap);
 
   function onGeometryClick(info, object) {
     store.dispatch(visualizationSlice.actions.setHighlightedDataGeometry(object.id));
@@ -53,6 +56,22 @@ function VectorDataLayer({ data, highlightedDataGeometry, tooltipHolder }) {
     store.dispatch(visualizationSlice.actions.resetHighlightedDataGeometry());
   }
 
+  function getPointRadius() {
+    if (zoom >= 1 && zoom <= 6) {
+      return 20;
+    }
+
+    if (zoom > 6 && zoom <= 8) {
+      return 13;
+    }
+
+    if (zoom > 8 && zoom <= 12) {
+      return 10;
+    }
+
+    return 6;
+  }
+
   function constructGeoJsonLayer(id, feature, highlightedDataGeometry, data = null) {
     return new GeoJsonLayer({
       id: id,
@@ -68,7 +87,7 @@ function VectorDataLayer({ data, highlightedDataGeometry, tooltipHolder }) {
         data !== null ? onGeometryClick(info, info.object) : onGeometryClick(info, feature),
       pointType: 'circle',
       getLineColor: GEOMETRY_BORDER_COLOR,
-      getPointRadius: 20,
+      getPointRadius: getPointRadius(),
       pointRadiusUnits: 'pixels',
       autoHighlight: true,
       highlightColor: HIGHLIGHTED_GEOMETRY_COLOUR,
@@ -80,6 +99,7 @@ function VectorDataLayer({ data, highlightedDataGeometry, tooltipHolder }) {
 
   const polygons = useMemo(() => {
     const smallGeometries = [];
+
     const largeGeometries = data.filter((d) => {
       if (d.geometrySize > MINIMUM_GEOMETRY_SIZE_TO_RENDER_OWN_LAYER) {
         return true;
@@ -98,7 +118,7 @@ function VectorDataLayer({ data, highlightedDataGeometry, tooltipHolder }) {
     );
     return [smallGeometriesLayer, ...largeGeometriesLayers];
     // eslint-disable-next-line
-  }, [data, highlightedDataGeometry]);
+  }, [data, highlightedDataGeometry, zoom]);
 
   return (
     <>
