@@ -48,7 +48,7 @@ export const AOI_SHAPE = {
 
 export const MAX_GEODB_FEATURES = 20000;
 
-export const EDC_PUBLIC_GROUPS = ['Sentinel', 'Landsat', 'ICEYE', 'DEM', 'ALOS', 'Copernicus service'];
+export const EDC_PUBLIC_GROUPS = ['Sentinel', 'Landsat', 'ICEYE', 'DEM', 'ALOS', 'Copernicus services'];
 
 export const DEFAULT_EDC_PUBLIC_GROUP = EDC_PUBLIC_GROUPS[0];
 

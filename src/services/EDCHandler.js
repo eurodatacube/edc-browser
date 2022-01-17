@@ -71,7 +71,7 @@ const MOCKED_ZARR_COLLECTIONS = [
     datasource_type: 'zarr-1e715627-1ad0-4c42-8525-28b98c5c334b',
     title: 'OCEANCOLOUR_BAL_CHL_L3_NRT_OBSERVATIONS_009_049',
     description: 'Some description',
-    keywords: ['open data', 'sentinel hub', 'raster', 'race challenges', 'Copernicus service'],
+    keywords: ['open data', 'sentinel hub', 'raster', 'race challenges', 'Copernicus services'],
     license: '',
     providers: [
       {
@@ -118,7 +118,7 @@ const MOCKED_ZARR_COLLECTIONS = [
     datasource_type: 'zarr-f10c203b-40ac-4c3f-b16e-61d0679c6345',
     title: 'OCEANCOLOUR_ATL_CHL_L4_NRT_OBSERVATIONS_009_037',
     description: 'Some description',
-    keywords: ['open data', 'sentinel hub', 'raster', 'race challenges', 'Copernicus service'],
+    keywords: ['open data', 'sentinel hub', 'raster', 'race challenges', 'Copernicus services'],
     license: '',
     providers: [
       {
@@ -165,7 +165,7 @@ const MOCKED_ZARR_COLLECTIONS = [
     datasource_type: 'zarr-b0b066fa-2e7b-46fa-a409-9044765da723',
     title: 'OCEANCOLOUR_MED_CHL_L4_NRT_OBSERVATIONS_009_041',
     description: 'Some description',
-    keywords: ['open data', 'sentinel hub', 'raster', 'race challenges', 'Copernicus service'],
+    keywords: ['open data', 'sentinel hub', 'raster', 'race challenges', 'Copernicus services'],
     license: '',
     providers: [
       {
@@ -212,7 +212,7 @@ const MOCKED_ZARR_COLLECTIONS = [
     datasource_type: 'zarr-ff3bb75c-df26-4616-9a89-1f1b33f80d77',
     title: 'OCEANCOLOUR_BS_CHL_L4_NRT_OBSERVATIONS_009_045',
     description: 'Some description',
-    keywords: ['open data', 'sentinel hub', 'raster', 'race challenges', 'Copernicus service'],
+    keywords: ['open data', 'sentinel hub', 'raster', 'race challenges', 'Copernicus services'],
     license: '',
     providers: [
       {
@@ -259,7 +259,7 @@ const MOCKED_ZARR_COLLECTIONS = [
     datasource_type: 'zarr-9bea3f4b-cc81-49cf-bb53-fa3cb7204745',
     title: 'OCEANCOLOUR_MED_OPTICS_L3_NRT_OBSERVATIONS_009_038',
     description: 'Some description',
-    keywords: ['open data', 'sentinel hub', 'raster', 'race challenges', 'Copernicus service'],
+    keywords: ['open data', 'sentinel hub', 'raster', 'race challenges', 'Copernicus services'],
     license: '',
     providers: [
       {
@@ -434,7 +434,7 @@ export default class EDCHandler extends AbstractServiceHandler {
 
   async getAvailableDates(collection, bounds, fromTime, toTime) {
     console.warn('getAvailableDates disabled for Copernicus services.');
-    if (collection.group === 'Copernicus service') {
+    if (collection.group === 'Copernicus services') {
       // Just temporary!
       return [];
     }

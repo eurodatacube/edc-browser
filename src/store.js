@@ -61,6 +61,7 @@ export const tabsSlice = createSlice({
     selectedEdcDataTabIndex: 0,
     selectedUserDataTabIndex: 0,
     selectedGroup: DEFAULT_EDC_PUBLIC_GROUP,
+    selectedSubcategoryIndex: 0,
   },
   reducers: {
     setMainTabIndex: (state, action) => {
@@ -74,6 +75,9 @@ export const tabsSlice = createSlice({
     },
     setSelectedGroup: (state, action) => {
       state.selectedGroup = action.payload;
+    },
+    setSubcategoryIndex: (state, action) => {
+      state.selectedSubcategoryIndex = action.payload;
     },
   },
 });

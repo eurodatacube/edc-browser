@@ -8,6 +8,8 @@ export const PublicAndUserDataPanel = ({
   handleCollectionClick,
   selectedGroup,
   setSelectedGroup,
+  setSubcategory,
+  subcategoryIndex,
 }) => {
   const toggleAccordion = (index) => {
     if (index !== selectedGroup) {
@@ -17,9 +19,58 @@ export const PublicAndUserDataPanel = ({
     }
   };
 
+  function onSubcategoryClick(index) {
+    if (index === subcategoryIndex) {
+      setSubcategory(-1);
+    } else {
+      setSubcategory(index);
+    }
+  }
+
   return (
     <div>
       {Object.keys(groups).map((groupKey) => {
+        if (groupKey === 'Copernicus services') {
+          return (
+            <Accordion
+              open={selectedGroup === groupKey}
+              title={groupKey}
+              key={groupKey}
+              toggleOpen={() => toggleAccordion(groupKey)}
+            >
+              <div className="selection-items">
+                <div className="accordion-subcategory">
+                  {Object.keys(groups[groupKey]).map((key, index) => {
+                    return (
+                      <Accordion
+                        toggleOpen={() => onSubcategoryClick(index)}
+                        open={subcategoryIndex === index}
+                        title={key}
+                      >
+                        <div className="selection-items">
+                          {groups[groupKey][key].map((item) => {
+                            return (
+                              <div
+                                key={item.uniqueId}
+                                onClick={(evt) => {
+                                  evt.stopPropagation();
+                                  handleCollectionClick(item);
+                                }}
+                                className="selection-item"
+                              >
+                                {item.title}
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </Accordion>
+                    );
+                  })}
+                </div>
+              </div>
+            </Accordion>
+          );
+        }
         return (
           <Accordion
             open={selectedGroup === groupKey}

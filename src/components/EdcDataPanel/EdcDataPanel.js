@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import moment from 'moment';
 
 import { Tabs, Tab } from '../Tabs/Tabs';
@@ -8,7 +8,6 @@ import CommercialData from './CommercialDataPanel/CommercialData';
 import store, { visualizationSlice, tabsSlice } from '../../store';
 import { groupBy } from './EdcDataPanel.utils';
 import { COLLECTION_TYPE, EDC_DATA_TAB, USER_DATA_TAB } from '../../const';
-
 import './EdcDataPanel.scss';
 
 function EdcDataPanel({
@@ -18,8 +17,8 @@ function EdcDataPanel({
   selectedGroup,
   showVisualisationPanel,
 }) {
+  const { selectedSubcategoryIndex } = useSelector((store) => store.tabs);
   const publicCollections = groupBy(collectionsList.public, 'group');
-
   const filteredUserCollections = useCallback(() => {
     if (selectedUserDataTabIndex === USER_DATA_TAB.SHARED) {
       return groupBy(
@@ -68,7 +67,6 @@ function EdcDataPanel({
 
   const omitUserCollections =
     collectionsList.user.length === 0 || process.env.REACT_APP_PUBLIC_DEPLOY === 'true';
-
   return (
     <div className="edc-data-panel">
       <Tabs
@@ -77,6 +75,8 @@ function EdcDataPanel({
       >
         <Tab title={`Public`} renderKey={EDC_DATA_TAB.PUBLIC}>
           <PublicAndUserDataPanel
+            subcategoryIndex={selectedSubcategoryIndex}
+            setSubcategory={(index) => store.dispatch(tabsSlice.actions.setSubcategoryIndex(index))}
             groups={publicCollections}
             handleCollectionClick={handleCollectionClick}
             selectedGroup={selectedGroup}
