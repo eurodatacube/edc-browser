@@ -7,7 +7,6 @@ const COPERNICUS_SUBGROUPS = {
 
 const COPERNICUS_DATASETS = {
   '2mt_2020_monthly_average_from_cds': COPERNICUS_SUBGROUPS.CAMS,
-  cams_glc_2017: COPERNICUS_SUBGROUPS.CAMS,
   'corine-land-cover': COPERNICUS_SUBGROUPS.CLMS,
   'corine-land-cover-accounting-layers': COPERNICUS_SUBGROUPS.CLMS,
   'global-land-cover': COPERNICUS_SUBGROUPS.CLMS,
