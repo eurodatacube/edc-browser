@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import DatePicker from '../../../DateSelectionComponents/DatePicker/DatePicker';
+const DateInput = ({ value, label, onChangeHandler, min, max, name }) => {
+  const calendarHolderRef = useRef();
 
-const DateInput = ({ name, value, label, onChangeHandler, min, max, calendarContainerRef }) => {
   return (
     <>
       <div className="row">
@@ -9,15 +10,17 @@ const DateInput = ({ name, value, label, onChangeHandler, min, max, calendarCont
         <DatePicker
           id={`${name}-calendar-holder`}
           selectedDay={value}
-          calendarContainer={
-            calendarContainerRef && calendarContainerRef.current ? calendarContainerRef.current : null
-          }
+          calendarContainer={calendarHolderRef}
           setSelectedDay={(selectedDate) => onChangeHandler(name, selectedDate)}
           minDate={min}
           maxDate={max}
         />
       </div>
-      <div id={`${name}-calendar-holder`} className={`${name}-calendar-holder`} ref={calendarContainerRef} />
+      <div
+        id={`${name}-calendar-holder`}
+        className={`${name}-calendar-holder`}
+        ref={(el) => (calendarHolderRef.current = el)}
+      />
     </>
   );
 };

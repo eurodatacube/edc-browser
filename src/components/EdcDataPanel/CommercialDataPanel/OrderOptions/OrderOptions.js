@@ -1,15 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import geo_area from '@mapbox/geojson-area';
-import Toggle from 'react-toggle';
-import { PlanetProductBundle, TPDICollections } from '@sentinel-hub/sentinelhub-js';
+import { TPDICollections } from '@sentinel-hub/sentinelhub-js';
 
 import { NotificationPanel } from '../../../junk/NotificationPanel/NotificationPanel';
 import { Button } from '../../../junk/Button/Button';
 import { CollectionSelection } from './CollectionSelection';
 import { OrderInputTooltip } from './OrderInputTooltip';
+import { renderProviderSpecificOrderParams } from './renderProviderSpecificOrderParams';
 
-import 'react-toggle/style.css';
 import './OrderOptions.scss';
 
 export const OrderType = {
@@ -187,43 +186,13 @@ const OrderOptions = ({
           <OrderInputTooltip inputId="limit" />
         </div>
       </div>
-      {searchParams && searchParams.dataProvider === TPDICollections.PLANET_SCOPE && (
-        <>
-          <div className="row">
-            <label title={`Harmonize data`}>{`Harmonize data`}</label>
-            <div>
-              <Toggle
-                defaultChecked={orderOptions.harmonizeData}
-                disabled={
-                  !!actionInProgress ||
-                  searchParams.productBundle === PlanetProductBundle.ANALYTIC_SR_UDM2 ||
-                  searchParams.productBundle === PlanetProductBundle.ANALYTIC_SR
-                }
-                icons={false}
-                onChange={() =>
-                  setOrderOptions({ ...orderOptions, harmonizeData: !orderOptions.harmonizeData })
-                }
-              />
-              <OrderInputTooltip inputId="harmonizeData" />
-            </div>
-          </div>
+      {renderProviderSpecificOrderParams(searchParams.dataProvider, {
+        actionInProgress,
+        searchParams,
+        orderOptions,
+        setOrderOptions,
+      })}
 
-          <div className="row">
-            <label title="Planet API Key">{`Planet API Key`}</label>
-            <div>
-              <input
-                className="input-primary compact"
-                type="text"
-                disabled={!!actionInProgress}
-                defaultValue={orderOptions.planetApiKey}
-                onChange={(e) => setOrderOptions({ ...orderOptions, planetApiKey: e.target.value })}
-                placeholder="Your Planet API key"
-              ></input>
-              <OrderInputTooltip inputId="planetApiKey" />
-            </div>
-          </div>
-        </>
-      )}
       <div className="order-actions">
         <Button
           fluid

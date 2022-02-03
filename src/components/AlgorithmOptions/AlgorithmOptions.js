@@ -19,6 +19,7 @@ function AlgorithmOptions({ options, algorithm, defaultValues }) {
 
   function checkIfAllParamsValid(selectedOptions, allOptions) {
     const selectedOptionsIds = Object.keys(selectedOptions);
+
     return allOptions.every(
       ({ id, optional }) =>
         (optional && !selectedOptionsIds.includes(id)) || // Optional, and no value is set.

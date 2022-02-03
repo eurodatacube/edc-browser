@@ -340,4 +340,9 @@ class DatePicker extends Component {
   }
 }
 
+DatePicker.defaultProps = {
+  minDate: moment.utc(new Date('1970-01-01')),
+  maxDate: moment.utc(new Date()),
+};
+
 export default DatePicker;

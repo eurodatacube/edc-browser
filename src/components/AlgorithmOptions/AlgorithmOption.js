@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 
 import BasicInput from './BasicInput';
 import DateRangeInput from './DateRangeInput';
@@ -6,7 +7,10 @@ import ListInput from './ListInput';
 import ListInputRestricted from './ListInputRestricted';
 import AOIAlgorithmOption from './AOIAlgorithmOption';
 import InfoTooltip from '../InfoTooltip/InfoTooltip';
+import DateInput from '../EdcDataPanel/CommercialDataPanel/Search/DateInput';
 
+import { ALGORITHM_TYPES } from '../../const';
+import { momentToISODate } from '../../utils';
 import './AlgorithmOption.scss';
 
 function AlgorithmOption(props) {
@@ -38,7 +42,7 @@ function AlgorithmOption(props) {
   };
 
   function renderInput(type) {
-    if (type === 'bbox') {
+    if (type === ALGORITHM_TYPES.bbox) {
       return (
         <AOIAlgorithmOption
           id={id}
@@ -52,7 +56,7 @@ function AlgorithmOption(props) {
           renderError={renderError}
         />
       );
-    } else if (type === 'daterange') {
+    } else if (type === ALGORITHM_TYPES.daterange) {
       return (
         <DateRangeInput
           restriction={restriction}
@@ -64,7 +68,17 @@ function AlgorithmOption(props) {
           renderError={renderError}
         />
       );
-    } else if (type === 'stringlist') {
+    } else if (type === ALGORITHM_TYPES.date) {
+      return (
+        <div className="date-picker-single-date">
+          <DateInput
+            value={moment.utc(value)}
+            onChangeHandler={(name, value) => setValue(momentToISODate(value), true)}
+            name="algorithm"
+          />
+        </div>
+      );
+    } else if (type === ALGORITHM_TYPES.stringlist) {
       if (restriction && restriction.value.length > 0) {
         return (
           <ListInputRestricted

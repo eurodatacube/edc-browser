@@ -46,6 +46,7 @@ export const PublicAndUserDataPanel = ({
                         toggleOpen={() => onSubcategoryClick(index)}
                         open={subcategoryIndex === index}
                         title={key}
+                        key={key}
                       >
                         <div className="selection-items">
                           {groups[groupKey][key].map((item) => {

@@ -6,8 +6,10 @@ export default function BasicInput(props) {
   const INPUT_TIMEOUT_DELAY = 1000;
 
   function setPotentialTimeoutAndValue(parsedVal) {
-    if (!checkIfMeetsRestriction(parsedVal, restriction)) {
+    if (inputTimeoutId) {
       clearTimeout(inputTimeoutId);
+    }
+    if (!checkIfMeetsRestriction(parsedVal, restriction)) {
       const restrictedVal = parsedVal < restriction.value[0] ? restriction.value[0] : restriction.value[1];
       const timeoutId = setTimeout(() => {
         setValue(restrictedVal, true, isEmpty(restrictedVal));

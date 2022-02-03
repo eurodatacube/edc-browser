@@ -24,7 +24,6 @@ export default function DateRangeInput(props) {
   const [fromTime, toTime] = value.split('/');
   const fromMoment = moment.utc(fromTime);
   const toMoment = moment.utc(toTime);
-
   return (
     <div className="algorithm-option-daterange">
       <div className="select-time-range">

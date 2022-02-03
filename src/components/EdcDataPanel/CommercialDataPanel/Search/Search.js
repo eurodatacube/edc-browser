@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 
 import { TPDICollections } from '@sentinel-hub/sentinelhub-js';
@@ -9,7 +9,7 @@ import { AOISelection } from './AOISelection';
 import DateInput from './DateInput';
 import { SelectInput } from './SelectInput';
 
-import { providerSpecificParameters, minDateRange, maxDateRange } from './config';
+import { providerSpecificSearchParameters, minDateRange, maxDateRange } from './config';
 
 import './Search.scss';
 
@@ -30,11 +30,8 @@ const Search = ({
   aoiDrawingEnabled,
   mapBounds,
 }) => {
-  const fromTimeRef = useRef(null);
-  const toTimeRef = useRef(null);
-
   const renderDataProviderParameters = (dataProvider, params, onChangeHandler) => {
-    let providerParameters = providerSpecificParameters[dataProvider];
+    let providerParameters = providerSpecificSearchParameters[dataProvider];
     if (!!providerParameters && !params.advancedOptions) {
       providerParameters = providerParameters.filter(
         (input) => input.advanced === undefined || !input.advanced,
@@ -69,7 +66,6 @@ const Search = ({
         onChangeHandler={handleSearchParamChange}
         min={minDateRange}
         max={searchParams.toTime}
-        calendarContainerRef={fromTimeRef}
       />
 
       <DateInput
@@ -79,7 +75,6 @@ const Search = ({
         onChangeHandler={handleSearchParamChange}
         min={searchParams.fromTime}
         max={maxDateRange}
-        calendarContainerRef={toTimeRef}
       />
 
       <SelectInput

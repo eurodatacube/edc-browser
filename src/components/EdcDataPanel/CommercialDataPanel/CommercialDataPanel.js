@@ -18,7 +18,7 @@ import { Results } from './Results/Results';
 import Orders from './Orders/Orders';
 import OrderOptions, { OrderType } from './OrderOptions/OrderOptions';
 import Search from './Search/Search';
-import { providerSpecificParameters } from './Search/config';
+import { providerSpecificSearchParameters } from './Search/config';
 import { ConfirmationDialog } from './Orders/ConfirmationDialog';
 import { calculateAOICoverage, extractErrorMessage } from './commercialData.utils';
 import store, { commercialDataSlice } from '../../../store';
@@ -100,7 +100,7 @@ const CommercialDataPanel = ({
       //remove previous dataProvider specific values on provider change
       if (name === 'dataProvider') {
         newParams = { ...newParams, ...defaultSearchParamsForProvider(value) };
-        let providerParameters = providerSpecificParameters[newParams.dataProvider];
+        let providerParameters = providerSpecificSearchParameters[newParams.dataProvider];
         if (!!providerParameters) {
           providerParameters.forEach((param) => {
             delete newParams[param.id];
@@ -110,7 +110,7 @@ const CommercialDataPanel = ({
 
       //remove values for advanced options on disabling advanced options
       if (name === 'advancedOptions') {
-        let providerParameters = providerSpecificParameters[newParams.dataProvider];
+        let providerParameters = providerSpecificSearchParameters[newParams.dataProvider];
         if (!value && !!providerParameters) {
           providerParameters
             .filter((param) => !!param.advanced)
@@ -211,9 +211,10 @@ const CommercialDataPanel = ({
         params.constellation = AirbusConstellation.PHR;
       }
 
+      const orderParams = { ...orderOptions };
+
       if (params.dataProvider === TPDICollections.PLANET_SCOPE) {
-        params.planetApiKey = orderOptions.planetApiKey;
-        params.harmonizeTo = orderOptions.harmonizeData
+        orderParams.harmonizeTo = orderOptions.harmonizeData
           ? PlanetScopeHarmonization.PS2
           : PlanetScopeHarmonization.NONE;
       }
@@ -228,6 +229,7 @@ const CommercialDataPanel = ({
         orderOptions.collectionId,
         orderOptions.type === OrderType.PRODUCTS ? selectedProducts : null,
         params,
+        orderParams,
         requestsConfig,
       );
 

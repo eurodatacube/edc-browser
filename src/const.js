@@ -29,6 +29,13 @@ export const USER_DATA_TAB = {
   PRIVATE: 1,
 };
 
+export const ALGORITHM_TYPES = {
+  bbox: 'bbox',
+  daterange: 'daterange',
+  stringlist: 'stringlist',
+  date: 'date',
+};
+
 export const ISO_DATE_FORMAT = 'YYYY-MM-DD';
 
 // SH services have a limit for a max image size of 2500px*2500px
