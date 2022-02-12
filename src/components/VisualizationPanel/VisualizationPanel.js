@@ -11,6 +11,7 @@ import {
   parseBandsFromEvalscript,
   generateIndexEvalscript,
 } from '../../utils/evalscript';
+import { getConfigValue } from '../../utils/configurations';
 import VisualizationLayer from './VisualizationLayer';
 import EvalscriptEditor, { CUSTOM_VISUALIZATION_URL_ROUTES } from '../EvalscriptEditor/EvalscriptEditor';
 import { MAX_GEODB_FEATURES, COLLECTION_TYPE } from '../../const';
@@ -42,7 +43,8 @@ function VisualizationPanel(props) {
 
   useEffect(() => {
     if (!selectedLayerId && !customVisualizationSelected && configurations.length > 0) {
-      selectVisualizationLayer(configurations[0].layer_name);
+      const selectedLayer = getConfigValue(configurations[0], 'sentinelhub:layer_name', 'layer_name');
+      selectVisualizationLayer(selectedLayer);
     } else if (configurations.length === 0 && supportsCustomScript) {
       selectCustomVisualization();
     }
@@ -169,6 +171,23 @@ function VisualizationPanel(props) {
     }
   }
 
+  function renderVisualizationLayer(configuration, i) {
+    const layerName = getConfigValue(configuration, 'sentinelhub:layer_name', 'layer_name');
+    const evalscriptUrl = getConfigValue(configuration, 'evalscript_url', 'href');
+
+    return (
+      <VisualizationLayer
+        onCustomVisualizationClick={handleCustomVisualizationClick}
+        key={i}
+        title={layerName}
+        evalscript={configuration.evalscript}
+        evalscriptUrl={evalscriptUrl}
+        selected={layerName === selectedLayerId}
+        onSelect={() => selectVisualizationLayer(layerName)}
+      />
+    );
+  }
+
   const serviceHandler = getServiceHandlerForCollectionType(collection.type);
   const supportsDateSelection = serviceHandler.supportsDateSelection(collection.type);
   const supportsCustomScript =
@@ -252,17 +271,7 @@ function VisualizationPanel(props) {
       {!showEvalscriptEditor && (
         <div className="visualization-layers-wrapper">
           <div className="panel-section">
-            {configurations.map((configuration, i) => (
-              <VisualizationLayer
-                onCustomVisualizationClick={handleCustomVisualizationClick}
-                key={i}
-                title={configuration.layer_name}
-                evalscript={configuration.evalscript}
-                evalscriptUrl={configuration.evalscript_url}
-                selected={configuration.layer_name === selectedLayerId}
-                onSelect={() => selectVisualizationLayer(configuration.layer_name)}
-              />
-            ))}
+            {configurations.map((configuration, i) => renderVisualizationLayer(configuration, i))}
           </div>
           {supportsCustomScript && (
             <button

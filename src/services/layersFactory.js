@@ -40,6 +40,7 @@ import {
 
 import { getServiceHandlerForCollectionType } from './index';
 import { COLLECTION_TYPE } from '../const';
+import { getConfigValue } from '../utils/configurations';
 
 export function LayersFactory(
   collection,
@@ -166,24 +167,21 @@ function getLayerParams(
       evalscriptUrl: customEvalscriptUrl,
     };
   }
-  const {
-    evalscript,
-    evalscript_url: evalscriptUrl,
-    acquisition_mode: acquisitionMode,
-    polarization,
-    resolution,
-    upsampling,
-    mosaicking_order: mosaickingOrder,
-    dem_instance: demInstance,
-  } = collection.configurations.find((configuration) => configuration.layer_name === layerId);
-  return {
-    evalscript,
-    evalscriptUrl,
-    acquisitionMode,
-    polarization,
-    resolution,
-    upsampling,
-    mosaickingOrder,
-    demInstance,
+
+  const foundConfig = collection.configurations.find(
+    (configuration) => getConfigValue(configuration, 'sentinelhub:layer_name', 'layer_name') === layerId,
+  );
+
+  const layerParams = {
+    evalscript: foundConfig.evalscript,
+    evalscriptUrl: getConfigValue(foundConfig, 'evalscript_url', 'href'),
+    acquisitionMode: getConfigValue(foundConfig, 'sentinelhub:acquisition_mode', 'acquisition_mode'),
+    polarization: getConfigValue(foundConfig, 'sentinelhub:polarization', 'polarization'),
+    resolution: getConfigValue(foundConfig, 'sentinelhub:resolution', 'resolution'),
+    upsampling: getConfigValue(foundConfig, 'sentinelhub:upsampling', 'upsampling'),
+    mosaickingOrder: getConfigValue(foundConfig, 'sentinelhub:mosaicking_order', 'mosaicking_order'),
+    demInstance: getConfigValue(foundConfig, 'sentinelhub:dem_instance', 'dem_instance'),
   };
+
+  return layerParams;
 }

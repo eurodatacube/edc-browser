@@ -95,12 +95,19 @@ const MOCKED_ZARR_COLLECTIONS = [
         rel: 'license',
       },
       {
-        layer_name: 'CHL visualization',
-        evalscript: evalscriptCHL,
-        mosaicking_order: 'mostRecent',
-        upsampling: 'BICUBIC',
         href: 'https://docs.sentinel-hub.com/api/latest/api/process/',
+        rel: 'about',
+        type: 'text/html',
+        title: 'Details about running Evalscripts',
+      },
+      {
+        evalscript: evalscriptCHL,
         rel: 'processing-expression',
+        type: 'application/javascript',
+        title: 'Evalscript to generate CHL visualization imagery',
+        'sentinelhub:layer_name': 'CHL visualization',
+        'sentinelhub:mosaicking_order': 'mostRecent',
+        'sentinelhub:upsampling': 'BICUBIC',
       },
     ],
     'cube:dimensions': {
@@ -142,12 +149,19 @@ const MOCKED_ZARR_COLLECTIONS = [
         rel: 'license',
       },
       {
-        layer_name: 'CHL visualization',
-        evalscript: evalscriptCHL,
-        mosaicking_order: 'mostRecent',
-        upsampling: 'BICUBIC',
         href: 'https://docs.sentinel-hub.com/api/latest/api/process/',
+        rel: 'about',
+        type: 'text/html',
+        title: 'Details about running Evalscripts',
+      },
+      {
+        evalscript: evalscriptCHL,
         rel: 'processing-expression',
+        type: 'application/javascript',
+        title: 'Evalscript to generate CHL visualization imagery',
+        'sentinelhub:layer_name': 'CHL visualization',
+        'sentinelhub:mosaicking_order': 'mostRecent',
+        'sentinelhub:upsampling': 'BICUBIC',
       },
     ],
     'cube:dimensions': {
@@ -189,12 +203,19 @@ const MOCKED_ZARR_COLLECTIONS = [
         rel: 'license',
       },
       {
-        layer_name: 'CHL visualization',
-        evalscript: evalscriptCHL,
-        mosaicking_order: 'mostRecent',
-        upsampling: 'BICUBIC',
         href: 'https://docs.sentinel-hub.com/api/latest/api/process/',
+        rel: 'about',
+        type: 'text/html',
+        title: 'Details about running Evalscripts',
+      },
+      {
+        evalscript: evalscriptCHL,
         rel: 'processing-expression',
+        type: 'application/javascript',
+        title: 'Evalscript to generate CHL visualization imagery',
+        'sentinelhub:layer_name': 'CHL visualization',
+        'sentinelhub:mosaicking_order': 'mostRecent',
+        'sentinelhub:upsampling': 'BICUBIC',
       },
     ],
     'cube:dimensions': {
@@ -236,12 +257,19 @@ const MOCKED_ZARR_COLLECTIONS = [
         rel: 'license',
       },
       {
-        layer_name: 'CHL visualization',
-        evalscript: evalscriptCHL,
-        mosaicking_order: 'mostRecent',
-        upsampling: 'BICUBIC',
         href: 'https://docs.sentinel-hub.com/api/latest/api/process/',
+        rel: 'about',
+        type: 'text/html',
+        title: 'Details about running Evalscripts',
+      },
+      {
+        evalscript: evalscriptCHL,
         rel: 'processing-expression',
+        type: 'application/javascript',
+        title: 'Evalscript to generate CHL visualization imagery',
+        'sentinelhub:layer_name': 'CHL visualization',
+        'sentinelhub:mosaicking_order': 'mostRecent',
+        'sentinelhub:upsampling': 'BICUBIC',
       },
     ],
     'cube:dimensions': {
@@ -283,12 +311,19 @@ const MOCKED_ZARR_COLLECTIONS = [
         rel: 'license',
       },
       {
-        layer_name: 'KD490 visualization',
-        evalscript: evalscriptKD490,
-        mosaicking_order: 'mostRecent',
-        upsampling: 'BICUBIC',
         href: 'https://docs.sentinel-hub.com/api/latest/api/process/',
+        rel: 'about',
+        type: 'text/html',
+        title: 'Details about running Evalscripts',
+      },
+      {
+        evalscript: evalscriptKD490,
         rel: 'processing-expression',
+        type: 'application/javascript',
+        title: 'Evalscript to generate KD490 visualization imagery',
+        'sentinelhub:layer_name': 'KD490 visualization',
+        'sentinelhub:mosaicking_order': 'mostRecent',
+        'sentinelhub:upsampling': 'BICUBIC',
       },
     ],
     'cube:dimensions': {
@@ -394,9 +429,16 @@ export default class EDCHandler extends AbstractServiceHandler {
 
   getLocationId(providers) {
     let { url: host } = providers.find((p) => p.roles.includes('processor'));
+
+    if (!host.startsWith('https://')) {
+      host = 'https://' + host;
+    }
+    if (!host.endsWith('/')) {
+      host += '/';
+    }
+
     return Object.keys(SHV3_LOCATIONS_ROOT_URL).find((key) => {
-      const url = new URL(SHV3_LOCATIONS_ROOT_URL[key]);
-      return url.host === host;
+      return SHV3_LOCATIONS_ROOT_URL[key] === host;
     });
   }
 

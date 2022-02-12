@@ -7,7 +7,7 @@ export function generateConfigurationsFromBands(bands, max_n = 10) {
 
   for (let i = 0; i < n; i++) {
     configurations.push({
-      layer_name: bandNames[i],
+      'sentinelhub:layer_name': bandNames[i],
       evalscript: generateBYOCConfigurationEvalscript([bandNames[i]], bands[bandNames[0]].bitDepth),
     });
   }
