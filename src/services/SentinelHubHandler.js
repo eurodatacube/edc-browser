@@ -19,6 +19,7 @@ import { COLLECTION_TYPE, DEFAULT_FROM_TIME, DEFAULT_TIMEOUT } from '../const';
 import { requestWithTimeout } from '../utils';
 import { getSubTypeAndCollectionId } from '../utils/collections';
 import { getBoundsAndLatLng } from '../components/EdcDataPanel/CommercialDataPanel/commercialData.utils';
+import store, { errorsSlice } from '../store';
 
 export default class SentinelHubHandler extends AbstractServiceHandler {
   HANDLER_ID = 'SENTINEL_HUB';
@@ -49,7 +50,7 @@ export default class SentinelHubHandler extends AbstractServiceHandler {
     }, refreshTokenInMilliseconds);
   }
 
-  async getCollections() {
+  async getCollectionsOfType(type) {
     const allCollections = [];
     const params = {
       count: 100,
@@ -60,7 +61,7 @@ export default class SentinelHubHandler extends AbstractServiceHandler {
       } = await requestWithTimeout(
         (cancelToken) =>
           axios
-            .get('https://services.sentinel-hub.com/api/v1/byoc/collections', {
+            .get(`https://services.sentinel-hub.com/api/v1/${type}/collections`, {
               params: params,
               cancelToken: cancelToken,
               headers: { Authorization: `Bearer ${this.token}` },
@@ -79,20 +80,62 @@ export default class SentinelHubHandler extends AbstractServiceHandler {
       params.viewToken = links.nextToken;
     }
 
-    const collectionsData = await Promise.all(
-      allCollections.map(async (collection) => {
-        const { data } = await axios.get(
-          `https://services.sentinel-hub.com/api/v1/metadata/collection/byoc-${collection.id}`,
-          {
-            headers: { Authorization: `Bearer ${this.token}` },
-          },
-        );
-        return {
-          ...data,
-          group: collection.name,
-          additionalData: collection.additionalData,
-        };
+    return allCollections;
+  }
+
+  async getDataForCollectionsOfType(type, collections) {
+    const allCollections = await Promise.all(
+      collections.map(async (collection) => {
+        try {
+          const { data } = await axios.get(
+            `https://services.sentinel-hub.com/api/v1/metadata/collection/${type}-${collection.id}`,
+            {
+              headers: { Authorization: `Bearer ${this.token}` },
+            },
+          );
+          return {
+            ...data,
+            group: collection.name,
+            additionalData: collection.additionalData,
+          };
+        } catch (error) {
+          store.dispatch(
+            errorsSlice.actions.addError({ text: `Could not load collection: ${collection.name}` }),
+          );
+          return null;
+        }
       }),
+    );
+
+    return allCollections;
+  }
+
+  async getCollections() {
+    const byocCollections = await this.getCollectionsOfType(BYOCSubTypes.BYOC.toLowerCase());
+    const byocCollectionsData = await this.getDataForCollectionsOfType(
+      BYOCSubTypes.BYOC.toLowerCase(),
+      byocCollections,
+    );
+    const batchCollections = await this.getCollectionsOfType(BYOCSubTypes.BATCH.toLowerCase());
+    const batchCollectionsData = await this.getDataForCollectionsOfType(
+      BYOCSubTypes.BATCH.toLowerCase(),
+      batchCollections,
+    );
+
+    // Public zarr collections on Sentinel Hub are already handled in the EDCHandler.js
+    // Although the list of zarr collections is easily retrievable in similar way
+    // as byoc or batch collections
+    // ( const zarrCollections = await this.getCollectionsOfType('zarr'); works )
+    // metadata for zarr collections on Sentinel Hub don't seem to be available
+    // through the same endpoint
+    // this makes getDataForCollectionsOfType() function unusable for zarr collections
+    // docs for:
+    // - byoc: https://docs.sentinel-hub.com/api/latest/reference/#operation/metadata_byoc_id
+    // - batch: https://docs.sentinel-hub.com/api/latest/reference/#operation/metadata_batch_id
+    // - zar: ?
+
+    const collectionsData = [...byocCollectionsData, ...batchCollectionsData].filter(
+      (collection) => collection,
     );
 
     return {
@@ -130,14 +173,16 @@ export default class SentinelHubHandler extends AbstractServiceHandler {
     return [];
   }
 
-  async getBestInitialLocation(collectionId) {
+  async getBestInitialLocation(collectionidWithSubtype) {
+    const { subType, collectionId } = getSubTypeAndCollectionId(collectionidWithSubtype);
     const searchLayer = new BYOCLayer({
       instanceId: true,
       layerId: true,
       evalscript: '//',
       collectionId: collectionId,
-      subType: BYOCSubTypes.BYOC,
+      subType,
     });
+
     const bbox = new BBox(CRS_EPSG4326, -180, -90, 180, 90);
     const fromTime = DEFAULT_FROM_TIME;
     const toTime = moment.utc();

@@ -7,9 +7,10 @@ import EdcDataPanel from '../EdcDataPanel/EdcDataPanel';
 import VisualizationPanel from '../VisualizationPanel/VisualizationPanel';
 import { getServiceHandlerForCollectionType } from '../../services';
 import store, { aoiSlice, tabsSlice, errorsSlice } from '../../store';
-import { PANEL_TAB } from '../../const';
+import { COLLECTION_TYPE, PANEL_TAB } from '../../const';
 import { getCollectionInfo } from '../../utils/collections';
 import ErrorPanel from '../ErrorPanel/ErrorPanel';
+import { VERSION_INFO } from '../../VERSION.js';
 
 import edcLogo from './EDC_logo_square_white.svg';
 
@@ -66,21 +67,23 @@ function MainPanel(props) {
 
   useEffect(() => {
     const getBestLocation = async (selectedCollectionId, selectedType, selectedLayerId) => {
-      if (collection) {
+      if (!collection) {
+        return;
+      }
+
+      try {
         const serviceHandler = getServiceHandlerForCollectionType(collection.type);
-        try {
-          const bestLocation = await serviceHandler.getBestInitialLocation(
-            selectedCollectionId,
-            selectedLayerId,
-          );
-          setBestLocation(bestLocation);
-        } catch (error) {
-          store.dispatch(
-            errorsSlice.actions.addError({
-              text: error.message,
-            }),
-          );
-        }
+        const bestLocation =
+          collection.type === COLLECTION_TYPE.SENTINEL_HUB
+            ? await serviceHandler.getBestInitialLocation(collection.uniqueId)
+            : await serviceHandler.getBestInitialLocation(selectedCollectionId, selectedLayerId);
+        setBestLocation(bestLocation);
+      } catch (error) {
+        store.dispatch(
+          errorsSlice.actions.addError({
+            text: error.message,
+          }),
+        );
       }
     };
     if (selectedCollectionId) {
@@ -101,6 +104,21 @@ function MainPanel(props) {
     );
   };
 
+  const renderVersion = () => {
+    if (VERSION_INFO.tag) {
+      return <span>{VERSION_INFO.tag}</span>;
+    } else if (VERSION_INFO.commit) {
+      return (
+        <span>
+          {VERSION_INFO.branch ? `${VERSION_INFO.branch} ` : null}
+          {VERSION_INFO.commit ? `[${VERSION_INFO.commit.substring(0, 8)}]` : null}
+        </span>
+      );
+    } else {
+      return <span>Local build</span>;
+    }
+  };
+
   return (
     <>
       <div className={`open-main-panel ${panelOpen ? 'hidden' : ''}`} onClick={() => setPanelOpen(true)}>
@@ -115,7 +133,11 @@ function MainPanel(props) {
             </div>
             <div className="app-title">
               <img className="app-logo" src={edcLogo} alt="Euro Data Cube" />
-              <span>EDC Browser</span>
+
+              <div className="app-title-text">
+                <span>EDC Browser</span>
+                <span className="version">{renderVersion()}</span>
+              </div>
             </div>
           </div>
         </header>

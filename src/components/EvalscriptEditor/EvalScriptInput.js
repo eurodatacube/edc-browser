@@ -1,20 +1,8 @@
 import React from 'react';
-import Codemirror from 'react-codemirror';
+import { CodeEditor, themeEdcBrowserLight, themeEdcBrowserDark } from '@sentinel-hub/evalscript-code-editor';
 import { fetchEvalscriptFromEvalscripturl } from '../../utils/evalscript';
-import 'codemirror/mode/javascript/javascript';
-import 'codemirror/lib/codemirror.css';
-import 'codemirror/theme/dracula.css';
 import './EvalScriptInput.scss';
-import { JSHINT } from 'jshint';
-
 import Switch from '../shared/Switch/Switch';
-
-require('codemirror/addon/lint/javascript-lint');
-require('codemirror/addon/lint/lint.css');
-require('codemirror/addon/lint/lint.js');
-
-window.JSHINT = JSHINT;
-
 export class EvalScriptInput extends React.Component {
   constructor(props) {
     super(props);
@@ -24,7 +12,6 @@ export class EvalScriptInput extends React.Component {
       isEvalUrl,
       evalscripturl,
       error: '',
-      evalScriptFocused: false,
     };
   }
 
@@ -63,7 +50,6 @@ export class EvalScriptInput extends React.Component {
       .then((res) => {
         const { data: text } = res;
         this.updateCode(text);
-        this._CM.codeMirror.setValue(text);
         this.setState({ loading: false, success: true }, () => {
           this.onCallback();
           setTimeout(() => this.setState({ success: false }), 2000);
@@ -90,10 +76,6 @@ export class EvalScriptInput extends React.Component {
     this.onCallback();
   };
 
-  onCloseClick = () => {
-    this.setState({ evalScriptFocused: false });
-  };
-
   handleURLSubmit = () => {
     const { evalscripturl } = this.state;
 
@@ -106,33 +88,18 @@ export class EvalScriptInput extends React.Component {
 
   render() {
     const { error, evalscript, evalscripturl, isEvalUrl } = this.state;
-    const options = {
-      lineNumbers: true,
-      mode: 'javascript',
-      lint: {
-        esversion: 6,
-      },
-      readOnly: !!isEvalUrl,
-      theme: `default${!!isEvalUrl ? ' readonly' : ''}`,
-      gutters: ['CodeMirror-lint-markers'],
-    };
     return (
-      <div className="code-editor-wrapper" style={{ clear: 'both' }}>
-        <div className="code-mirror-wrapper">
-          <div
-            className={`react-code-mirror${this.state.evalScriptFocused ? '-resizable' : '-not-resizable'}`}
-          >
-            <i className="fas fa-times"></i>
-            <Codemirror
-              value={evalscript || ''}
-              onChange={this.updateCode}
-              options={options}
-              ref={(el) => (this._CM = el)}
-              onFocusChange={() =>
-                !isEvalUrl && this.setState({ evalScriptFocused: !this.state.evalScriptFocused })
-              }
-            />
-          </div>
+      <div className="custom-script-wrap">
+        <div className="code-editor-wrapper" style={{ clear: 'both' }}>
+          <CodeEditor
+            themeLight={themeEdcBrowserLight}
+            themeDark={themeEdcBrowserDark}
+            value={evalscript}
+            onChange={(code) => this.updateCode(code)}
+            onRunEvalscriptClick={this.handleRefreshClick}
+            portalId="__evalscript_code_editor"
+            isReadOnly={!!isEvalUrl}
+          />
         </div>
         <div style={{ padding: '5px 0px 5px 0px', fontSize: 12, marginTop: '5px' }}>
           <span className="checkbox-holder use-url">

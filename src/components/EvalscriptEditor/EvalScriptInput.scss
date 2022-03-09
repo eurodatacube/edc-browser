@@ -1,64 +1,14 @@
 @import "../../variables.module.scss";
 
 .code-editor-wrapper {
-  position: relative;
-
-  .code-mirror-wrapper {
-    height: 300px;
-    margin-bottom: $spacing03;
-
-    .cm-s-readonly {
-      opacity: 0.7;
-      cursor: not-allowed;
-    }
-
-    /* stylelint-disable-next-line */
-    .cm-s-readonly .CodeMirror-lines {
-      cursor: not-allowed;
-    }
-
-    .react-code-mirror-not-resizable {
-      width: 100% !important;
-
-      .fas.fa-times {
-        display: none;
-      }
-    }
-
-    .react-code-mirror-resizable {
-      position: fixed;
-      left: 20px;
-      top: 50%;
-      transform: translateY(-50%);
-      border: 2px solid $colorBg70;
-      min-width: 500px;
-      height: 300px;
-      resize: horizontal;
-      overflow: hidden;
-      z-index: 9999999;
-
-      @media screen and (max-width: 400px) {
-        & {
-          left: 0;
-          min-width: unset;
-          width: 100%;
-        }
-      }
-
-      .fas.fa-times {
-        position: absolute;
-        top: $spacing02;
-        right: $spacing04;
-        color: $colorBg70;
-        font-size: 18px;
-        z-index: 50;
-        cursor: pointer;
-      }
-    }
-  }
+  height: 300px;
+  margin-bottom: $spacing03;
 }
 
-/* stylelint-disable-next-line */
-.cm-s-default.CodeMirror-lint-tooltip {
-  z-index: 1000;
+.custom-script-wrap {
+  height: 100%;
+
+  .button-primary {
+    margin-bottom: $spacing03;
+  }
 }

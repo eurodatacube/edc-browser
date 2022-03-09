@@ -1,5 +1,5 @@
-@import './variables.module.scss';
-@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap');
+@import "./variables.module.scss";
+@import url("https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap");
 
 body,
 div {
@@ -11,12 +11,9 @@ div {
   box-sizing: border-box;
 }
 
-div,
-button,
-h1,
-h2,
-span {
-  font-family: 'Source Sans Pro', sans-serif;
+body,
+button {
+  font-family: "Source Sans Pro", sans-serif;
 }
 
 // Leaflet.js overwrites CSS styles of buttons in the right-hand side panel,
