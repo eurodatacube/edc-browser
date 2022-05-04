@@ -67,6 +67,7 @@ function EdcDataPanel({
 
   const omitUserCollections =
     collectionsList.user.length === 0 || process.env.REACT_APP_PUBLIC_DEPLOY === 'true';
+
   return (
     <div className="edc-data-panel">
       <Tabs

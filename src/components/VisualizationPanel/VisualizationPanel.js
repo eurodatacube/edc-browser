@@ -202,6 +202,77 @@ function VisualizationPanel(props) {
   } else {
     selectedBands = getDefaultSelectedBands();
   }
+
+  function getDateRange() {
+    const MIN_DATE = new Date('1970-01-01');
+
+    if (!collection.temporalExtent || !Array.isArray(collection.temporalExtent.interval)) {
+      return {
+        minDate: moment(MIN_DATE).utc(),
+        maxDate: moment().utc(),
+      };
+    }
+
+    const { interval: dateIntervals } = collection.temporalExtent;
+    let validIntervals = [];
+
+    dateIntervals.forEach((interval) => {
+      if (interval.length !== 2) {
+        return;
+      }
+
+      const startDate = moment(interval[0]).isValid() ? moment(interval[0]) : moment(MIN_DATE);
+      const endDate = moment(interval[1]).isValid() ? moment(interval[1]) : moment().utc();
+
+      if (startDate.isBefore(endDate)) {
+        validIntervals.push([startDate, endDate]);
+      }
+    });
+
+    if (validIntervals.length === 0) {
+      return {
+        minDate: moment(MIN_DATE).utc(),
+        maxDate: moment().utc(),
+      };
+    }
+
+    let minMaxDates = {
+      minDate: validIntervals[0][0],
+      maxDate: validIntervals[0][1],
+    };
+
+    validIntervals.forEach((intervalDates) => {
+      const startDate = moment(intervalDates[0]);
+      const endDate = moment(intervalDates[1]);
+
+      if (startDate.isBefore(minMaxDates.minDate)) {
+        minMaxDates = {
+          ...minMaxDates,
+          minDate: startDate,
+        };
+      }
+
+      if (endDate.isAfter(minMaxDates.maxDate)) {
+        minMaxDates = {
+          ...minMaxDates,
+          maxDate: endDate,
+        };
+      }
+    });
+
+    return minMaxDates;
+  }
+
+  function getMinDate() {
+    const { minDate } = getDateRange();
+    return moment(minDate).utc();
+  }
+
+  function getMaxDate() {
+    const { maxDate } = getDateRange();
+    return moment(maxDate).utc();
+  }
+
   return (
     <div className="visualization-panel">
       <div className="panel-section">
@@ -245,8 +316,8 @@ function VisualizationPanel(props) {
           <VisualizationTimeSelect
             fromTime={fromTime}
             toTime={toTime}
-            minDate={moment().subtract(10, 'year')}
-            maxDate={moment.utc()}
+            minDate={getMinDate()}
+            maxDate={getMaxDate()}
             updateSelectedTime={onSelectedTimeChanged}
             onQueryDatesForActiveMonth={onQueryDates}
             showNextPrev={true}
