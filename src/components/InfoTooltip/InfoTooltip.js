@@ -12,14 +12,25 @@ class InfoTooltip extends Component {
 
   render() {
     const { tooltipOpen } = this.state;
-    const { text } = this.props;
+    const { text, setOpenTooltipId, tooltipId, title } = this.props;
     return (
-      <div className="info-tooltip">
-        <i
-          className="fas fa-info-circle tooltip-icon"
-          onClick={() => this.setState((prevState) => ({ tooltipOpen: !prevState.tooltipOpen }))}
-        />
-        {tooltipOpen && <div className="info-tooltip-text">{text}</div>}
+      <div>
+        <div
+          className={`info-tooltip ${tooltipOpen ? 'active' : ''}`}
+          onClick={(evt) => {
+            evt.stopPropagation();
+            this.setState((prevState) => ({ tooltipOpen: !prevState.tooltipOpen }));
+            setOpenTooltipId(tooltipId);
+          }}
+          title={title}
+        >
+          <i className="fas fa-info tooltip-icon" />
+        </div>
+        {tooltipOpen && (
+          <div className="info-tooltip-text" onClick={(evt) => evt.stopPropagation()}>
+            {text}
+          </div>
+        )}
       </div>
     );
   }

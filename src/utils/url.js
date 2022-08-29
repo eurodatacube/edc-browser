@@ -4,6 +4,8 @@ import store, { mainMapSlice, visualizationSlice, tabsSlice, algorithmsSlice } f
 import { DEFAULT_LAT_LNG, PANEL_TAB } from '../const';
 import { b64EncodeUnicode, b64DecodeUnicode } from './base64MDN';
 
+import { translatedCollectionIds } from './translatedCollectionIds';
+
 export function updatePath(props) {
   let {
     lat,
@@ -115,8 +117,11 @@ export function setStore(params) {
     }
   }
 
+  // backward compatibility: some collection ids in EDC public collection changed
+  let correctCollectionId = getTranslatedCollectionId(params.collectionId);
+
   const newVisualizationParams = {
-    collectionId: collectionId,
+    collectionId: correctCollectionId,
     layerId: layerId,
     customVisualizationSelected: customVisualizationSelected,
     evalscript: decodedEvalscript,
@@ -138,4 +143,9 @@ export function setStore(params) {
     store.dispatch(algorithmsSlice.actions.setSelectedAlgorithm(algorithm));
     store.dispatch(tabsSlice.actions.setMainTabIndex(PANEL_TAB.ON_DEMAND_DATA_PANEL));
   }
+}
+
+function getTranslatedCollectionId(collectionId) {
+  const newCollectionId = translatedCollectionIds[collectionId];
+  return newCollectionId ? newCollectionId : collectionId;
 }

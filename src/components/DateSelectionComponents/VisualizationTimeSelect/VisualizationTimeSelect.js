@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 
 import DatePicker from '../DatePicker/DatePicker';
 import { TimespanPicker } from '../TimespanPicker/TimespanPicker';
-import './VisualizationTimeSelect.scss';
 import Switch from '../../shared/Switch/Switch';
+
+import './VisualizationTimeSelect.scss';
 
 export class VisualizationTimeSelect extends Component {
   state = {
@@ -39,11 +40,9 @@ export class VisualizationTimeSelect extends Component {
       minDate,
       onQueryDatesForActiveMonth,
       showNextPrev,
-      maxCloudCover,
       fromTime,
       toTime,
       timespanSupported,
-      onQueryFlyoversForActiveMonth,
       hasCloudCoverage,
     } = this.props;
 
@@ -82,43 +81,26 @@ export class VisualizationTimeSelect extends Component {
           <div>
             <Switch checked={this.state.timespanExpanded} label="Timespan" onChange={this.toggleTimespan} />
 
-            {!timespanExpanded &&
-              (hasCloudCoverage ? (
-                <div className="">
-                  <label htmlFor="" className="label-primary date-picker-label">
-                    Date
-                  </label>
-                  <DatePicker
-                    id="cloud-cover-datepicker-wrap"
-                    calendarContainer={this.calendarHolder}
-                    selectedDay={toTime.clone().utc().startOf('day')}
-                    setSelectedDay={this.updateDate}
-                    minDate={minDate}
-                    maxDate={maxDate}
-                    showNextPrevDateArrows={showNextPrev}
-                    onQueryDatesForActiveMonth={onQueryFlyoversForActiveMonth}
-                    hasCloudCoverFilter={true}
-                    setMaxCloudCover={(value) => this.setState({ setMaxCloudCover: value })}
-                    maxCloudCover={maxCloudCover}
-                  />
-                </div>
-              ) : (
-                <div>
-                  <label htmlFor="" className="label-primary date-picker-label">
-                    Date
-                  </label>
-                  <DatePicker
-                    id="visualization-date-picker"
-                    calendarContainer={this.calendarHolder}
-                    selectedDay={toTime.clone().utc().startOf('day')}
-                    setSelectedDay={this.updateDate}
-                    minDate={minDate}
-                    maxDate={maxDate}
-                    showNextPrevDateArrows={showNextPrev}
-                    onQueryDatesForActiveMonth={onQueryDatesForActiveMonth}
-                  />
-                </div>
-              ))}
+            {!timespanExpanded && (
+              <div>
+                <label className="label-primary date-picker-label">Date</label>
+                <DatePicker
+                  id={hasCloudCoverage ? 'cloud-cover-datepicker-wrap' : 'visualization-date-picker'}
+                  onQueryDatesForActiveMonth={
+                    hasCloudCoverage
+                      ? (toTime) => onQueryDatesForActiveMonth(toTime, true)
+                      : onQueryDatesForActiveMonth
+                  }
+                  hasCloudCoverFilter={hasCloudCoverage}
+                  calendarContainer={this.calendarHolder}
+                  selectedDay={toTime.clone().utc().startOf('day')}
+                  setSelectedDay={this.updateDate}
+                  minDate={minDate}
+                  maxDate={maxDate}
+                  showNextPrevDateArrows={showNextPrev}
+                />
+              </div>
+            )}
           </div>
         </div>
         {timespanExpanded && (
@@ -128,8 +110,11 @@ export class VisualizationTimeSelect extends Component {
             maxDate={maxDate}
             timespan={{ fromTime: fromTime, toTime: toTime }}
             applyTimespan={this.updateTimespan}
-            onQueryDatesForActiveMonth={onQueryDatesForActiveMonth}
+            onQueryDatesForActiveMonth={(toTime) =>
+              hasCloudCoverage ? onQueryDatesForActiveMonth(toTime, true) : onQueryDatesForActiveMonth(toTime)
+            }
             autoApply={true}
+            hasCloudCoverage={hasCloudCoverage}
           />
         )}
         <div className="visualization-calendar-holder" ref={(e) => (this.calendarHolder = e)} />

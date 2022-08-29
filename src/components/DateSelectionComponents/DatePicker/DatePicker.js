@@ -17,11 +17,31 @@ class DatePicker extends Component {
     loading: false,
   };
 
+  componentDidMount() {
+    const { sharedMaxCloudCover } = this.props;
+    if (sharedMaxCloudCover) {
+      this.setState({ maxCloudCover: sharedMaxCloudCover });
+    }
+  }
+
+  setMaxCloudCover = (v) => {
+    const { setSharedMaxCloudCover } = this.props;
+    if (setSharedMaxCloudCover) {
+      setSharedMaxCloudCover(v);
+    }
+    this.setState({ maxCloudCover: v });
+  };
+
+  componentDidUpdate() {
+    const { sharedMaxCloudCover } = this.props;
+    if (sharedMaxCloudCover && sharedMaxCloudCover !== this.state.maxCloudCover) {
+      this.setState({ maxCloudCover: sharedMaxCloudCover });
+    }
+  }
+
   openCalendar = () => {
     const { selectedDay } = this.props;
-    this.setState({
-      displayCalendar: true,
-    });
+    this.setState({ displayCalendar: true });
     this.fetchAvailableDaysInMonth(selectedDay).then((dates) => this.setState({ availableDays: dates }));
   };
 
@@ -294,6 +314,7 @@ class DatePicker extends Component {
       hasCloudCoverFilter,
     } = this.props;
     const { displayCalendar, availableDays, maxCloudCover, loading } = this.state;
+
     return (
       <>
         <div className={`date-picker ${displayCalendar ? id : ''}`}>
@@ -301,7 +322,7 @@ class DatePicker extends Component {
             selectedDay={selectedDay}
             setSelectedDay={setSelectedDay}
             dateFormat={STANDARD_STRING_DATE_FORMAT}
-            onClick={this.state.displayCalendar ? this.closeCalendar : this.openCalendar}
+            onClick={displayCalendar ? this.closeCalendar : this.openCalendar}
             onValueConfirmed={this.closeCalendar}
             showNextPrevDateArrows={showNextPrevDateArrows}
             getAndSetNextPrevDate={this.handleGetAndSetNextPrevDate}
@@ -317,8 +338,8 @@ class DatePicker extends Component {
         {displayCalendar && (
           <Calendar
             hasCloudCoverFilter={hasCloudCoverFilter}
-            cloudCoverPercentage={maxCloudCover}
-            setMaxCloudCover={(value) => this.setState({ maxCloudCover: value })}
+            maxCloudCover={maxCloudCover}
+            setMaxCloudCover={this.setMaxCloudCover}
             selectedDay={selectedDay}
             minDate={minDate}
             handleMonthChange={this.handleMonthChange}

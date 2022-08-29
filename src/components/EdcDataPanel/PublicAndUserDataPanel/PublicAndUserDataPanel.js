@@ -1,7 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
+import ReactMarkdown from 'react-markdown';
+
 import Accordion from '../../Accordion/Accordion';
+import InfoTooltip from '../../InfoTooltip/InfoTooltip';
 
 import './PublicAndUserDataPanel.scss';
+import { MAX_DESCRIPTION_LENGTH_IN_CHARS } from '../../../const';
 
 export const PublicAndUserDataPanel = ({
   groups,
@@ -10,7 +14,10 @@ export const PublicAndUserDataPanel = ({
   setSelectedGroup,
   setSubcategory,
   subcategoryIndex,
+  shouldShowTooltip,
 }) => {
+  const [openTooltipId, setOpenTooltipId] = useState('');
+
   const toggleAccordion = (index) => {
     if (index !== selectedGroup) {
       setSelectedGroup(index);
@@ -26,6 +33,33 @@ export const PublicAndUserDataPanel = ({
       setSubcategory(index);
     }
   }
+
+  const getMarkdownForCollection = (collection) => {
+    const description = collection?.description;
+    const link = collection?.extendedInformationLink;
+
+    if (description === null && link === null) {
+      return '';
+    }
+
+    if (description === null && link !== null) {
+      return `Extended information in the [EDC public collections repository](${link}).`;
+    }
+
+    if (description !== null && link === null) {
+      return `${
+        description.length > MAX_DESCRIPTION_LENGTH_IN_CHARS
+          ? description.substring(0, MAX_DESCRIPTION_LENGTH_IN_CHARS) + '...'
+          : description
+      }`;
+    }
+
+    return `${
+      description.length > MAX_DESCRIPTION_LENGTH_IN_CHARS
+        ? description.substring(0, MAX_DESCRIPTION_LENGTH_IN_CHARS) + '...'
+        : description
+    }\n\nExtended information in the [EDC public collections repository](${link}).`;
+  };
 
   return (
     <div>
@@ -57,9 +91,24 @@ export const PublicAndUserDataPanel = ({
                                   evt.stopPropagation();
                                   handleCollectionClick(item);
                                 }}
-                                className="selection-item"
+                                className={`selection-item ${
+                                  item.uniqueId === openTooltipId ? 'active-tooltip' : ''
+                                }`}
                               >
                                 {item.title}
+                                {shouldShowTooltip && (
+                                  <InfoTooltip
+                                    text={
+                                      <ReactMarkdown
+                                        linkTarget="_blank"
+                                        children={getMarkdownForCollection(item)}
+                                      />
+                                    }
+                                    setOpenTooltipId={(i) => setOpenTooltipId(i)}
+                                    tooltipId={item.uniqueId}
+                                    title="Collection description"
+                                  />
+                                )}
                               </div>
                             );
                           })}
@@ -83,7 +132,9 @@ export const PublicAndUserDataPanel = ({
               {groups[groupKey].map((collection) => {
                 return (
                   <div
-                    className="selection-item"
+                    className={`selection-item ${
+                      collection.uniqueId === openTooltipId ? 'active-tooltip' : ''
+                    }`}
                     key={collection.uniqueId}
                     onClick={(evt) => {
                       evt.stopPropagation();
@@ -91,7 +142,19 @@ export const PublicAndUserDataPanel = ({
                     }}
                   >
                     {collection.title}
-                    <i className="fas fa-chevron-right"></i>
+                    {shouldShowTooltip && (
+                      <InfoTooltip
+                        text={
+                          <ReactMarkdown
+                            linkTarget="_blank"
+                            children={getMarkdownForCollection(collection)}
+                          />
+                        }
+                        setOpenTooltipId={(i) => setOpenTooltipId(i)}
+                        tooltipId={collection.uniqueId}
+                        title="Collection description"
+                      />
+                    )}
                   </div>
                 );
               })}

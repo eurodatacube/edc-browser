@@ -96,3 +96,33 @@
 .date-picker-separator {
   padding: 0 5px;
 }
+
+.cc-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: $spacing02 $spacing03;
+  margin-top: $spacing03;
+  background: $colorBg70;
+
+  &.cc-wrapper-number {
+    background: none;
+    padding: 0;
+  }
+
+  .cc-text-label {
+    color: $textColor;
+    margin-right: $spacing03;
+  }
+
+  .cc-text {
+    color: $textColor;
+    margin-right: $spacing03;
+    background-color: $colorBg70;
+    padding: $spacing02 $spacing03;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-left: 0 !important;
+  }
+}

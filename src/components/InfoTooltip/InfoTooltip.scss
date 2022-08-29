@@ -3,21 +3,56 @@
 .info-tooltip {
   position: relative;
   display: inline-block;
-
-  .info-tooltip-text {
-    position: absolute;
-    background: $colorBg70;
-    padding: $spacing03;
-    border-radius: 5px;
-    box-shadow: $boxShadow;
-    right: 100%;
-    max-width: 300px;
-    width: max-content;
-    z-index: 1;
-    word-wrap: break-word;
-  }
+  background-color: $colorBg70;
+  margin-left: $spacing03;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  cursor: pointer;
 
   .tooltip-icon {
     cursor: pointer;
+    font-size: 10px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    color: $colorText70;
+  }
+
+  &.active {
+    background-color: $colorText70;
+
+    .tooltip-icon {
+      color: $colorBg70;
+    }
+  }
+}
+
+.info-tooltip-text {
+  cursor: auto;
+  position: absolute;
+  background: $textColor;
+  color: $colorBg70;
+  padding: $spacing02 $spacing03;
+  border-radius: 4px;
+  box-shadow: $boxShadow;
+  right: 0;
+  top: 100%;
+  width: 100%;
+  z-index: 1;
+  word-wrap: break-word;
+
+  a {
+    color: $colorBg70;
+  }
+
+  pre {
+    margin: 0;
+    overflow-x: auto;
+
+    code {
+      letter-spacing: -1.5px;
+    }
   }
 }

@@ -10,7 +10,13 @@ import '@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css';
 import 'nprogress/nprogress.css';
 
 import LeafletControls from './LeafletControls/LeafletControls';
-import store, { mainMapSlice, aoiSlice, commercialDataSlice } from '../../store';
+import store, {
+  mainMapSlice,
+  aoiSlice,
+  commercialDataSlice,
+  errorsSlice,
+  visualizationSlice,
+} from '../../store';
 import GlTileLayer from './plugins/GlTileLayer';
 import PreviewLayer from './PreviewLayer';
 import { baseLayers, overlayTileLayers } from './Layers';
@@ -18,6 +24,7 @@ import { removeAoiWithEmptyCoords, onUnload, onTileImageError } from './Map.util
 import VisualizationLayerComponent from './plugins/VisualizationLayerComponent';
 import VectorDataLayer from './VectorDataLayer';
 import { getCollectionInfo } from '../../utils/collections';
+import { getConfigValue } from '../../utils/configurations';
 
 import './Map.scss';
 
@@ -188,6 +195,39 @@ function Map(props) {
   });
 
   const collection = getCollectionInfo(collectionsList, collectionId, type, layerId);
+
+  if (collectionId && !collection) {
+    // check if collection with <collectionId> exists
+    // if not, display notification and reset visualizationSlice values in store
+    store.dispatch(
+      errorsSlice.actions.addError({ text: "Can't find collection for provided collection id" }),
+    );
+    store.dispatch(visualizationSlice.actions.reset());
+  }
+
+  if (collection && layerId) {
+    let selectedConfig = collection.configurations.find(
+      (configuration) => getConfigValue(configuration, 'sentinelhub:layer_name', 'layer_name') === layerId,
+    );
+    if (!selectedConfig) {
+      // check if configuration with id <layerId> exists for collection
+      // if not, display notification and
+      // update <layerId> in visualizationSlice in store to the first configuration, so that:
+      // - VisualizationLayerComponent (for leaflet) does't fail
+      // - the correct layer will be selected in the list of layers for the collection
+      store.dispatch(
+        errorsSlice.actions.addError({
+          text: "Can't find configuration for provided layer id, using first available",
+        }),
+      );
+      store.dispatch(
+        visualizationSlice.actions.setVisualizationParams({
+          layerId: getConfigValue(collection.configurations[0], 'sentinelhub:layer_name', 'layer_name'),
+        }),
+      );
+    }
+  }
+
   const canDisplayVisualizationLayer = !!(
     collection &&
     (layerId || (customVisualizationSelected && (evalscript || evalscriptUrl))) &&

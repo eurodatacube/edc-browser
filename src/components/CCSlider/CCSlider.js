@@ -2,9 +2,10 @@ import React from 'react';
 import RCSlider from 'rc-slider';
 
 import 'rc-slider/assets/index.css';
-import './EOBCCSlider.scss';
+import './CCSlider.scss';
+import InfoTooltip from '../InfoTooltip/InfoTooltip';
 
-export class EOBCCSlider extends React.Component {
+export class CCSlider extends React.Component {
   static defaultProps = {
     sliderWidth: 50,
     cloudCoverPercentage: 100,
@@ -32,6 +33,14 @@ export class EOBCCSlider extends React.Component {
         <span className="percentage">
           {this.props.cloudCoverPercentage}&nbsp;{this.props.unit ? this.props.unit : ''}
         </span>
+        {this.props.showSliderTooltip && (
+          <InfoTooltip
+            text={
+              'The max. cloud coverage slider filters the available dates in the calendar to match the selected threshold. The dates must be selected manually afterwards (when in timespan in the from- and until-date picker).'
+            }
+            setOpenTooltipId={() => null}
+          />
+        )}
       </div>
     );
   }

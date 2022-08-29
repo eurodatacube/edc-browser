@@ -103,9 +103,9 @@ function VisualizationPanel(props) {
     );
   }
 
-  async function onQueryDates(toTime) {
+  async function onQueryDates(toTime, isFlyover = false) {
     const fromTime = toTime.clone().subtract(1, 'month');
-    return serviceHandler.getAvailableDates(collection, mapBounds, fromTime, toTime);
+    return serviceHandler.getAvailableDates(collection, mapBounds, fromTime, toTime, isFlyover);
   }
 
   function goToBestLocation() {
@@ -273,22 +273,26 @@ function VisualizationPanel(props) {
     return moment(maxDate).utc();
   }
 
+  const hasCloudCoverage = serviceHandler.supportsCloudCoverage(collection.serviceSpecificInfo.type);
+
   return (
     <div className="visualization-panel">
       <div className="panel-section">
         <div className="header">
-          <button className="back-button" onClick={oncBackToCollectionList}>
-            <i className="fas fa-arrow-left" />
-          </button>
-          <div className="collection-info">
-            <div className="collection-name">{collectionName}</div>
+          <div className="header-left">
+            <button className="back-button" onClick={oncBackToCollectionList}>
+              <i className="fas fa-arrow-left" />
+            </button>
+            <div className="collection-info">
+              <div className="collection-name">{collectionName}</div>
 
-            {bestLocation && (
-              <button className="zoom-to-location button-tertiary" onClick={goToBestLocation}>
-                <i className="fa fa-crosshairs" onClick={goToBestLocation} />
-                Zoom to data
-              </button>
-            )}
+              {bestLocation && (
+                <button className="zoom-to-location button-tertiary" onClick={goToBestLocation}>
+                  <i className="fa fa-crosshairs" onClick={goToBestLocation} />
+                  Zoom to data
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -323,6 +327,7 @@ function VisualizationPanel(props) {
             showNextPrev={true}
             timespanSupported={true}
             timespanExpanded={shouldExpandTimespan()}
+            hasCloudCoverage={hasCloudCoverage}
           />
         </div>
       )}

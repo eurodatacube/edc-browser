@@ -20,11 +20,17 @@
     color: $colorText70;
     border-radius: $borderRadius;
     transition: 0.1s linear background;
+    position: relative;
 
-    &:hover {
+    &:hover,
+    &.active-tooltip {
       background: $colorBg60;
       color: $colorText50;
       transition: 0.1s linear background;
+    }
+
+    .info-tooltip-text {
+      padding: 0 $spacing03;
     }
 
     .fas.fa-chevron-right {

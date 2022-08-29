@@ -1,11 +1,11 @@
 import React from 'react';
-import { EOBCCSlider } from '../../../EOBCCSlider/EOBCCSlider';
+import { CCSlider } from '../../../CCSlider/CCSlider';
 
 export const SliderInput = ({ input, params, onChangeHandler }) => (
   <div key={`${params.dataProvider}-${input.id}`} className="row">
     <label title={input.label}>{input.label}</label>
-    <EOBCCSlider
-      sliderWidth={120}
+    <CCSlider
+      sliderWidth={'100%'}
       cloudCoverPercentage={!isNaN(params[input.id]) ? params[input.id] : input.defaultValue}
       onChange={(value) => onChangeHandler(input.id, value)}
       min={input.min}

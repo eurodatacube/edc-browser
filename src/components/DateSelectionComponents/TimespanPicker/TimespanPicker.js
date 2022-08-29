@@ -7,6 +7,7 @@ export class TimespanPicker extends Component {
   state = {
     fromTime: null,
     toTime: null,
+    sharedMaxCloudCover: 100,
   };
 
   componentDidMount() {
@@ -52,9 +53,11 @@ export class TimespanPicker extends Component {
     );
   };
 
+  setSharedMaxCloudCover = (value) => this.setState({ sharedMaxCloudCover: value });
+
   render() {
-    const { fromTime, toTime } = this.state;
-    const { id, autoApply, onQueryDatesForActiveMonth } = this.props;
+    const { fromTime, toTime, sharedMaxCloudCover } = this.state;
+    const { id, autoApply, onQueryDatesForActiveMonth, hasCloudCoverage } = this.props;
 
     return (
       <div className="timespan-picker">
@@ -68,6 +71,10 @@ export class TimespanPicker extends Component {
             minDate={this.props.minDate}
             maxDate={toTime}
             onQueryDatesForActiveMonth={onQueryDatesForActiveMonth}
+            hasCloudCoverage={hasCloudCoverage}
+            timespanExpanded={true}
+            sharedMaxCloudCover={sharedMaxCloudCover}
+            setSharedMaxCloudCover={this.setSharedMaxCloudCover}
           />
           <div className="timespan-calendar-holder" ref={(e) => (this.calendarHolder1 = e)} />
         </div>
@@ -82,6 +89,10 @@ export class TimespanPicker extends Component {
             minDate={fromTime}
             maxDate={this.props.maxDate}
             onQueryDatesForActiveMonth={onQueryDatesForActiveMonth}
+            hasCloudCoverage={hasCloudCoverage}
+            timespanExpanded={true}
+            sharedMaxCloudCover={sharedMaxCloudCover}
+            setSharedMaxCloudCover={this.setSharedMaxCloudCover}
           />
 
           <div className="timespan-calendar-holder" ref={(e) => (this.calendarHolder2 = e)} />

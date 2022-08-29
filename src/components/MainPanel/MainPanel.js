@@ -40,6 +40,8 @@ function MainPanel(props) {
   );
   const [configurations, setConfigurations] = useState(null);
   const [bestLocation, setBestLocation] = useState(null);
+  const [publicCollectionsFilter, setPublicCollectionsFilter] = useState('');
+  const [userCollectionsFilter, setUserCollectionsFilter] = useState('');
 
   const collection = getCollectionInfo(collectionsList, selectedCollectionId, selectedType, selectedLayerId);
   const TAB_TITLES = {
@@ -124,7 +126,6 @@ function MainPanel(props) {
       <div className={`open-main-panel ${panelOpen ? 'hidden' : ''}`} onClick={() => setPanelOpen(true)}>
         <i className="fa fa-bars" />
       </div>
-
       <div className={`main-panel-wrapper ${panelOpen ? '' : 'hidden'}`}>
         <header id="header">
           <div className="header-left">
@@ -169,6 +170,10 @@ function MainPanel(props) {
                 <EdcDataPanel
                   collectionsList={collectionsList}
                   showVisualisationPanel={() => setShowVisualizationPanel(true)}
+                  publicCollectionsFilter={publicCollectionsFilter}
+                  setPublicCollectionsFilter={setPublicCollectionsFilter}
+                  userCollectionsFilter={userCollectionsFilter}
+                  setUserCollectionsFilter={setUserCollectionsFilter}
                 />
               )}
             </div>

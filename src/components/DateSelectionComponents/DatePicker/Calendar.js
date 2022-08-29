@@ -7,6 +7,7 @@ import { getFirstDayOfWeek, getWeekDaysLong, getWeekDaysMin, getMonths } from '.
 import { momentToDate } from './Datepicker.utils';
 import Navbar from './Navbar';
 import YearMonthForm from './YearMonthForm';
+import { CCSlider } from '../../CCSlider/CCSlider';
 
 import 'react-day-picker/lib/style.css';
 import './Calendar.scss';
@@ -22,6 +23,9 @@ function Calendar(props) {
     handleDayClick,
     onMonthOrYearDropdownChange,
     highlightedDays,
+    maxCloudCover,
+    setMaxCloudCover,
+    hasCloudCoverFilter,
   } = props;
 
   const modifiers = {
@@ -59,6 +63,18 @@ function Calendar(props) {
         months={getMonths(locale)}
         firstDayOfWeek={getFirstDayOfWeek(locale)}
       />
+      {hasCloudCoverFilter && (
+        <div className="cc-wrapper">
+          <div className="cc-text-label">Max. cloud coverage:</div>
+          <CCSlider
+            showIcons={false}
+            sliderWidth={'100%'}
+            onChange={(value) => setMaxCloudCover(value)}
+            cloudCoverPercentage={maxCloudCover}
+            showSliderTooltip={true}
+          />
+        </div>
+      )}
     </div>,
     calendarContainer.current ? calendarContainer.current : calendarContainer,
   );

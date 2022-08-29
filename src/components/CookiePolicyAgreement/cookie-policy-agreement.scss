@@ -1,0 +1,36 @@
+@import '../../variables.module.scss';
+
+.cookie-policy {
+  max-width: 400px;
+  background: $colorBg50;
+  padding: $spacing04 $spacing06;
+
+  &-text {
+    color: $textColorFaded;
+    line-height: 170%;
+    text-align: center;
+    margin-bottom: $spacing04;
+  }
+
+  &-buttons {
+    display: flex;
+  }
+
+  &-link {
+    color: $colorPrimary50;
+    text-decoration: none;
+
+    &:hover {
+      color: $colorPrimary30;
+      text-decoration: underline;
+    }
+  }
+
+  .button-primary {
+    margin-right: $spacing01;
+  }
+
+  .button-secondary {
+    margin-left: $spacing01;
+  }
+}

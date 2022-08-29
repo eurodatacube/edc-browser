@@ -36,7 +36,17 @@ export class DateTimeInput extends Component {
   };
 
   render() {
-    const { id, selectedTime, label, calendarContainer, onQueryDatesForActiveMonth } = this.props;
+    const {
+      id,
+      selectedTime,
+      label,
+      calendarContainer,
+      onQueryDatesForActiveMonth,
+      hasCloudCoverage,
+      timespanExpanded,
+      sharedMaxCloudCover,
+      setSharedMaxCloudCover,
+    } = this.props;
 
     if (!selectedTime) {
       return null;
@@ -57,6 +67,10 @@ export class DateTimeInput extends Component {
             minDate={this.props.minDate}
             maxDate={this.props.maxDate}
             onQueryDatesForActiveMonth={onQueryDatesForActiveMonth}
+            hasCloudCoverFilter={hasCloudCoverage}
+            timespanExpanded={timespanExpanded}
+            sharedMaxCloudCover={sharedMaxCloudCover}
+            setSharedMaxCloudCover={setSharedMaxCloudCover}
           />
         </div>
         <div className="time-input">

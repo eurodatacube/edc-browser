@@ -1,15 +1,11 @@
 import { useEffect, useState } from 'react';
-import { setAuthToken } from '@sentinel-hub/sentinelhub-js';
-
-import AnonymousAuth from './AnonymousAuth';
 import store, { errorsSlice } from '../../store';
 import { serviceHandlers } from '../../services';
 import Loader from '../Loader/Loader';
+import CookiePolicyAgreement from '../CookiePolicyAgreement/CookiePolicyAgreement';
 
 const AuthProvider = ({ children }) => {
-  const isPublicDeploy = process.env.REACT_APP_PUBLIC_DEPLOY === 'true';
   const [userAuthInProgress, setUserAuthInProgress] = useState(true);
-  const [anonAuthInProgress, setAnonAuthInProgress] = useState(isPublicDeploy);
 
   useEffect(() => {
     const authenticateAllServices = async () => {
@@ -27,21 +23,18 @@ const AuthProvider = ({ children }) => {
     });
   }, []);
 
-  function setAnonToken(token) {
-    setAuthToken(token);
-    setAnonAuthInProgress(false);
+  const authInProgress = userAuthInProgress;
+
+  if (authInProgress) {
+    return <Loader type="initial-loader" />;
   }
 
-  const authInProgress = userAuthInProgress || anonAuthInProgress;
+  const isPublicDeploy = process.env.REACT_APP_PUBLIC_DEPLOY === 'true';
+  if (isPublicDeploy) {
+    return <CookiePolicyAgreement>{children}</CookiePolicyAgreement>;
+  }
 
-  return authInProgress ? (
-    <>
-      <Loader type="initial-loader" />
-      {isPublicDeploy && <AnonymousAuth setAnonToken={setAnonToken} />}
-    </>
-  ) : (
-    children
-  );
+  return children;
 };
 
 export default AuthProvider;

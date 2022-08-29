@@ -124,7 +124,7 @@ function AlgorithmOption(props) {
         <div className="label-primary">{name}</div>
         {description && description.length > 0 && (
           <div className="option-description">
-            <InfoTooltip text={description} />
+            <InfoTooltip text={description} setOpenTooltipId={() => null} />
           </div>
         )}
       </div>

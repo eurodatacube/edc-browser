@@ -17,11 +17,11 @@ const COPERNICUS_DATASETS = {
   wind_10m_u: COPERNICUS_SUBGROUPS.C3S,
   wind_10m_v: COPERNICUS_SUBGROUPS.C3S,
   'seasonal-trajectories': COPERNICUS_SUBGROUPS.CLMS,
-  oceancolour_bal_chl_l3_nrt_observations_009_049: COPERNICUS_SUBGROUPS.CMEMS,
-  oceancolour_atl_chl_l4_nrt_observations_009_037: COPERNICUS_SUBGROUPS.CMEMS,
-  oceancolour_med_chl_l4_nrt_observations_009_041: COPERNICUS_SUBGROUPS.CMEMS,
-  oceancolour_bs_chl_l4_nrt_observations_009_045: COPERNICUS_SUBGROUPS.CMEMS,
-  oceancolour_med_optics_l3_nrt_observations_009_038: COPERNICUS_SUBGROUPS.CMEMS,
+  'oceancolour-bal-chl-l3-nrt-observations-009-049': COPERNICUS_SUBGROUPS.CMEMS,
+  'oceancolour-atl-chl-l4-nrt-observations-009-037': COPERNICUS_SUBGROUPS.CMEMS,
+  'oceancolour-med-chl-l4-nrt-observations-009-041': COPERNICUS_SUBGROUPS.CMEMS,
+  'oceancolour-bs-chl-l4-nrt-observations-009-045': COPERNICUS_SUBGROUPS.CMEMS,
+  'oceancolour-med-optics-l3-nrt-observations-009-038': COPERNICUS_SUBGROUPS.CMEMS,
 };
 
 export const groupBy = (arr, groupByProperty) => {

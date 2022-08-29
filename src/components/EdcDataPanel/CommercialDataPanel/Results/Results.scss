@@ -169,7 +169,11 @@
 
   .commercial-data-results-list {
     overflow-y: auto;
-    max-height: 400px;
+    max-height: 350px;
+    border-top: 1px solid $colorUtilGrey;
+    border-bottom: 1px solid $colorUtilGrey;
+    margin-top: 10px;
+    box-shadow: #373453 0 0 8px;
   }
 
   .actions-container {
@@ -180,6 +184,7 @@
 
   .toggle-display-results {
     padding-bottom: 5px;
+    margin-top: 5px;
   }
 
   .bold {
@@ -199,7 +204,7 @@
 
   .commercial-data-results {
     overflow-y: auto;
-    max-height: 400px;
+    max-height: 380px;
     background-color: $colorBg70;
   }
 }

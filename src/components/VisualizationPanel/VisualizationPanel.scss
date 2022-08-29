@@ -10,40 +10,46 @@
   .header {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     width: 100%;
 
-    .back-button {
-      height: $spacing06;
-      width: $spacing06;
-      color: $colorText50;
-      border-radius: $borderRadius;
-      background: $colorBg70;
-      border: none;
-      margin-right: $spacing04;
-      flex-shrink: 0;
-      transition: 0.1s linear background;
+    .header-left {
+      display: flex;
+      align-items: center;
 
-      &:hover {
-        cursor: pointer;
-        background: $colorBg40;
+      .back-button {
+        height: $spacing06;
+        width: $spacing06;
+        color: $colorText50;
+        border-radius: $borderRadius;
+        background: $colorBg70;
+        border: none;
+        margin-right: $spacing04;
+        flex-shrink: 0;
         transition: 0.1s linear background;
+
+        &:hover {
+          cursor: pointer;
+          background: $colorBg40;
+          transition: 0.1s linear background;
+        }
       }
-    }
 
-    .collection-info {
-      max-width: 100%;
-    }
+      .collection-info {
+        max-width: 100%;
 
-    .collection-name {
-      color: $colorText50;
-      font-size: $fontSize03;
-      font-weight: $fontWeightMedium;
-      margin-bottom: $spacing01;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 100%;
-      white-space: pre-wrap;
-      word-wrap: break-word;
+        .collection-name {
+          color: $colorText50;
+          font-size: $fontSize03;
+          font-weight: $fontWeightMedium;
+          margin-bottom: $spacing01;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          max-width: 100%;
+          white-space: pre-wrap;
+          word-wrap: break-word;
+        }
+      }
     }
 
     .zoom-to-location {
