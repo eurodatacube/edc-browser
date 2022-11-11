@@ -222,8 +222,8 @@ export async function showDataOnMap(order, orderCollection) {
 
   const layer = orderCollection.configurations[0];
   const searchLayer = new BYOCLayer({
-    instanceId: layer.layer_name,
-    layerId: layer.layer_name,
+    instanceId: orderCollection.uniqueId,
+    layerId: layer['sentinelhub:layer_name'],
     evalscript: layer.evalscript,
     collectionId: order.collectionId,
     subType: BYOCSubTypes.BYOC,
@@ -234,7 +234,7 @@ export async function showDataOnMap(order, orderCollection) {
   try {
     const result = await searchLayer.findTiles(
       bbox,
-      new Date(moment.utc().subtract(5, 'years').startOf('day')),
+      new Date(moment.utc().subtract(10, 'years').startOf('day')),
       new Date(moment().utc().endOf('day')),
       1,
       0,

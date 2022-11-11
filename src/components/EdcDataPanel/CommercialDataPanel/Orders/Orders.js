@@ -1,6 +1,6 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react';
 import moment from 'moment';
-import { OrderStatus, TPDI, TPDProvider } from '@sentinel-hub/sentinelhub-js';
+import { TPDITransactionStatus, TPDI, TPDProvider } from '@sentinel-hub/sentinelhub-js';
 import {
   extractErrorMessage,
   fetchOrders,
@@ -21,15 +21,15 @@ import { getServiceHandlerForCollectionType } from '../../../../services';
 
 const orderStatus = [
   {
-    status: OrderStatus.CREATED,
+    status: TPDITransactionStatus.CREATED,
     title: 'Created orders (Not confirmed)',
   },
   {
-    status: OrderStatus.RUNNING,
+    status: TPDITransactionStatus.RUNNING,
     title: 'Running orders',
   },
   {
-    status: OrderStatus.DONE,
+    status: TPDITransactionStatus.DONE,
     title: 'Finished orders',
   },
 ];
@@ -105,14 +105,14 @@ const OrderDetails = ({ order, setAction, orderCollection }) => {
     {
       title: 'Confirm',
       onClick: () => setAction('confirmOrder', order),
-      status: [OrderStatus.CREATED],
+      status: [TPDITransactionStatus.CREATED],
       icon: 'check',
       hidden: false,
     },
     {
       title: 'Delete',
       onClick: () => setAction('deleteOrder', order),
-      status: [OrderStatus.CREATED, OrderStatus.DONE],
+      status: [TPDITransactionStatus.CREATED, TPDITransactionStatus.DONE],
       icon: 'trash',
       hidden: false,
     },
@@ -130,7 +130,7 @@ const OrderDetails = ({ order, setAction, orderCollection }) => {
           store.dispatch(mainMapSlice.actions.setPosition({ lat: lat, lng: lng, zoom: zoom }));
         }
       },
-      status: [OrderStatus.CREATED, OrderStatus.DONE, OrderStatus.RUNNING],
+      status: [TPDITransactionStatus.CREATED, TPDITransactionStatus.DONE, TPDITransactionStatus.RUNNING],
       icon: 'crosshairs',
       hidden: false,
     },
@@ -139,7 +139,7 @@ const OrderDetails = ({ order, setAction, orderCollection }) => {
       onClick: async () => {
         await showDataOnMap(order, orderCollection);
       },
-      status: [OrderStatus.DONE],
+      status: [TPDITransactionStatus.DONE],
       icon: 'map',
       hidden: !orderCollection,
     },
