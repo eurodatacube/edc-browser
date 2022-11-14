@@ -27,6 +27,8 @@ import {
   Landsat7AWSLETML1Layer,
   DATASET_AWS_LETML2,
   Landsat7AWSLETML2Layer,
+  DATASET_AWS_HLS,
+  HLSAWSLayer,
   DATASET_MODIS,
   MODISLayer,
   DATASET_AWS_DEM,
@@ -96,6 +98,8 @@ function getSHLayerClass(type) {
       return Landsat7AWSLETML1Layer;
     case DATASET_AWS_LETML2.catalogCollectionId:
       return Landsat7AWSLETML2Layer;
+    case DATASET_AWS_HLS.catalogCollectionId:
+      return HLSAWSLayer;
     case DATASET_MODIS.catalogCollectionId:
       return MODISLayer;
     case DATASET_AWS_DEM.shProcessingApiDatasourceAbbreviation:
