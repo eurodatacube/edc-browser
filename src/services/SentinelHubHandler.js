@@ -21,6 +21,9 @@ import { getSubTypeAndCollectionId } from '../utils/collections';
 import { getBoundsAndLatLng } from '../components/EdcDataPanel/CommercialDataPanel/commercialData.utils';
 import store, { errorsSlice } from '../store';
 
+// enterprise accounts have codes 1400_ (14000, 14001, ...)
+const SH_ACCOUNT_ENTERPRISE_CODE_RANGE = { min: 14000, max: 14999 };
+
 export default class SentinelHubHandler extends AbstractServiceHandler {
   HANDLER_ID = 'SENTINEL_HUB';
 
@@ -61,14 +64,14 @@ export default class SentinelHubHandler extends AbstractServiceHandler {
       } = await requestWithTimeout(
         (cancelToken) =>
           axios
-            .get(`https://services.sentinel-hub.com/api/v1/${type}/collections`, {
+            .get(`https://services.sentinel-hub.com/api/v1/${type.toLowerCase()}/collections`, {
               params: params,
               cancelToken: cancelToken,
               headers: { Authorization: `Bearer ${this.token}` },
             })
             .catch((err) => {
               console.error(err);
-              throw new Error('Fetching user BYOC collections failed.');
+              throw new Error(`Fetching user ${type.toUpperCase()} collections failed.`);
             }),
         DEFAULT_TIMEOUT,
       );
@@ -110,17 +113,37 @@ export default class SentinelHubHandler extends AbstractServiceHandler {
     return allCollections;
   }
 
+  isSubscriptionEnterprise(type) {
+    if (!type) {
+      console.warn(
+        "Could not get subscription type from user's auth token. Fall-back to subscription not being enterprise.",
+      );
+      return false;
+    }
+    return type >= SH_ACCOUNT_ENTERPRISE_CODE_RANGE.min && type <= SH_ACCOUNT_ENTERPRISE_CODE_RANGE.max;
+  }
+
   async getCollections() {
-    const byocCollections = await this.getCollectionsOfType(BYOCSubTypes.BYOC.toLowerCase());
+    const collectionsData = [];
+
+    const byocCollections = await this.getCollectionsOfType(BYOCSubTypes.BYOC);
     const byocCollectionsData = await this.getDataForCollectionsOfType(
       BYOCSubTypes.BYOC.toLowerCase(),
       byocCollections,
     );
-    const batchCollections = await this.getCollectionsOfType(BYOCSubTypes.BATCH.toLowerCase());
-    const batchCollectionsData = await this.getDataForCollectionsOfType(
-      BYOCSubTypes.BATCH.toLowerCase(),
-      batchCollections,
-    );
+    collectionsData.push(...byocCollectionsData.filter((collection) => collection));
+
+    // SH batch API (including requesting existing batch collections) is available
+    // only for enterprise users (https://docs.sentinel-hub.com/api/latest/api/batch/).
+    // We can get user subscription type from the decoded token ("t" contains this information).
+    if (this.isSubscriptionEnterprise(jwtDecode(this.token)['d']?.['1']?.['t'])) {
+      const batchCollections = await this.getCollectionsOfType(BYOCSubTypes.BATCH);
+      const batchCollectionsData = await this.getDataForCollectionsOfType(
+        BYOCSubTypes.BATCH.toLowerCase(),
+        batchCollections,
+      );
+      collectionsData.push(...batchCollectionsData.filter((collection) => collection));
+    }
 
     // Public zarr collections on Sentinel Hub are already handled in the EDCHandler.js
     // Although the list of zarr collections is easily retrievable in similar way
@@ -133,10 +156,6 @@ export default class SentinelHubHandler extends AbstractServiceHandler {
     // - byoc: https://docs.sentinel-hub.com/api/latest/reference/#operation/metadata_byoc_id
     // - batch: https://docs.sentinel-hub.com/api/latest/reference/#operation/metadata_batch_id
     // - zar: ?
-
-    const collectionsData = [...byocCollectionsData, ...batchCollectionsData].filter(
-      (collection) => collection,
-    );
 
     return {
       user: collectionsData.map((collection) => {
