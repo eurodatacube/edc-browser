@@ -299,6 +299,18 @@ export const algorithmsSlice = createSlice({
   },
 });
 
+export const consentSlice = createSlice({
+  name: 'consent',
+  initialState: {
+    termsAndPrivacyConsent: false,
+  },
+  reducers: {
+    setTermsAndPrivacyConsent: (state, action) => {
+      state.termsAndPrivacyConsent = action.payload;
+    },
+  },
+});
+
 const reducers = combineReducers({
   mainMap: mainMapSlice.reducer,
   tabs: tabsSlice.reducer,
@@ -310,6 +322,7 @@ const reducers = combineReducers({
   index: indexSlice.reducer,
   pagination: paginationSlice.reducer,
   algorithms: algorithmsSlice.reducer,
+  consentSlice: consentSlice.reducer,
 });
 
 const store = configureStore({

@@ -8,6 +8,7 @@ import CommercialData from './CommercialDataPanel/CommercialData';
 import store, { visualizationSlice, tabsSlice } from '../../store';
 import { groupBy } from './EdcDataPanel.utils';
 import { COLLECTION_TYPE, EDC_DATA_TAB, USER_DATA_TAB } from '../../const';
+import { checkIfPublicDeploy } from '../../utils/envVarsUtils';
 import './EdcDataPanel.scss';
 
 function EdcDataPanel({
@@ -119,8 +120,7 @@ function EdcDataPanel({
     return filteredCollections;
   };
 
-  const omitUserCollections =
-    collectionsList.user.length === 0 || process.env.REACT_APP_PUBLIC_DEPLOY === 'true';
+  const omitUserCollections = collectionsList.user.length === 0 || checkIfPublicDeploy();
 
   const filteredPublicCollectionsByName = filterCollections(publicCollections, publicCollectionsFilter);
   const filteredUserCollectionsByName = filterCollections(filteredUserCollections(), userCollectionsFilter);

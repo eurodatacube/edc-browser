@@ -18,3 +18,7 @@ export function getEnvVarValue(envVar) {
     ? process.env[ENV_VAR_NAMES[envVar].buildTimeName]
     : window._env_[ENV_VAR_NAMES[envVar].runTimeName];
 }
+
+export function checkIfPublicDeploy() {
+  return process.env.REACT_APP_PUBLIC_DEPLOY === 'true';
+}

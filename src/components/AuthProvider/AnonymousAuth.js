@@ -1,48 +1,62 @@
 import React from 'react';
 
 import './Auth.scss';
+import {
+  UPDATE_BEFORE_EXPIRY_ANON_TOKEN,
+  fetchAnonTokenUsingService,
+  getAnonTokenFromLocalStorage,
+  getTokenExpiration,
+  saveAnonTokenToLocalStorage,
+  scheduleTokenRefresh,
+} from './authHelpers.js';
+
+let anonTokenRefreshTimeout = null;
 
 export default class AnonymousAuth extends React.Component {
-  CLIENT_ID = process.env.REACT_APP_ANONYMOUS_AUTH_CLIENT_ID;
   RECAPTCHA_SITE_KEY = process.env.REACT_APP_CAPTCHA_SITE_KEY;
-  GRANT_TYPE = 'client_credentials';
-  UPDATE_SECONDS_BEFORE_EXPIRY = 60;
-  iFrame = undefined;
+
   captchaRef = undefined;
 
-  componentDidMount() {
-    window.addEventListener('message', (e) => {
-      if (e.data.access_token) {
-        this.props.setAnonToken(e.data.access_token);
-        const tokenExpiresIn = (e.data.expires_in - this.UPDATE_SECONDS_BEFORE_EXPIRY) * 1000;
-        this.revokeTokenTimeout = setTimeout(() => {
-          this.captchaRef.executeCaptcha();
-        }, tokenExpiresIn);
-      }
-    });
-  }
+  saveAnonTokenAndScheduleRefresh = (anonToken) => {
+    saveAnonTokenToLocalStorage(anonToken);
+    this.props.setAnonToken(anonToken?.access_token);
 
-  onCaptchaExecuted = (token) => {
-    this.iFrame.src =
-      'https://services.sentinel-hub.com/oauth/token/assisted?client_id=' +
-      this.CLIENT_ID +
-      '&redirect_uri=not_used' +
-      '&response_type=token&grant_type=' +
-      this.GRANT_TYPE +
-      '&recaptcha=' +
-      token;
+    if (anonToken) {
+      scheduleTokenRefresh(
+        getTokenExpiration(anonToken),
+        UPDATE_BEFORE_EXPIRY_ANON_TOKEN,
+        anonTokenRefreshTimeout,
+        this.captchaRef.executeCaptcha,
+      );
+    }
+  };
+
+  setInitialToken = async () => {
+    let anonToken = await getAnonTokenFromLocalStorage();
+    if (anonToken) {
+      this.saveAnonTokenAndScheduleRefresh(anonToken);
+    } else {
+      this.captchaRef.executeCaptcha();
+    }
+  };
+
+  onCaptchaExecuted = async (siteResponse) => {
+    const anonToken = await fetchAnonTokenUsingService(process.env.REACT_APP_ANON_AUTH_SERVICE_URL, {
+      siteResponse: siteResponse,
+    });
+
+    this.saveAnonTokenAndScheduleRefresh(anonToken);
   };
 
   render() {
     return (
-      <iframe className="anon-frame" ref={(node) => (this.iFrame = node)} title="auth">
-        <Captcha
-          ref={(node) => (this.captchaRef = node)}
-          onExecute={this.onCaptchaExecuted}
-          sitekey={this.RECAPTCHA_SITE_KEY}
-          action="token_assisted_anonymous"
-        />
-      </iframe>
+      <Captcha
+        ref={(node) => (this.captchaRef = node)}
+        onExecute={this.onCaptchaExecuted}
+        onLoad={this.setInitialToken}
+        sitekey={this.RECAPTCHA_SITE_KEY}
+        action="token_assisted_anonymous"
+      />
     );
   }
 }
@@ -57,9 +71,7 @@ class Captcha extends React.Component {
       const script = document.createElement('script');
       script.type = 'text/javascript';
       script.async = true;
-      script.onload = (e) => {
-        this.executeCaptcha();
-      };
+      script.onload = this.props.onLoad;
       script.src = 'https://www.google.com/recaptcha/api.js?render=' + this.props.sitekey;
       this.instance.appendChild(script);
     }

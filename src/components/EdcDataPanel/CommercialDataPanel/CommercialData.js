@@ -6,6 +6,7 @@ import CommercialDataPanel from './CommercialDataPanel';
 import { checkUserAccount } from './commercialData.utils';
 import { getServiceHandlerForCollectionType } from '../../../services';
 import { COLLECTION_TYPE } from '../../../const';
+import { checkIfPublicDeploy } from '../../../utils/envVarsUtils';
 
 import './CommercialData.scss';
 
@@ -28,7 +29,7 @@ const CommercialData = ({ collectionsList }) => {
   const shAuthToken = sentinelHubHandler && sentinelHubHandler.token;
 
   useEffect(() => {
-    if (!shAuthToken || process.env.REACT_APP_PUBLIC_DEPLOY === 'true') {
+    if (!shAuthToken || checkIfPublicDeploy()) {
       return;
     }
     const user = {

@@ -1,11 +1,18 @@
 import { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
+import { setAuthToken } from '@sentinel-hub/sentinelhub-js';
+
 import store, { errorsSlice } from '../../store';
+import { checkIfPublicDeploy } from '../../utils/envVarsUtils';
 import { serviceHandlers } from '../../services';
 import Loader from '../Loader/Loader';
-import CookiePolicyAgreement from '../CookiePolicyAgreement/CookiePolicyAgreement';
+import TOSAgreement from '../TOSAgreement/TOSAgreement';
+import AnonymousAuth from './AnonymousAuth';
 
-const AuthProvider = ({ children }) => {
-  const [userAuthInProgress, setUserAuthInProgress] = useState(true);
+const AuthProvider = ({ children, termsAndPrivacyConsent }) => {
+  const isPublicDeploy = checkIfPublicDeploy();
+  const [servicesAuthInProgress, setServicesAuthInProgress] = useState(true);
+  const [anonAuthInProgress, setAnonAuthInProgress] = useState(true);
 
   useEffect(() => {
     const authenticateAllServices = async () => {
@@ -19,22 +26,38 @@ const AuthProvider = ({ children }) => {
     };
 
     Promise.all([authenticateAllServices()]).then(() => {
-      setUserAuthInProgress(false);
+      setServicesAuthInProgress(false);
     });
   }, []);
 
-  const authInProgress = userAuthInProgress;
+  const setAnonAuth = (token) => {
+    setAnonAuthInProgress(false);
+    setAuthToken(token);
+  };
 
-  if (authInProgress) {
-    return <Loader type="initial-loader" />;
-  }
+  const renderUserDeploy = () => {
+    if (servicesAuthInProgress) {
+      return <Loader type="initial-loader" />;
+    }
+    return children;
+  };
 
-  const isPublicDeploy = process.env.REACT_APP_PUBLIC_DEPLOY === 'true';
-  if (isPublicDeploy) {
-    return <CookiePolicyAgreement>{children}</CookiePolicyAgreement>;
-  }
+  const renderPublicDeploy = () => {
+    const authInProgress = servicesAuthInProgress || anonAuthInProgress;
+    return (
+      <>
+        {!termsAndPrivacyConsent && <TOSAgreement />}
+        {termsAndPrivacyConsent && <AnonymousAuth setAnonToken={(token) => setAnonAuth(token)} />}
+        {authInProgress && <Loader type="initial-loader" />}
+        {termsAndPrivacyConsent && !authInProgress && children}
+      </>
+    );
+  };
 
-  return children;
+  return isPublicDeploy ? renderPublicDeploy() : renderUserDeploy();
 };
 
-export default AuthProvider;
+const mapStoreToProps = (store) => ({
+  termsAndPrivacyConsent: store.consentSlice.termsAndPrivacyConsent,
+});
+export default connect(mapStoreToProps)(AuthProvider);
