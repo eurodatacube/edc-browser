@@ -20,10 +20,9 @@ import { requestWithTimeout } from '../utils';
 import { getSubTypeAndCollectionId } from '../utils/collections';
 import { getBoundsAndLatLng } from '../components/EdcDataPanel/CommercialDataPanel/commercialData.utils';
 import store, { errorsSlice } from '../store';
+import { getAccountInfo, isEnterpriseAccount } from '../utils/sentinelHubAccounts';
 
-// enterprise accounts have codes 1400_ (14000, 14001, ...)
-const SH_ACCOUNT_ENTERPRISE_CODE_RANGE = { min: 14000, max: 14999 };
-
+export const SH_SERVICES_URL = 'https://services.sentinel-hub.com';
 export default class SentinelHubHandler extends AbstractServiceHandler {
   HANDLER_ID = 'SENTINEL_HUB';
 
@@ -64,7 +63,7 @@ export default class SentinelHubHandler extends AbstractServiceHandler {
       } = await requestWithTimeout(
         (cancelToken) =>
           axios
-            .get(`https://services.sentinel-hub.com/api/v1/${type.toLowerCase()}/collections`, {
+            .get(`${SH_SERVICES_URL}/api/v1/${type.toLowerCase()}/collections`, {
               params: params,
               cancelToken: cancelToken,
               headers: { Authorization: `Bearer ${this.token}` },
@@ -91,7 +90,7 @@ export default class SentinelHubHandler extends AbstractServiceHandler {
       collections.map(async (collection) => {
         try {
           const { data } = await axios.get(
-            `https://services.sentinel-hub.com/api/v1/metadata/collection/${type}-${collection.id}`,
+            `${SH_SERVICES_URL}/api/v1/metadata/collection/${type}-${collection.id}`,
             {
               headers: { Authorization: `Bearer ${this.token}` },
             },
@@ -113,16 +112,6 @@ export default class SentinelHubHandler extends AbstractServiceHandler {
     return allCollections;
   }
 
-  isSubscriptionEnterprise(type) {
-    if (!type) {
-      console.warn(
-        "Could not get subscription type from user's auth token. Fall-back to subscription not being enterprise.",
-      );
-      return false;
-    }
-    return type >= SH_ACCOUNT_ENTERPRISE_CODE_RANGE.min && type <= SH_ACCOUNT_ENTERPRISE_CODE_RANGE.max;
-  }
-
   async getCollections() {
     const collectionsData = [];
 
@@ -135,8 +124,9 @@ export default class SentinelHubHandler extends AbstractServiceHandler {
 
     // SH batch API (including requesting existing batch collections) is available
     // only for enterprise users (https://docs.sentinel-hub.com/api/latest/api/batch/).
-    // We can get user subscription type from the decoded token ("t" contains this information).
-    if (this.isSubscriptionEnterprise(jwtDecode(this.token)['d']?.['1']?.['t'])) {
+    // We can get user subscription type from  /account-info endpoint.
+    const accountInfo = await getAccountInfo(this.token, jwtDecode(this.token));
+    if (isEnterpriseAccount(accountInfo)) {
       const batchCollections = await this.getCollectionsOfType(BYOCSubTypes.BATCH);
       const batchCollectionsData = await this.getDataForCollectionsOfType(
         BYOCSubTypes.BATCH.toLowerCase(),

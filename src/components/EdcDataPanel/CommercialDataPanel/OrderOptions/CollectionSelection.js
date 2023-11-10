@@ -5,6 +5,7 @@ import { TPDICollections } from '@sentinel-hub/sentinelhub-js';
 import { OrderInputTooltip } from './OrderInputTooltip';
 import { getServiceHandlerForCollectionType } from '../../../../services';
 import { COLLECTION_TYPE } from '../../../../const';
+import { SH_SERVICES_URL } from '../../../../services/SentinelHubHandler';
 
 const CollectionSelectionType = {
   CREATE: 'CREATE',
@@ -93,7 +94,7 @@ export const CollectionSelection = ({ disabled, orderOptions, setOrderOptions, s
         };
 
         //taken from request builder
-        const res = await axios.get(`https://services.sentinel-hub.com/api/v1/byoc/global`, requestConfig);
+        const res = await axios.get(`${SH_SERVICES_URL}/api/v1/byoc/global`, requestConfig);
         if (res.data) {
           let collections = res.data.data.filter((col) => col.s3Bucket === 'sh.tpdi.byoc.eu-central-1');
           if (collections.length > 0) {

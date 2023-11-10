@@ -1,4 +1,3 @@
-import axios from 'axios';
 import L from 'leaflet';
 import geo_area from '@mapbox/geojson-area';
 import intersect from '@turf/intersect';
@@ -8,9 +7,7 @@ import { TPDProvider, TPDI, BYOCLayer, BYOCSubTypes } from '@sentinel-hub/sentin
 import { constructBBoxFromBounds } from '../../../utils/constructBBoxFromBounds';
 import { getBoundsZoomLevel } from '../../../utils/coords';
 import store, { mainMapSlice, visualizationSlice, commercialDataSlice } from '../../../store';
-
-const SH_ACCOUNT_TRIAL = 11000;
-const SH_DOMAIN_SERVICE = 1;
+import { getAccountInfo, isPayingAccount } from '../../../utils/sentinelHubAccounts';
 
 export const extractErrorMessage = (error) => {
   const errors = [];
@@ -139,34 +136,16 @@ export const checkUserAccount = async (user) => {
     };
   }
 
-  const headers = {
-    Authorization: `Bearer ${user.access_token}`,
-    'Content-Type': 'application/json',
-  };
-  const requestConfig = {
-    headers: headers,
-  };
+  const accountInfo = await getAccountInfo(user.access_token, user.userdata);
 
-  let hasPayingAccount = false;
-
-  const res = await axios.get(
-    `https://services.sentinel-hub.com/oauth/users/${user.userdata.sub}/accounts`,
-    requestConfig,
-  );
-
-  if (res.data && res.data.member && Array.isArray(res.data.member)) {
-    const domain = res.data.member.find((member) => member.domainId === SH_DOMAIN_SERVICE);
-    if (domain) {
-      hasPayingAccount = domain.type !== SH_ACCOUNT_TRIAL;
-    }
-  }
+  const payingAccount = isPayingAccount(accountInfo);
 
   const quotas = await TPDI.getQuotas({
     authToken: user.access_token,
   });
 
   return {
-    payingAccount: hasPayingAccount,
+    payingAccount: payingAccount,
     quotasEnabled: quotas && quotas.length > 0,
   };
 };
